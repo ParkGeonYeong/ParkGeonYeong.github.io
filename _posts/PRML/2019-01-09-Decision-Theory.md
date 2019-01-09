@@ -12,8 +12,9 @@ Bayesian statistics에서 probability는 uncertainty의 inference입니다.
 **1. Decision Theory가 무엇인가?** 
 - Misclassification rate, 혹은 *Expected loss*를 최소화하는 Decision boundary를 찾는 것입니다.
   - 여기서 misclassification rate는 arbitrary given x에 대해 ground truth의 category를 얼마나 잘 찾아내는지를 의미합니다. 
-  >$$p(correct) = \sum_{k=1}^{K}\int_{R_k}^{}p(x, C_k)dx  \propto \sum_{k=1}^{K}\int_{R_k}^{}p(C_k|x)p(x)dx$$  
-  - $p(x)$를 redundant하다 가정하면, 위 수식에서 결국 $p(C_k|x)$의 값을 최대화하는 방향으로 $kth category$를 결정해야 합니다. 
+  >$$p(correct) = \sum_{k=1}^{K}\int_{R_k}^{}p(x, C_k)dx  \propto \sum_{k=1}^{K}\int_{R_k}^{}p(C_k
+  x)p(x)dx$$  
+  - $p(x)$를 redundant하다 가정하면, 위 수식에서 결국 $p(C_k|x)$ 의 값을 최대화하는 방향으로 $kth category$를 결정해야 합니다. 
   
   - 반면 Expected loss는 specific given x의 decision loss에 대해서는 penalty를 부과하는 function입니다.
     - 위 수식에서는 모든 ground truth category 종류를 균등하게 취급했지만,
