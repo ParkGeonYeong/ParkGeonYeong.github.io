@@ -24,7 +24,7 @@ Global average pooling
   - **이는 각 kernel의 contribution을 확인할 수 있어 interpretability가 높다.**  
   - **또한 단순 fully connected layer 대비 overfitting에 강하다**  
   
-2. CNN (의 문제점)
+2. CNN (의 문제점)  
   - Linear convolution으로 good abstraction을 얻기 위해서는 많은 kernel이 필요하다.  
     - 이는 다음 레이어가 고려해야 할 input kernel이 그만큼 많아져버리는 것을 의미한다.  
     - 따라서 more higher level concpet을 얻기 전의 각 local layer에서 좋은 abstraction을 얻고 넘어가는게 좋다.  
