@@ -41,9 +41,9 @@ Bayesian statistics에서 probability는 uncertainty의 inference입니다.
   - Discriminant function은 posterior probability를 바로 추론합니다.
   - 흔히 아는 SVM, tree 등이 포함됩니다.  
   
-  *두 모델링의 차이점*
-  ![image](https://user-images.githubusercontent.com/46081019/50903340-e0a77e80-1460-11e9-834f-1d3eaf284476.png)
-  상황 : x=0.8에 대해 decision을 내려야 하는 상황
+  *두 모델링의 차이점*  
+  ![image](https://user-images.githubusercontent.com/46081019/50903547-6f1c0000-1461-11e9-81cd-8eed62e6ab3a.png)    
+  상황 : x=0.8에 대해 decision을 내려야 하는 상황  
   왼쪽(Generative) : 파랑, 빨강 class probability $p(C_b), p(C_r)$는 대충 비슷하고... 기존 데이터를 보아하니, 클래스 밀도가 빨강이 훨씬 높으니까 빨강으로 결정해야겠다!   
   오른쪽(Discriminant) : 클래스 밀도는 모르겠지만... 사후 확률을 학습한 바로는 빨강일 확률이 높으니까 빨강으로 결정!   
   
