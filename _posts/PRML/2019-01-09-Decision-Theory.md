@@ -50,9 +50,9 @@ Bayesian statistics에서 probability는 uncertainty의 inference입니다.
   오른쪽(Discriminant) : 클래스 밀도는 모르겠지만... 사후 확률을 학습한 바로는 빨강일 확률이 높으니까 빨강으로 결정!   
   
   (3) Discriminant Function
-  - Discriminant model은 사후 확률 모델을 만들지만, discriminant function은 확률을 따지지 않고 바로 input을 결정해 버림  
-  $p(c_k|x)$
-    
+  - Discriminant model은 사후 확률 모델을 만들지만, discriminant function은 확률을 따지지 않고 바로 input을 결정해 버림    
+
+
     
     
     
