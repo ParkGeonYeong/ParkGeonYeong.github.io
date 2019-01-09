@@ -51,3 +51,14 @@ Bayesian statistics에서 probability는 uncertainty의 inference입니다.
   (3) Discriminant Function
   - Discriminant model은 사후 확률 모델을 만들지만, discriminant function은 확률을 따지지 않고 바로 input을 결정해 버림
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
