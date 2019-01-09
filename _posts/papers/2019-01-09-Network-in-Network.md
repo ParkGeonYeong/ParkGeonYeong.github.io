@@ -30,13 +30,17 @@ Global average pooling
     - 따라서 more higher level concpet을 얻기 전의 각 local layer에서 좋은 abstraction을 얻고 넘어가는게 좋다.  
 
 3. Network in Network
-  ![image](https://user-images.githubusercontent.com/46081019/50895744-4b998b00-144a-11e9-90cf-f8956e78ddbe.png)  
+  ![image](https://user-images.githubusercontent.com/46081019/50895744-4b998b00-144a-11e9-90cf-f8956e78ddbe.png)    
   - 위 수식이 Mlpconv layer이다.
     - k1, k2, ..., kn kernels에 대해 각 layer의 input feature map이 MLP를 통과하고, 그 다음 ReLU를 통과한다.
     - 이를 cross channel parameteric pooling이라 한다. (각 input features-channel-이 crossed되므로)
     - 이는 수식적으로 1x1 convolution kernel과 동일하다.
-    - 이 cross channel-pooled layers를 모아서 네트워크 가장 뒷단에서 평균내는 것을 Global Average pooling이라 한다.
-      - 논문에서는 이를 feed-forward -> softmax의 대체재로 제안한다.
-      - Good Interpretability, No overfitting, Spatial translation available
+    - 이 cross channel-pooled layers를 모아서 네트워크 가장 뒷단에서 평균내는 것을 Global Average pooling이라 한다.  
+      - 논문에서는 이를 feed-forward -> softmax의 대체재로 제안한다.  
+      - Good Interpretability, No overfitting, Spatial translation available  
+    ![image](https://user-images.githubusercontent.com/46081019/50896861-b5fffa80-144d-11e9-889e-7be32e547da4.png)  
+    Softmax 직전의 global average pooled kernel의 feature map. 물체가 이미지에 등장한 영역과 feature map이 매우 유사한 것을 알 수 있다.  
+    feedforward network와 달리 높은 해석이 가능.  
   - maxout layer와의 차이점
-    - 본질적으로 maxout layers는 linear하다.
+    - 본질적으로 maxout layers는 linear하다.  
+    
