@@ -26,8 +26,9 @@ Bayesian statistics에서 probability는 uncertainty의 inference입니다.
     
 **2. Inference와 decision의 차이가 무엇인가?**
 - Inference는 주어진 training dataset으로 $p(C_k|x)$에 대한 모델을 학습하는 과정. Decision은 이를 활용해 주어진 data에 class를 assign하는 과정  
-- 결국 목표는 decision이고, 이 문제를 푸는 방법은 3가지가 있습니다.  
-  (1) Generative model  
+- 결국 목표는 decision이고, 이 문제를 푸는 방법은 3가지가 있습니다.
+  
+  (1) Generative model
   - Generative model은 데이터의 클래스-조건부 밀도와 prior probability를 각각 추론해서 posterior probability를 얻어냅니다. ~~사실상 bayesian~~
   - 얻어낸 $p(C_k|x)$로 새로운 new train data sample point를 유추할 수 있어서 generative라는 이름이 붙었습니다.
   - 이는 Bayesian statistics에 근거합니다.
@@ -36,18 +37,17 @@ Bayesian statistics에서 probability는 uncertainty의 inference입니다.
   - 이를 통해 posterior probability를 얻어냅니다.
   - 분포를 추론했기 때문에 임의로 새 데이터 생성도 가능합니다.
   - 가령 Linear Discriminant Analysis(LDA)는 각 카테고리의 데이터 분포가 정규 분포라고 가정하여 $p(x|C_k)$를 얻어내고, 카테고리별 분포로부터 $p(C_k)$를 얻어내서 posterior probability를 계산합니다. 마지막으로 (1)에서의 decision theory를 통해 x에 class를 assign합니다.
-  - ~~LDA가 왜 Linear Generative Analyis라고 불리지 않는지 모르겠습니다~~  
-  (2) Discriminant model  
+  - ~~LDA가 왜 Linear Generative Analyis라고 불리지 않는지 모르겠습니다~~
+    
+  (2) Discriminant model
   - Discriminant function은 posterior probability를 바로 추론합니다.
   - 흔히 아는 SVM, tree 등이 포함됩니다.  
-  
   *두 모델링의 차이점*  
   ![image](https://user-images.githubusercontent.com/46081019/50903547-6f1c0000-1461-11e9-81cd-8eed62e6ab3a.png)    
   상황 : x=0.8에 대해 decision을 내려야 하는 상황  
   왼쪽(Generative) : 파랑, 빨강 class probability $p(C_b), p(C_r)$는 대충 비슷하고... 기존 데이터를 보아하니, 클래스 밀도가 빨강이 훨씬 높으니까 빨강으로 결정해야겠다!   
   오른쪽(Discriminant) : 클래스 밀도는 모르겠지만... 사후 확률을 학습한 바로는 빨강일 확률이 높으니까 빨강으로 결정!   
   
-  
-  (3) Discriminant Function  
+  (3) Discriminant Function
   - Discriminant model은 사후 확률 모델을 만들지만, discriminant function은 확률을 따지지 않고 바로 input을 결정해 버림
     
