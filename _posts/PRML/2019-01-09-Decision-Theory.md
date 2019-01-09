@@ -14,13 +14,13 @@ Bayesian statistics에서 probability는 uncertainty의 inference입니다.
   - 여기서 misclassification rate는 arbitrary given x에 대해 ground truth의 category를 얼마나 잘 찾아내는지를 의미합니다. 
   >$$p(correct) = \sum_{k=1}^{K}\int_{R_k}^{}p(x, C_k)dx  \propto \sum_{k=1}^{K}\int_{R_k}^{}p(C_k
   x)p(x)dx$$  
-  - $p(x)$를 redundant하다 가정하면, 위 수식에서 결국 $p(C_k|x)$ 의 값을 최대화하는 방향으로 $kth category$를 결정해야 합니다. 
+  $p(x)$를 redundant하다 가정하면, 위 수식에서 결국 $p(C_k|x)$ 의 값을 최대화하는 방향으로 $kth category$를 결정해야 합니다. 
   
   - 반면 Expected loss는 specific given x의 decision loss에 대해서는 penalty를 부과하는 function입니다.
     - 위 수식에서는 모든 ground truth category 종류를 균등하게 취급했지만,
     - 만약 특정 category로 잘못 판정됬을때 큰 페널티를 부과하려 한다면 별도의 Loss function을 정의해야 합니다.
     - 우리의 목표는 이러한 expected total loss를 최소화하는 $R_j$ decision region(~=boundary)를 정의하는 것입니다.
-  - 만약 모든 category 선택지에 대해 $p(C_k|x)$가 고만고만하다면
+  만약 모든 category 선택지에 대해 $p(C_k|x)$가 고만고만하다면
     - 즉, 모든 category에 대해 비슷하게 불확실하다면
     - 해당 given x에 대한 선택을 보류하는게 유리합니다.
     - 이를 reject option이라고 합니다.
@@ -50,7 +50,8 @@ Bayesian statistics에서 probability는 uncertainty의 inference입니다.
   오른쪽(Discriminant) : 클래스 밀도는 모르겠지만... 사후 확률을 학습한 바로는 빨강일 확률이 높으니까 빨강으로 결정!   
   
   (3) Discriminant Function
-  - Discriminant model은 사후 확률 모델을 만들지만, discriminant function은 확률을 따지지 않고 바로 input을 결정해 버림
+  - Discriminant model은 사후 확률 모델을 만들지만, discriminant function은 확률을 따지지 않고 바로 input을 결정해 버림  
+  $p(c|x)$
     
     
     
