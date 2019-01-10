@@ -1,6 +1,5 @@
 ---
 title: "1.5 Decision Theory"
-layout: post
 use_math: true
 ---
 
