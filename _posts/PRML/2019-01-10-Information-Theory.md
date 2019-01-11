@@ -28,4 +28,4 @@ $$-\sum_i^{}(\frac{n_i}{N}ln\frac{n_i}{N}) = -\sum_i^{}p_ilnp_i$$가 됩니다. 
 $$KL(p||q) = -\int_{}^{}p(x)lnq(x)dx-(-\int_{}^{}p(x)lnp(x)dx) = -\int_{}^{}p(x)ln(\frac{q(x)}{p(x)})dx$$입니다.  
 KL-divergence는 convex하기 때문에 (증명은 생략하겠습니다) p와 q distribution이 완전히 일치하지 않으면 positive 값을 갖는 non-negative index입니다. 이러한 특성때문에 KL-divergence를 주로 두 분포의 similarity index로 활용합니다. (당연히 우리의 목표는 KL-divergence를 loss로 규정하고 최소화하는 것이 될 것입니다.)
 앞서 우리가 유추한 q(x)는 사실 learnable-parameter $$\theta$$를 기반으로 얻어내기 때문에 $$q(x_i|\theta)$$로 표현할 수 있습니다. (For i-th datapoints) 이때 finite dataset에 대해 위의 KL-divergence을 discrete하게 근사하면,  
-$$KL(p||q) \simeq \frac{1}{N}\sum_{i=1}^N{-lnq(x_i|\theta) + lnp(x_i)}$$이 됩니다. 시그마의 두번째 항은 $$\theta$$와 무관하기에, 결국 KL-divergence 최소화 문제는 시그마의 첫번째 항인 negative log likelihood를 최대화하는 것으로 귀결됩니다.
+$$KL(p||q) \simeq \frac{1}{N}\sum_{i=1}^N{-lnq(x_i|\theta) + lnp(x_i)}$$이 됩니다. 시그마의 두번째 항은 $$\theta$$와 무관하기에, 결국 KL-divergence 최소화 문제는 시그마의 첫번째 항인 negative log likelihood를 최소화하는 것으로 귀결됩니다.
