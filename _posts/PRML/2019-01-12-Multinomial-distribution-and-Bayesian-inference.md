@@ -11,3 +11,5 @@ use_math : true
 그렇다면 어떤 식으로 이런 사전 확률을 가정하고, 또 갱신하는 것일까.
 Binomial/Multinomial Distribution과 베타 분포 등을 통해 이를 알아보자.
 
+**1. Binomial Distribution**
+이항 분포에서 동전의 앞면이 나올 확률을 $$\ㅡ
