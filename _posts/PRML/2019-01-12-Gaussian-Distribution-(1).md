@@ -19,9 +19,9 @@ $$Pre-requisite$$
 $$A^\intercal = A$$, $$A^{*} = A$$, *는 conjugate sign, $$Au = {\lambda}u$$에서 $$\lambda$$는 eigen value, $$u$$는 eigen vector  
 
 $$Prof \; 1$$  
-$$Au = {\lambda}u$$이므로 $$A^{*}u^{*} = Au^{*} = \lambda^{*}u^{*}$$  
-유도의 편의성을 위해, 가장 우변에 $$(u^{*})^{\intercal}$$을 pre-product해보겠습니다.  
-$$\lambda^{*}((u^{*})^{\intercal})u^{*} = (u^{*})^{\intercal}Au = ((u^{*})^{\intercal}A)u$$  
+$$Au = {\lambda}u$$   
+유도의 편의성을 위해, 우변에 $$(u^{*})^{\intercal}$$을 pre-product해보겠습니다.  
+$$\lambda((u^{*})^{\intercal})u^{*} = (u^{*})^{\intercal}Au = ((u^{*})^{\intercal}A)u$$  
 이는 곧 다음과 같습니다;  
 $$((u^{*})^{\intercal}A)u = (A^{\intercal}u^{*})^{\intercal}u = (Au^{*})^{\intercal}u\;\; (A\,is\,symmetric)$$  
 이때 $$Au^{*} = {\lambda}^{*}u^{*}$$이므로, $$(Au^{*})^{\intercal}u = ({\lambda^{*}}u^{*})^{\intercal}u  
