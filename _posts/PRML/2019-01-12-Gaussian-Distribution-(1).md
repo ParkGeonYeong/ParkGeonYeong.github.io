@@ -47,7 +47,7 @@ $$(\lambda_1-\lambda_2)u_2^{\intercal}u_1 = 0$$
 Jacobian matrix는 서로 다른 두 좌표계 $$(x,y), \, (u,v)$$의 transform에서 자주 등장합니다.  
 (x,y) 좌표계에서 (u,v) 좌표계로 전환할 때 어떤 그래프의 면적에는 변화가 생깁니다. 우리는 그 차이가 얼마나 발생하는지를 새 coordinate의 미소 간격 du, dv로  
 표현하고 싶습니다. 결론적으로, jacobian의 행렬식이 그 차이를 대변합니다.  
-> $$dxdy = det(J(u,v))dudv$$  
+$$dxdy = det(J(u,v))dudv$$  
 이는 곧 3차원(부피 관계)로도 확장 가능합니다. 이를 조금 바꿔 말하면,
 $$\int_{\bf x} f({\bf x})d{\bf x} = \int_{\bf y} f({\bf y})|{\bf J}|d{\bf y}$$ 관계가 성립할 수 있다는 뜻입니다(x,y는 multivariable vector 분포).  
 x coordinate를 y coordinate으로 전환할때, 식에서 jacobian의 행렬식은 새 coordinate y에서의 강체의 부피가 이전 대비 얼마나 차이나는지를 보정해주는 값입니다.  
