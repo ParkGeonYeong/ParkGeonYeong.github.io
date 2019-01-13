@@ -40,10 +40,10 @@ $$max_{a'}(Q(s', a'))$$는 *평균적으로* 어떠한 a' action-value의 기대
 **2.1 single estimator 보충 설명**  
 s'에서 취할 수 있는 3개의 action $$a_1', a_2', a_3'$$이 있고, 각 action value $$Q(s', a_i')$$를 random variable X_i라 합시다.  
 이때 $$max_iE(X_i)$$를 estimate해야 합니다. 이를 위해 각 action value의 experience sample 집합 $$S_i$$를 생각합시다.  
+
 각 sample의 평균 중 최대값 $$max_i \mu_i(S)$$을 찾으면 $$max_iE(X_i)$$을 estimate하는 것이라는 주장이 Q-learning이자 single-estimator 방식입니다.   
 ![image](https://user-images.githubusercontent.com/46081019/51086360-70169f80-1789-11e9-97c9-d6c98d4348ed.png)  
 
-하지만 $$max_i \mu_i(S)$$은 $$E(max_i \mu_i(S))$$eo
-
+하지만 $$max_i \mu_i(S)$$은 $$E(max_i \mu_i(S))$$를 sampling하여 estimate
 
 심지어 true value function과 맞더라도 그렇다. 
