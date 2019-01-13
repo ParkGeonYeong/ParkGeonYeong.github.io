@@ -44,6 +44,6 @@ s'에서 취할 수 있는 3개의 action $$a_1', a_2', a_3'$$이 있고, 각 ac
 각 sample의 평균 중 최대값 $$max_i \mu_i(S)$$을 찾으면 $$max_iE(X_i)$$을 estimate하는 것이라는 주장이 Q-learning이자 single-estimator 방식입니다.   
 ![image](https://user-images.githubusercontent.com/46081019/51086360-70169f80-1789-11e9-97c9-d6c98d4348ed.png)  
 
-하지만 $$max_i \mu_i(S)$$은 $$E(max_i \mu_i(S))$$를 sampling하여 estimate
+하지만 $$max_i \mu_i(S)$$은 $$E(max_i \mu_i)$$를 sampling하여 estimate
 
 심지어 true value function과 맞더라도 그렇다. 
