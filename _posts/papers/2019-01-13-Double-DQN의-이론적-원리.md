@@ -39,11 +39,26 @@ $$max_{a'}(Q(s', a'))$$는 *평균적으로* 어떠한 a' action-value의 기대
 
 **2.1 single estimator 보충 설명**  
 s'에서 취할 수 있는 3개의 action $$a_1', a_2', a_3'$$이 있고, 각 action value $$Q(s', a_i')$$를 random variable X_i라 합시다.  
-이때 $$max_iE(X_i)$$를 estimate해야 합니다. 이를 위해 각 action value의 experience sample 집합 $$S_i$$를 생각합시다.  
+이때 $$max_iE(X_i)$$를 estimate해야 합니다. 이를 위해 각 action value의 experience sample 집합 $$S_i$$를 생각합시다. (experience sample은 편의상 제가 명명했습니다; 강화학습의 experience replay에서 따온 느낌으로 보시면 될 것 같습니다)   
 
 각 sample의 평균 중 최대값 $$max_i \mu_i(S)$$을 찾으면 $$max_iE(X_i)$$을 estimate하는 것이라는 주장이 Q-learning이자 single-estimator 방식입니다.   
-![image](https://user-images.githubusercontent.com/46081019/51086360-70169f80-1789-11e9-97c9-d6c98d4348ed.png)  
+![image](https://user-images.githubusercontent.com/46081019/51086360-70169f80-1789-11e9-97c9-d6c98d4348ed.png)   
+하지만 $$max_i \mu_i(S)$$은 **$$E(max_i \mu_i)$$의 unbias sampled estimate**이며, 이는 앞서 말했듯이 **maximum of expectation, 즉 $$max_iE(X_i)$$보다도 큰 값을 갖습니다.**  
 
-하지만 $$max_i \mu_i(S)$$은 $$E(max_i \mu_i)$$를 sampling하여 estimate
+왜 이러한 크기 관계가 성립하는지 Informal하게 이해해보자면, $$E(max_i \mu_i)$$의 경우 alongside with $$S_i$$를 따라 그때그때 $$max_i \mu_i$$를 구하는 반면, $$max_iE(X_i)$$의 경우 전체적인 $$S_i$$를 보고 expected value가 가장 큰 i(=action-value 기대값이 가장 큰 액션)을 고른다고 할 수 있겠습니다. 그림으로 표현하면 다음과 같습니다.
+![1](https://user-images.githubusercontent.com/46081019/51093720-d6330f00-17e9-11e9-92ad-44918bb7c756.png)  
 
-심지어 true value function과 맞더라도 그렇다. 
+Formal한 증명은 past paper에 있지만 확인은 하지 못한 상태입니다.  
+
+**2.2 double estimator**  
+Double-DQN에서 single estimator를 대체하여 사용하는 방식은 double-estimator입니다. 논문에서는 e-greedy하게 action을 select하는 selection 과정과, 이러한 e-greedy policy 자체를 평가하는 evaluation 과정을 분리했는데요. 이를 'double' estimator의 예시라고 할 수 있습니다. 요지는 다음 식과 같습니다.  
+![image](https://user-images.githubusercontent.com/46081019/51093805-8e60b780-17ea-11e9-8da2-fba96e043a03.png)  
+여기서 A, B는 각각 experience sample 집합 S를 independent하게 split한 subset $$S^A, S^B$$입니다. 새로 등장한 인덱스 $$a^{*}$$는, **$$max_i \mu_i^A(S^A)$$인 i의 집합입니다.**   
+이 방식은 Double-DQN 알고리즘과 동일한데요. Double-DQN에서 main network가 maximum으로 뽑은 'action'의 집합으로 target network를 indexing하여 최종 objective action-value를 얻게 됩니다. 위의 알고리즘 역시 $$a^{*}$$로 $$\mu^B$$를 indexing하고 있습니다. 아래 그림을 참고해 주세요.  
+![1](https://user-images.githubusercontent.com/46081019/51096395-8f501400-17ff-11e9-9bd5-d31d725c7bb0.png)  
+
+그렇다면 이 indexing이 (maximum) expectation of action value를 unbias하게 estimate하고 있을까요? Double-estimator는 single estimator와는 반대로,  overestimate가 아닌 underestimate를 하게 됩니다. 아래 Lemma 1이 이를 증명하고 있습니다.  
+![image](https://user-images.githubusercontent.com/46081019/51096417-ca524780-17ff-11e9-80a8-206467dd60c9.png)  
+
+**3. conclusion**  
+Double-DQN은 stochastic한 상황에서 maximum estimator가 action value를 제대로 estimate하지 못하는 점을 개선하기 위한 알고리즘입니다. 논문에도 잘 나와 있듯이 다양한 시뮬레이션 환경(real-action value function approximator, Atari games)에서 잘 작동되는 것을 확인하였고, 지금까지도 많이 활용되는 알고리즘입니다. 또한 이 포스트에서는 리뷰하지 않았지만 Double Q-learning을 극한으로 보냈을 때 optimal policy로 수렴하게 된다고 합니다.
