@@ -8,7 +8,7 @@ use_math: True
 - "Asynchronous Methods for Deep Reinforcement Learning", *Mnih. V., et al*
 - Medium blog posts of *Arthur Juliani*  
 
-**0. Policy Gradient란 무엇인가?*  
+**0. Policy Gradient란 무엇인가?**  
 2016년 나와 아직까지 핫한 알고리즘으로 자리잡고 있는 A3C(Asynchronous advantage actor-critic) 알고리즘은 actor-critic을 이해해야 하고, 
 actor-critic은 policy gradient를 이해해야 합니다.  
 Policy Gradient는 action 혹은 state의 value를 approximate하여 문제를 해결하는 value-based RL 알고리즘과는 다르게 policy 자체를 학습의 object로 규정합니다. 
