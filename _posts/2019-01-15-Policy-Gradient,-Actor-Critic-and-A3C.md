@@ -51,4 +51,27 @@ $$\pi_{\theta}(s,a) \propto e^{\phi(s,a)^{\intercal}\theta}$$
 이 score function을 black box로 취급하고, general한 policy 형태에 대해 gradient를 일반화하면 다음과 같습니다.  
 ![image](https://user-images.githubusercontent.com/46081019/51185128-a71bbb00-1919-11e9-84fb-99888610e3ee.png)  
 - 위 식에서 score function 외의 $$\pi$$를 빼놨기 때문에 기대값 형태로 쓸 수 있습니다.
-- 여기서 loss
+- 여기서 loss는 $$log{\pi}_{\theta}(s,a)r$$이며, parameter $$\theta$$로 gradient를 구하고 있습니다.
+- 다만 이 'loss'는 최소화가 아닌 최대화의 대상이기 때문에, gradient ascent로 접근해야 합니다.
+- 이를 gradient descent 문제로 바꾸기 위해 loss에 -를 곱해줍니다.  
+- **loss = $$-log{\pi}_{\theta}(s,a)A$$
+- 이때 A는 'advantage'입니다.
+  
+**1. Actor-Critic이란 무엇인가?**  
+앞서 policy gradient의 최종 loss를 정의함에 있어 instantaneous한 reward인 r을 사용했고, 보다 일반화된 표현으로 바꿔주기 위해 advantage term A를 사용했습니다. 사실 이 term A에는 instant reward r외에도 여러 값들이 들어갈 수 있는데, long-term $$Q^{\pi}$$가 그 예시입니다. 하지만 우리는 이 ground-truth $$Q^{\pi}$$를 모르기 때문에 (사실 이것을 알면 이미 문제는 풀린 것이기에), 이에 대한 대체로 unbiased sample r을 사용한 것입니다.  
+  
+여기서 우리는 자연스럽게, reward r 말고 우리가 기존에 해왔던 Q-learning, DQN에서처럼 **$$Q_w$$를 학습해서 advantage term A를 대체**할 수 있지 않을까라는 질문을 할 수 있습니다. 이것이 바로 **Critic**의 개념입니다. 즉 critic으로 action-value function을 estimate하고, 이 값을 사용하여 actor가 policy를 update하는 것입니다. 마치 Double-DQN처럼 double estimator를 활용하여 action value와 policy를 개별적으로 평가하고 있습니다. [Double DQN의 double estimator를 확인해 보세요](https://parkgeonyeong.github.io/Double-DQN%EC%9D%98-%EC%9D%B4%EB%A1%A0%EC%A0%81-%EC%9B%90%EB%A6%AC/)  
+   
+![image](https://user-images.githubusercontent.com/46081019/51327647-21347700-1ab5-11e9-8e16-8cb8d764f79f.png)   
+위 슈도-알고리즘에서 확인할 수 있듯이 개별적인 action-value estimator $$Q_w$$를 업데이트해가며, 해당 $$Q_W(s,a)$$값을 policy gradient에도 사용하고 있습니다. 이때 monte-carlo 방식과 달리 현재는 online 학습이 가능합니다. (episode가 끝나기 전에 계속 학습중). 한 가지 Q-learning 등과 비교해서 주의해야 하는 차이점은, actor-critic 방식에서 action을 결정하는 원인이자 주체는 policy $$\theta$$이며, $$Q_w$$가 아니라는 점입니다. Action-value estimator는 말 그대로 estimator로서 어떤 힌트만 제공할 뿐, 현재 decision-making의 주체는 policy 그 자체입니다.  
+  
+이 action-value estimator는 사실 다양한 버전이 가능합니다.    
+한 가지 방법은 바로 advantage function $$A^{\pi_{\theta}}(s,a)$$를 Q 대신 사용하는 것입니다. 이 advantage function은 간단히 설명하면 Q(s,a)에서 V(s)를 뺀 값입니다. 지금 어떤 액션을 취했을 때, 현재 머무르고 있는 state s의 가치 V 대비 얼마나 더 이득을 얻을 수 있을지를 다루고 있습니다. 이는 [dueling DQN](https://arxiv.org/abs/1511.06581)과도 유사한 개념이라 보입니다.  
+![image](https://user-images.githubusercontent.com/46081019/51328659-39a59100-1ab7-11e9-8da2-d11223708cee.png)   
+이때 $$A^{\pi_{\theta}}(s,a)$$를 대신 사용해도 괜찮은 이유는, action과 관련없는 state function(such as $$V(s)$$는 현재 gradient에 더하거나 빼도 기대값에 변화를 주지 못하기 때문입니다.  
+  
+또 다른 중요한 트릭으로는 바로 TD error의 활용입니다. 결론부터 말하면 advantage function은 사실 TD error로 estimate가능합니다. TD error는 특정 action을 취했을때 기대되는 보상 및 미래 가치 - 현재 state, action의 가치이기 때문입니다. **따라서 최종적으로 actor-critic의 gradient는  
+$$
+\triangledown_{\theta}J(\theta) = E_{\pi_{\theta}} [\triangledown_{\theta}log{\pi_{\theta}}(s,a)\delta^{\pi_{\theta}}]
+$$  
+의 형태로 많이 사용합니다.** (이때 delta가 TD error를 의미합니다)  앞에서 r을 Q로 대체한 것처럼, TD error도 결국은 approximate estimator이기 때문에 에이전트의 experience에 의해 variance 영향을 많이 받습니다. 따라서 이를 고려해 $$TD(\lambda)$$를 사용하기도 합니다.
