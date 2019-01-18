@@ -1,8 +1,10 @@
+---
+title: Network in Network
+layout: single
+classes: wide
+---
 
-## Paper Review
-# Network in Network
-
-Min Lin, et al, 2013  
+Network in Network, *Min Lin, et al, 2013*  
 
 핵심 : Network 안의 micro neural network가 receptive field의 input을 abstract한다.  
 Global average pooling  
