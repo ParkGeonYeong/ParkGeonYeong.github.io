@@ -1,6 +1,8 @@
 ---
 title : "Gaussian Distribution (1)"
 use_math : True
+layout: single
+classes: wide
 ---
 
 **본 포스트는 gaussian distribution을 설명하기 위한 선형대수학적 기초를 먼저 정리하고 있습니다.**  
