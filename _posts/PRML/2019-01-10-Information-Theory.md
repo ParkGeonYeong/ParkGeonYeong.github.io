@@ -1,6 +1,8 @@
 ---
 titel: "Information Theory"
 use_math: true
+layout: single
+classes: wide
 ---
 
 **0. 정보란 무엇인가?**  
