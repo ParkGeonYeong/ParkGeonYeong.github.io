@@ -1,6 +1,8 @@
 ---
 title: "1.5 Decision Theory"
 use_math: true
+layout: single
+classes: wide
 ---
 
 본 글은 PRML 1.5 Decision Theory를 QnA 형식으로 정리했습니다.  
