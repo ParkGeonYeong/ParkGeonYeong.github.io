@@ -1,6 +1,8 @@
 ---
 title : "Multinomial Distribution and Bayesian Inference"
 use_math : true
+layout: single
+classes: wide
 ---
 
 **0. 동전 던지기에서 앞면이 나올 확률은?**
