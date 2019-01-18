@@ -107,9 +107,9 @@ author:
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "Computational Neuroscience, Machine Learning enthusiast"
   location         : "Daejeon, South Korea"
-  email            : pky3436@kaist.ac.kr
+  email            : "pky3436@kaist.ac.kr"
   links:
-    - label: "Email"
+    - label: "pky3436@kaist.ac.kr"
       icon: "fas fa-fw fa-envelope-square"
       #url: mailto:pky3436@kaist.ac.kr
     - label: "Website"
