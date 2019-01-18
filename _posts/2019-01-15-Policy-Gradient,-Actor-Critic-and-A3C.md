@@ -1,7 +1,7 @@
 ---
 title: "Policy Gradient, Actor Critic and A3C"
 use_math: True
-layout: single
+classes: wide
 ---
 
 본 글은 다음 자료를 주로 참고하여 작성하였습니다.  
