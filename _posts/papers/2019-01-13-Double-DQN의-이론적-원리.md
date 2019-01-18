@@ -1,6 +1,8 @@
 ---
 title: "Double DQN의 이론적 원리"
 use_math: True
+layout: single
+classes: wide
 ---
 
 **본 포스트는 다음 논문들을 기반으로 작성되었습니다. 참고한 정도로 정렬했습니다.**  
