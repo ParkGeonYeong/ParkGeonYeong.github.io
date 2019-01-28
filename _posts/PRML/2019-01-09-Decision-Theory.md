@@ -1,5 +1,5 @@
 ---
-title: "1.5 Decision Theory"
+title: "Decision Theory"
 use_math: true
 layout: single
 classes: wide
