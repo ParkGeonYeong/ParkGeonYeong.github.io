@@ -1,5 +1,5 @@
 ---
-title: "Policy Gradient, Actor Critic and A3C"
+title: "Policy Gradient, Actor Critic and A3C(1)"
 use_math: True
 layout: single
 classes: wide
