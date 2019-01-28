@@ -54,7 +54,7 @@ Feature의 경우 전체 feature set에서 random하게 feature을 선택하거�
 이를 out-of-bag error estimation이라고 합니다.   
   
 **Random Forest가 좋은 앙상블 모델인 이유는 variance를 줄이면서도 unbiased error를 갖기 때문입니다.** 
-**구체적으로는, forest의 tree 개수가 많아질수록 각 tree의 prediction에서 발생한 prediction error가 전체 feature set을 이용한 prediction error로
+**구체적으로는, forest의 tree 개수가 많아질수록 각 tree의 prediction에서 발생한 prediction error의 기댓값이 전체 feature set을 이용한 prediction error로
 수렴합니다.** Bias 측면에서 전체 tree와 이론적으로는 큰 차이가 없다는 뜻입니다. 
 이로 인해 Random Forest는 low-bias와 low-variance 이득을 동시에 챙길 수 있게 됩니다.  
 $$Proof$$  
