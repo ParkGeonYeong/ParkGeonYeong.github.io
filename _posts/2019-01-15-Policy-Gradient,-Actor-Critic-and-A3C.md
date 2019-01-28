@@ -1,5 +1,5 @@
 ---
-title: "Policy Gradient, Actor Critic and A3C(1)"
+title: "Policy Gradient, Actor Critic and A3C"
 use_math: True
 layout: single
 classes: wide
@@ -76,4 +76,20 @@ $$\pi_{\theta}(s,a) \propto e^{\phi(s,a)^{\intercal}\theta}$$
 $$
 \triangledown_{\theta}J(\theta) = E_{\pi_{\theta}} [\triangledown_{\theta}log{\pi_{\theta}}(s,a)\delta^{\pi_{\theta}}]
 $$  
-의 형태로 많이 사용합니다.** (이때 delta가 TD error를 의미합니다)  앞에서 r을 Q로 대체한 것처럼, TD error도 결국은 approximate estimator이기 때문에 에이전트의 experience에 의해 variance 영향을 많이 받습니다. 따라서 이를 고려해 $$TD(\lambda)$$를 사용하기도 합니다.
+의 형태로 많이 사용합니다.** (이때 delta가 TD error를 의미합니다)  앞에서 r을 Q로 대체한 것처럼, TD error도 결국은 approximate estimator이기 때문에 에이전트의 experience에 의해 variance 영향을 많이 받습니다. 따라서 이를 고려해 $$TD(\lambda)$$를 사용하기도 합니다.  
+  
+**2. A3C이란 무엇인가?**  
+A3C는 비동기적 어드밴티지 액터-크리틱(Asynchronous Advantage Actor-Critic)의 줄임말으로, 말 그대로 여러 에이전트가 각자 'asynchronous하게' 자신의 경험을 활용하여 전역 네트워크를 업데이트하는 방식입니다. Learning을 위한 experience를 여러 에이전트가 독립적으로 가져갈 수 있기 때문에 학습의 다원화, 다양화 효과를 볼 수 있습니다. 동일 에이전트가 겪은 에피소드 경험들을 학습할 때, 경험 간의 high-time correlation으로 인해 i.i.d 가정을 어기는 점이 문제가 됬습니다. 이를 해결하기 위해 replay memory가 대안으로 제안됬었고 좋은 성능을 보였습니다. 다만 이는 필연적으로 과거의 정해진 experience를 따라가며, 학습 대상이 결정된 off-policy 방식을 강요한다는 단점이 있었습니다. A3C에서는 i.i.d 충족 문제를, 에이전트 자체를 다원화시킴으로써 필연적으로 경험들이 독립을 보장받도록 개선하였습니다. 여러 에이전트가 전역 네트워크를 각자 독립적으로 업데이팅하고, 업데이트 결과가 반영된 네트워크는 다시 각 에이전트가 다운로드하는 방식입니다. 이러한 정기적 다운로드 과정을 통해 단일 에이전트 내부에서 발생하는 여러 에피소드간의 correlation 역시 해결했습니다. 또한 여러 에이전트를 코어의 각 쓰레드에서 작동시키면서 효율성 역시 높였습니다.  
+각 에이전트는 1에서 설명한 어드밴티지 액터-크리틱을 통해 학습합니다. 이때 어드밴티지 함수로는 흔히 사용하는 $$Q_w$$를 사용하지 않고 state에서 얻은 일련의 reward를 통해 계산한 discounted reward와, 학습한 value의 차이를 사용했습니다.   
+따라서 A3C에서 메인으로 사용하는 objective function은 크게 2가지입니다; 우선 Value 함수 학습시 사용하는 loss $$\frac{1}{2}\sum_{i}(R_i-V(s_i;{\theta_v}'))^2$$입니다. 이때 $$R_i$$는 각 state i 이후로 경험한 discounted reward, $$\theta_v$$는 value function의 parameter입니다. 또한 policy 학습시 사용하는 loss $$-log{\pi}(a_i|s_i;\theta')(R-V(s_i;\theta_v'))$$입니다. **이때 1에서 설명하였듯이 policy loss는 최대화 대상이고, value loss는 최소화 대상입니다. 따라서 실제 loss는 policy loss에 -를 곱해 최소화 문제로 풀게 됩니다.** 논문에서는 이에 더해 정칙화 개념으로 policy의 entropy를 도입합니다. Entropy of policy가 너무 빠른 시간 안에 premature하게 줄어들어 수렴할 경우, action이 더욱 deterministic하게 결정되기 때문에 exploration을 상대적으로 하지 않게 됩니다. **따라서 이를 방지하기 위해 loss function에서 policy의 entropy를 *빼서* suboptimal policy에 빠지는 것을 방지합니다.** 전체 loss를 코드로 보면 다음과 같습니다.  
+
+```python
+self.policy_loss = -tf.reduce_sum(tf.log(self.action_prob)*self.advantages)
+self.value_loss = 0.5*tf.reduce_sum(tf.square(self.discount_reward-tf.reshape(self.value, [-1])))
+self.entropy = -tf.reduce_sum(self.policy*tf.log(self.policy))
+self.alpha = 0.5
+self.beta = 0.01
+self.loss = self.policy_loss+self.alpha*self.value_loss-self.beta*self.entropy
+```   
+이때 alpha는 value loss와 policy loss 간의 weight를 의미하는 hyper-parameter입니다. Entropy loss의 경우 weight를 0.01로 낮게 주었습니다. action_prob은 경험했던 a를 현 policy 상에서 선택할 확률입니다.   
+사실 A3C
