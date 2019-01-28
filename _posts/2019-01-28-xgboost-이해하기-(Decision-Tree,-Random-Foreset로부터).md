@@ -65,8 +65,8 @@ $$\frac{1}{N}\sum_{k=1}^{N}I(h(\theta_k,x)=j)$$입니다.
 이때 전체 $$\theta$$가 총 K개의 hyper-rectangles $$S_1, ..., S_k$$을 형성하고 있다고 합시다. 
 주어진 x에 대해 j를 판정할 확률은, "어떤 hyper-rectangle $$S_k$$에 속한 x에 대해 tree들이 평균적으로 j를 판정한 사건"을 모든 rectangles에 대해 평균내는 것과 같습니다.  
 $$\frac{1}{N}\sum_{k=1}^{N}I(h(\theta_k,x)=j) = \frac{1}{N}\sum_{k}N_kI(x{\in}S_k)$$   
-이때 $$N_k = \frac{1}{N}\sum_{m=1}^{N}I(\phi(\theta_m)=k)$$으로, 전체 tree에 대해서, j로 판정받은 데이터 x가 $$S_k$$에 속할 기댓값입니다.  
-($$\phi(\theta_m)=k$$는 [{x: h(\theta_m, x)=j}] = S_k)  
-이때 tree의 개수가 매우 많아질 경우 $$\theta_m$$의 예측을 모두 평균낸 $$N_k$$는, 곧 "전체 셋인 $$\theta$$가 j로 판정한 x가, $$S_k$$에 속할 확률"으로 수렴합니다. 
+이때 $$N_k = \frac{1}{N}\sum_{m=1}^{M}I(\phi(\theta_m)=k)$$으로, 전체 tree에 대해서, j로 판정받은 데이터 x가 $$S_k$$에 속할 기댓값입니다.  
+($$\phi(\theta_m)=k$$는 $$[{x: h(\theta_m, x)=j}] = S_k$$)  
+이때 tree의 개수 M이 매우 많아질 경우 $$\theta_m$$의 예측을 모두 평균낸 $$N_k$$는, 곧 "전체 셋인 $$\theta$$가 j로 판정한 x가, $$S_k$$에 속할 확률"으로 수렴합니다. 
 (수많은 $$theta_m$$의 의견이 모여 전체 $$\theta$$의 의견을 대변한다고 해석할 수 있습니다. Law of Large Number가 사용되었습니다.)  
 
