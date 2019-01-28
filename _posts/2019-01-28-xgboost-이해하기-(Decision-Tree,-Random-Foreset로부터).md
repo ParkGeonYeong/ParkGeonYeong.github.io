@@ -5,10 +5,10 @@ layout: single
 classes: wide
 ---
 
-본 글은 다음 자료를 주로 참고했습니다.
+본 글은 다음 자료를 주로 참고했습니다.  
 *xgboost*  
 - XGBoost: A Scalable Tree Boosting System, T Chen et al.
-- [Complete Guide to Parameter Tuning in xgboost](https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/)
+- [Complete Guide to Parameter Tuning in xgboost](https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/)  
 *Random Forest, Decision Tree*  
 - [Random Forest](https://link.springer.com/article/10.1023/A:1010933404324)
 - [CMU Docu](https://www.cs.cmu.edu/~ggordon/780-fall07/fall06/homework/15780f06-hw4sol.pdf)
