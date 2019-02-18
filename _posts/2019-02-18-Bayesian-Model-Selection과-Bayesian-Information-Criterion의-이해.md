@@ -36,7 +36,7 @@ $$p(DㅣM_i) = \int{p(Dㅣw, M_i)p(wㅣM_i)}dw$$
 이때 $$p(DㅣM_i)$$은 다음과 같다. $$W_{MAP}$$이외의 likelihood 값은 무시하여 직사각형으로 근사한 결과이다.   
 $$p(DㅣM_i) = \int p(D|w,M_i)p(wㅣM_i)dw \simeq p(D|w_{MAP}, M_i)\frac{\Delta w_{posterior}}{\Delta w_{prior}}$$   
 로그를 씌우면 다음과 같다.  
-$$\ln p(DㅣM_i) \simeq \ln p(D|w_{MAP}, M_i) + \ln \left( \frac{\Delta w_{posterior}}{\Delta w_{prior}} \right)}$$   
+$$\ln p(DㅣM_i) \simeq \ln p(D|w_{MAP}, M_i) + \ln{\frac{\Delta w_{posterior}}{\Delta w_{prior}}}$$   
 **위 식은 결국 maximum likelihood가 높아야 해당 model evidence, 즉 선호도가 높아지는 것을 의미한다.** 
 이때 뒷 항이 패널티 항으로 붙어있는데 이는 $$w_{posterior}$$가 전체 사전 분포 대비 지나치게 sharp한 경우 페널티를 부과하는 항으로써 
 오버피팅을 방지하는 일종의 regularizer 역할을 한다고 생각한다. 이때 싱글 파라미터가 아닌 멀티 파라미터가 되는 경우 위의 식은 아래와 같이 바뀌며, 
