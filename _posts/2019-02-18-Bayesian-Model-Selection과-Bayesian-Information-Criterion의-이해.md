@@ -53,10 +53,12 @@ $$\ln p(DㅣM_i) \simeq \ln p(D|w_{MAP}, M_i) + {M\ln \left( \frac{\Delta w_{pos
 **1. Bayesian Information Criterion**  
 앞서 확인 했듯이 모델의 파라미터 $$w$$에 대해 계산을 거쳐 model evidence를 얻을 수 있었다. 
 또한 bayes factor를 이용해 두 모델의 evidence을 비교할 수 있었다.
-그러나 실제로 이러한 적분 과정을 일일히 거치는 것은 어려움이 있기에 근사 과정이 필요하며 
+그러나 실제로 이러한 적분 과정을 일일히 거치는 것은 어려움이 있기에 근사(approximate) 과정이 필요하며 
 이를 위해 bayesian information criterion (BIC)이라는 메트릭이 만들어지게 된다.  
 
 BIC 역시 likelihood와 동시에, model parameter의 개수에 패널티를 부과하며 
 비슷한 metric인 Akaike information criterion (AIC)보다 더 많이 부과한다고 한다. BIC의 수식은 다음과 같다.  
-
+$$BIC = ln(n)k-2ln(L)$$  
+이때 n은 number of data points, k는 모수의 개수, L은 max likelihood이다. 
+전개 및 증명 과정은 테일러 근사 과정과 laplace's method를 사용하는 것으로 보이는데 정확히 이해하지는 못했다.
 
