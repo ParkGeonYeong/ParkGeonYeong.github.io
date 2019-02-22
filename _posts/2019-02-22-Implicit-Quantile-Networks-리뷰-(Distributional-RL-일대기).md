@@ -57,7 +57,6 @@ QR-DQN에서 한 발 더 나아가, IQN은 N개의 *discrete and fixed* quantile
   
 $$\tau-sampling$$이 어떻게 risk-sensitive policy을 가능하게 하는지 알아보겠습니다. 기존 distributional RL에서도 액션을 선택할 때 Q-value를 구해 사용합니다. 이때 Q-value는 supports value의 확률 분포 $$z$$을 이용한 기댓값입니다. 이를 조금 복잡한 수식으로 나타내면 다음과 같습니다.  
 $$Q = E[U(z)]$$   
-  
 이를 expected utility theory라고 하며 U를 utility function이라 합니다. 만약 U가 identity function인 경우 앞서 서술한 과정과 동일합니다. 
 하지만 U가 'linear'하지 않고 concave하거나 convex한 non-linear function인 경우 policy는 다른 경향을 나타내게 됩니다. 
 구체적으로는 U가 linear한 경우 risk-neutral, concave한 경우 risk-averse, convex한 경우 risk-seeking policy라고 합니다. U가 극단적으로 convex한 경우를 예로 생각해 보겠습니다. 임의의 z가 convex의 minimum에서 매우 먼 경우, utility function은 매우 큰 값을 리턴합니다. 즉 높은 z value를 seeking한다고 할 수 있습니다. 확률이 100%인 1과, 30%로 2, 70%로 0.1인 경우를 생각해보면 convex utility function은 낮은 확률의 2라도 매우 큰 값으로 가치를 뻥튀기하기 때문에 후자를 선택할 확률이 높아지게 됩니다.   
