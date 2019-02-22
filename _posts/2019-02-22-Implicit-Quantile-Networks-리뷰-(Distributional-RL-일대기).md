@@ -54,4 +54,22 @@ Quantile Regression 이전의 C51 논문에서는 Bellman optimality operator에
 하지만 C51과 달리 QR-DQN에서는 quantile function을 갖고 있기 때문에 quantile regression을 시도를 할 수 있습니다. 이는 **quantile function을 unbiased하게 approximate**하는 알고리즘으로 경제학에서 많이 쓰인다고 합니다. 네트워크를 통해 초기 결과로 얻은 value distribution의 quantiles와, bellman operator를 통해 얻은 target quantiles에 quantile regression을 적용시키는 것입니다. **즉 두 quantile function의 quantile regression loss(asymmetric convex loss)를 SGD를 통해 minimize할 수 있다는 것이 QR-DQN의 핵심입니다. 이것이 궁극적으로는 inverse CDF, quantile function의 metric을 최소화함으로써 Wasserstein metric의 최소화가 가능하다는 것입니다.** 구체적으로는 주어진 value distribution에 bellman optimal operator를 적용시킨 $${\tau}^{\pi}z$$을 타겟으로 하여, quantile regression을 적용해 타겟에 맞는 approximated distribution $$Z$$을 얻었다고 합시다. 이때 $$Z$$은 p-wasserstein metric에 대해 contract하기 때문에 unique fixed point $$Z^{\pi}$$로 수렴을 보장받게 된다는 것이 전체 증명입니다.  
 
 **2. IQN RL**  
-QR-DQN에서 한 발 더 나아가, IQN은 N개의 *discrete and fixed* quantiles이 아닌 전체 continuous한 quantiles function을 estimate하게 됩니다. QR-DQN이 고정적으로 Quantiles 개수와 대응되는 확률을 고정하고 운영했다면 IQN은 이를 random하게 sampling합니다. 이를 $$\tau-sampling$$이라고 합니다.  
+QR-DQN에서 한 발 더 나아가, IQN은 N개의 *discrete and fixed* quantiles이 아닌 전체 continuous한 quantiles function을 estimate하게 됩니다. QR-DQN이 고정적으로 Quantiles 개수와 대응되는 확률($$\tau$$)을 고정하고 운영했다면 IQN은 이를 random하게 sampling합니다. 이를 $$\tau-sampling$$이라고 합니다. 얼핏 quantile function을 non-uniform하게 estimate한다는 점을 빼곤 동일하지만, 변화를 통해서 얻을 수 있는 가장 큰 장점으로는 시도할 수 있는 class of policy가 다양해진다는 것입니다. 구체적으로는 e-greedy policy 외에도 **risk-sensitive policies**을 시도할 수 있습니다. (risk-sensitive policy에 대한 내용은 마찬가지로 RL Korea 블로그 참고) 여기서 말하는 risk는 return의 distribution에서 생기는 intrinsic uncertainty를 말합니다. 분산이 크지만(매우 낮은 value가 나올 수도 있지만) 평균은 높은 value를 sampling할 것인지, 분산이 작아 어느 정도는 값이 보장되지만 평균이 낮은 value을 samplling할 지에 대한 policy라고 생각할 수 있습니다.  
+  
+$$\tau-sampling$$이 어떻게 risk-sensitive policy을 가능하게 하는지 알아보겠습니다. 기존 distributional RL에서도 액션을 선택할 때 Q-value를 구해 사용합니다. 이때 Q-value는 supports value의 확률 분포 $$z$$을 이용한 기댓값입니다. 이를 조금 복잡한 수식으로 나타내면 다음과 같습니다.  
+$$Q = E[U(z)]$$   
+  
+이를 expected utility theory라고 하며 U를 utility function이라 합니다. 만약 U가 identity function인 경우 앞서 서술한 과정과 동일합니다. 
+하지만 U가 'linear'하지 않고 concave하거나 convex한 non-linear function인 경우 policy는 다른 경향을 나타내게 됩니다. 
+구체적으로는 U가 linear한 경우 risk-neutral, concave한 경우 risk-averse, convex한 경우 risk-seeking policy라고 합니다. U가 극단적으로 convex한 경우를 예로 생각해 보겠습니다. 임의의 z가 convex의 minimum에서 매우 먼 경우, utility function은 매우 큰 값을 리턴합니다. 즉 높은 z value를 seeking한다고 할 수 있습니다. 확률이 100%인 1과, 30%로 2, 70%로 0.1인 경우를 생각해보면 convex utility function은 낮은 확률의 2라도 매우 큰 값으로 가치를 뻥튀기하기 때문에 후자를 선택할 확률이 높아지게 됩니다.   
+현재 우리는 distribution $$z$$을 직접적으로 갖고 있지 않고 quantile function을 갖고 있기 때문에, 각 quantile에 해당하는 확률 $$\tau$$를 샘플링해 이에 해당하는 value $$z_{\tau}$$을 얻어야 합니다. 이를 함수로 표현하면 $$Z_{\tau}=F_z^{-1}(\tau)$$, $$\tau=U([0,1])%%이라 할 수 있습니다.  
+  
+이제 $$\tau$$를 sampling하는 logic에 대한 함수를 $$\beta(\tau)$$라 합시다. 위의 Q-value 식을 다시 표현하면 다음과 같습니다.  
+$$Q_{\beta}(s,a) = E[Z_{\beta(\tau)}(s,a)]$$  
+이때 만약 $$\beta$$가 $$\tau$$를 매우 치우친 값에서 sampling하도록 유도한다고 가정합시다. 가령 [0, 1] 사이의 $$\tau$$를 받아 [0, .25] 사이의 값을 return한다면, 그 결과인 value 역시 최대 quarter-quantiles을 넘지 못할 것입니다. 즉 액션별로 하위 25%의 return을 비교해서 어떤 액션이 안정적으로 return을 보장하는지를 확인하는 것입니다. **따라서 expected return이 높진 않더라도 non-risky한 action을 선호하게 되는데, 이를 risk-averse policy라 합니다.** 반대로 어떤 action이 Expected return은 높아도 Variance가 커서 매우 낮은 return을 받을 가능성이 있다면, 선택받지 못할 것입니다. **이를 distorted expectation of $$Z(s,a)$$라고 하며, $$\beta$$는 distortion risk measure라고 합니다.** 어떤 $$\beta$$를 선택하는 지가 policy의 성격을 결정한다고 할 수 있겠습니다.  
+  
+  
+지금까지 C51, QR-DQN, IQN 등으로 불리는 알고리즘 각각의 가장 큰 특징에 대해 다뤄보았습니다. IQN은 atari에 다양한 policy를 적용하면서 task 특성에 맞는 policy를 찾으려는 모습을 보여줬고, 성능 역시 가장 좋았습니다. 딥마인드에서 앞으로 distributional RL 알고리즘을 어떤 방향으로 발전시킬지 기대됩니다.
+
+
+
