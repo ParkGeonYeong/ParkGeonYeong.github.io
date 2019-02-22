@@ -33,8 +33,7 @@ C51의 경우 reward distribution의 supports 개수와 최대,최소값을 파�
 그 기초가 된 C51 역시 매우 중요한 논문이지만, 본 자료에서는 이 QR-DQN, 더 중요하게는 IQN에 대해 다루겠습니다. C51에 대해서는 논문 및 RL Korea 블로그를 미리 참고 바랍니다.  
   
 **1. Quantile Regression DQN**   
-QR-DQN 전에 우선 Wasserstein metric에 대해 알아보겠습니다.   
-- Wasserstein metric
+우선 Wasserstein metric에 대해 알아보겠습니다.   
 Wasserstein metric은 분포 공간에 대한 거리 metric으로, 직관적으로는 두 확률 분포의 떨어진 거리를 의미합니다. 
 이는 optimal transport 문제로도 잘 알려져 있습니다. 분포 $${\mu}(x)$$에서 $${\pi}(x)$$으로 값을 '옮긴다'고 생각해 봅시다.
 $$\mu$$의 x에서 $$\pi$$의 y로 값을 옮길 때, 받아 얼마나 많은 '값을 옮길지'를 리턴하는 joint 함수 $${\gamma}(x,y)$$가 있고, 두 지점의 거리에 대한 함수 $$c(x,y)$$가 있습니다. 이때 미소 $$dx, dy$$에 대해서 모든 거리 비용을 계산하면   
@@ -62,7 +61,7 @@ $$Q = E[U(z)]$$
 이를 expected utility theory라고 하며 U를 utility function이라 합니다. 만약 U가 identity function인 경우 앞서 서술한 과정과 동일합니다. 
 하지만 U가 'linear'하지 않고 concave하거나 convex한 non-linear function인 경우 policy는 다른 경향을 나타내게 됩니다. 
 구체적으로는 U가 linear한 경우 risk-neutral, concave한 경우 risk-averse, convex한 경우 risk-seeking policy라고 합니다. U가 극단적으로 convex한 경우를 예로 생각해 보겠습니다. 임의의 z가 convex의 minimum에서 매우 먼 경우, utility function은 매우 큰 값을 리턴합니다. 즉 높은 z value를 seeking한다고 할 수 있습니다. 확률이 100%인 1과, 30%로 2, 70%로 0.1인 경우를 생각해보면 convex utility function은 낮은 확률의 2라도 매우 큰 값으로 가치를 뻥튀기하기 때문에 후자를 선택할 확률이 높아지게 됩니다.   
-현재 우리는 distribution $$z$$을 직접적으로 갖고 있지 않고 quantile function을 갖고 있기 때문에, 각 quantile에 해당하는 확률 $$\tau$$를 샘플링해 이에 해당하는 value $$z_{\tau}$$을 얻어야 합니다. 이를 함수로 표현하면 $$Z_{\tau}=F_z^{-1}(\tau)$$, $$\tau=U([0,1])%%이라 할 수 있습니다.  
+현재 우리는 distribution $$z$$을 직접적으로 갖고 있지 않고 quantile function을 갖고 있기 때문에, 각 quantile에 해당하는 확률 $$\tau$$를 샘플링해 이에 해당하는 value $$z_{\tau}$$을 얻어야 합니다. 이를 함수로 표현하면 $$Z_{\tau}=F_z^{-1}(\tau)$$, $$\tau=U([0,1])$$이라 할 수 있습니다.  
   
 이제 $$\tau$$를 sampling하는 logic에 대한 함수를 $$\beta(\tau)$$라 합시다. 위의 Q-value 식을 다시 표현하면 다음과 같습니다.  
 $$Q_{\beta}(s,a) = E[Z_{\beta(\tau)}(s,a)]$$  
