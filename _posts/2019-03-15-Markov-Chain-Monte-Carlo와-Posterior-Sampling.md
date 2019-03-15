@@ -1,6 +1,8 @@
 ---
 Title : "Markov Chain Monte Carlo와 Posterior Sampling"
 use_math : true
+layout : single
+classes : wide
 ---
 
 **0. Posterior Sampling의 필요성**  
