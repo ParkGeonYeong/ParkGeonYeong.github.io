@@ -58,7 +58,7 @@ $$A(z^*, z^{\tau}) = min(1, \frac{(* 결과)}{(\tau 결과)})$$
    
 MCMC은 마르코프 체인의 수렴성을 수학적 백그라운드로 갖고 있는 알고리즘이다. Equilibrium distribution이 우리의 관심사 분포와 일치하는, 
 가역적인 마르코프 체인을 설계해서 그 안에서 계속해서 안정적으로 샘플링을 진행하는 것이다. 
-조금 더 쉽게 말하면 $$p(z)$$가 stationary하도록 마르코프 체인의 전환 $$T(z'\leftarrowz)$$을 설계한 뒤, 이를 기반으로 계속 시뮬레이션을 돌려 
+조금 더 쉽게 말하면 $$p(z)$$가 stationary하도록 마르코프 체인의 전환 $$T(z'{\leftarrow}z)$$을 설계한 뒤, 이를 기반으로 계속 시뮬레이션을 돌려 
 샘플을 얻는다.  
   
 우선 결론을 먼저 보면, 설계한 마르코프 체인의 Equilibrium distribution이 우리의 타겟 분포와 일치하는 경우, 어떤 chain step을 거쳐 샘플링을 하더라도 우리의 타겟인 분포 $$p(z)$$은 stationarity를 유지할 수 있다.
@@ -67,3 +67,6 @@ $$p(z(\tau)) = p(z(\tau-1)) = ... \equiv p_eq(z)$$
 반대로 성립할 경우 마르코프 체인에서 어떤 state로 갈 확률이 항상 동일하게 유지되기 때문에 균일한 방식의 샘플링을 유지할 수 있다.
 이러한 stationarity가 만족되도록 위에서 전환이자 승인 함수 $$A$$를 설계했기 때문에 모든 $$p$$의 state를 방문할 수 있는 것이 보장되고, 
 계속된 샘플링 시뮬레이션 끝에 invariant distribution $$p$$로 수렴할 수 있다.
+  
+수식적으로는 위의 승인 함수 A를 전환 함수 $$T(z'{\leftarrow}z)$$이라 생각할 때  
+$$p(z)T(z'{\leftarrow}z) = p(z')T(z{\leftarrow}z')$$가 성립하고 따라서 가역적인 markov chain이 설계된다.
