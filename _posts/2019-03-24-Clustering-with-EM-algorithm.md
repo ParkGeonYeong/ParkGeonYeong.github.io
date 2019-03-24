@@ -23,10 +23,11 @@ Parameter 뿐만 아니라 latent variable을 정의하고, 두 변수의 intera
 이는 $$\sum$$이 로그 안에 들어있기 때문에 계산의 어려움이 있습니다.  
 따라서 이를 밖으로 빼주는 과정이 필요한데 이 과정에서 로그 함수가 concave임을 활용합니다.  
   
-우선 위의 식을 $$ln(\sum_{z}q(Z)\frac{P(x,Z|\theta)}{q(Z)})$$으로 변형합니다. $$q(Z)$$는 latent variable에 대한 확률 분포입니다.
-Jensen's inequality에 따라 $$ln(\sum_{z}q(Z)\frac{P(x,Z|\theta)}{q(Z)})\geq\sum_{z}q(Z)ln(\frac{P(x,Z|\theta)}{q(Z)}) $$
-이 됩니다. 우변의 분모, 분자를 분리하면 $$\sum_{z}q(Z)ln(P(x,Z|\theta))-\sum_{z}q(Z)ln(q(Z))$$으로, 
-$$E_{q(Z)}ln(P(x,Z|\theta)+H(q)$$와 동일한 식이 됩니다. 따라서 jensen's inequality를 통해 log likelihood의 lower bound을 찾았습니다. 
+우선 위의 식을 $$ln(\sum_{z}q(Z)\frac{P(x,Zㅣ\theta)}{q(Z)})$$  
+으로 변형합니다. $$q(Z)$$는 latent variable에 대한 확률 분포입니다.
+Jensen's inequality에 따라 $$ln(\sum_{z}q(Z)\frac{P(x,Zㅣ\theta)}{q(Z)})\geq\sum_{z}q(Z)ln(\frac{P(x,Zㅣ\theta)}{q(Z)}) $$
+이 됩니다. 우변의 분모, 분자를 분리하면 $$\sum_{z}q(Z)ln(P(x,Zㅣ\theta))-\sum_{z}q(Z)ln(q(Z))$$으로, 
+$$E_{q(Z)}ln(P(x,Z\theta)+H(q)$$와 동일한 식이 됩니다. 따라서 jensen's inequality를 통해 log likelihood의 lower bound을 찾았습니다. 
   
 또 다른 방식으로 lower bound을 찾아보면 다음과 같습니다. 
 $$ln(\sum_{z} P(x,Z|\theta))\\
@@ -53,7 +54,7 @@ latent variable의 distribution $$q(Z)$$가 $$P(Z|x, \theta)$$와 일치할 때�
 **1. K-means Clustering**  
 ![image](https://user-images.githubusercontent.com/46081019/54875301-ba7a6380-4e3f-11e9-9fe1-066642621807.png)  
 K-means Clustering은 K개의 centroid $$\mu_k$$을 parameter로 정의해 이를 유클리드 거리 손실에 대해 업데이트합니다.  
-L = \sum_n\sum_kq(Z=k)||x_n-\mu_k||^2  
+$$L = \sum_n\sum_kq(Z=k)||x_n-\mu_k||^2$$   
 이 과정에서 latent variable $$Z=i$$는 nth data $$x_n$$이 어느 centroid에 할당되었는지를 의미합니다. 즉 
 discrete variable에 대한 분포로써 $$x_n$$과 가장 가까운 $$\mu_k$$에 $$x_n$$을 할당하고, $$q(Z=k)=1$$이 됩니다.  
 따라서 우선 \mu를 임의로 설정하고, 이를 기반으로 $$q(Z)$$를 설정한 다음, 다시 $$\mu_k$$에 대해 loss를 최적화합니다.  
