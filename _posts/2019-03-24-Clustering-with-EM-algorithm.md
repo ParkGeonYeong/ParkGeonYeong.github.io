@@ -27,7 +27,7 @@ Parameter 뿐만 아니라 latent variable을 정의하고, 두 변수의 intera
 으로 변형합니다. $$q(Z)$$는 latent variable에 대한 확률 분포입니다.
 Jensen's inequality에 따라 $$ln(\sum_{z}q(Z)\frac{P(x,Zㅣ\theta)}{q(Z)})\geq\sum_{z}q(Z)ln(\frac{P(x,Zㅣ\theta)}{q(Z)}) $$
 이 됩니다. 우변의 분모, 분자를 분리하면 $$\sum_{z}q(Z)ln(P(x,Zㅣ\theta))-\sum_{z}q(Z)ln(q(Z))$$으로, 
-$$E_{q(Z)}ln(P(x,Z|\theta)+H(q)$$와 동일한 식이 됩니다. 따라서 jensen's inequality를 통해 log likelihood의 lower bound을 찾았습니다. 
+$$E_{q(Z)}ln(P(x,Z|\theta))+H(q)$$와 동일한 식이 됩니다. 따라서 jensen's inequality를 통해 log likelihood의 lower bound을 찾았습니다. 
   
 또 다른 방식으로 lower bound을 찾아보면 다음과 같습니다. 
 $$ln(\sum_{z} P(x,Z|\theta))\\
