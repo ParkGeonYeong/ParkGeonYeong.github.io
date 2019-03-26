@@ -15,7 +15,7 @@ Reinforcement learning의 주요 과제는 크게 2가지로 나뉜다.
 - 현재 도메인을 넘어 타 도메인에 학습한 정책을 활용, 보다 효율적인 방식으로 적응.  
 - 가장 해결이 어렵다고 여겨지는 문제  
     
-이 두 가지 문제를 모두 해결한 획기적이었던 논문[Curiosity-driven Exploration by Self-supervised Prediction](https://arxiv.org/abs/1705.05363)을 정리하고자 한다. 
+이 두 가지 문제를 모두 해결한 획기적이었던 논문 [Curiosity-driven Exploration by Self-supervised Prediction](https://arxiv.org/abs/1705.05363)을 정리하고자 한다. 
 Curiosity-driven exploration 방식은 주어진 정보 중 agent-related feature을 걸러낸다.
 그리고 취한 액션이 feature에 미치는 영향을 지속적으로 예측, 개선한다.
 현재 state에서 특정 액션을 취했을 때 어떤 state'에 도달할 지를 끊임 없이 예측하고 있는 것이다.  
