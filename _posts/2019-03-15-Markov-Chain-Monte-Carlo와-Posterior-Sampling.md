@@ -15,7 +15,8 @@ $$P(\thetaㅣx) = \frac{P(xㅣ\theta)P(\theta)}{P(x)}$$에서 분모의 evidence
 해당 과정들의 문제점을 보완할 수 있는 MCMC를 설명하겠다.  
 
 **1. Sampling Methods**   
-두 방식 모두 given $$z$$에 대해서 $$p(z)$$를 계산할 수 있다고 가정한다.
+두 방식 모두 given $$z$$에 대해서 $$p(z)$$를 계산할 수 있다고 가정한다.  
+
 **1.1 Rejection Sampling**  
 Rejection Sampling은 이름에서 알 수 있듯이 Sample을 제안해 특정 기준을 obey하지 못하는 경우 reject하여 underlying true distribution을 
 근사한다. 우선 우리의 관심사인 분포를 $$p(z)$$이라 하고, sample의 proposal distribution $$q(z)$$을 정의한다. 
@@ -54,8 +55,11 @@ Target과 behavior policy를 정의하여 Monte-Carlo 추정을 실행할 경우
 **2. Markov Chain Monte Carlo**  
 
 MCMC는 앞선 Sampling 알고리즘이 고차원 분포에서 좋지 못한 성능을 보이는 것을 개선할 수 있는 알고리즘이다.  
-**MCMC = Obtain dependent samples drawn approximately from p(z) by simulating Markov Chain**
+
+**MCMC = Obtain dependent samples drawn approximately from p(z) by simulating Markov Chain**  
+
 우선 Markov Chain에 대해서 간단히 짚고 넘어가자.  
+
 **2.1 Markov Chain**  
 Markov Chain이란 current state에 대한 non-deterministic 확률 분포를 얻는 과정으로, 
 매 시간마다 state-space는 바뀌거나 혹은 같은 상태를 유지할 수 있다. 
