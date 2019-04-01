@@ -14,12 +14,10 @@ $$P(\thetaㅣx) = \frac{P(xㅣ\theta)P(\theta)}{P(x)}$$에서 분모의 evidence
 많이 쓰이는 알고리즘이 바로 Markov Chain Monte Carlo(MCMC)이다. 여기서는 우선 몇몇 sampling 기법을 먼저 다룬 다음, 
 해당 과정들의 문제점을 보완할 수 있는 MCMC를 설명하겠다.  
 
-**1. 다양한 Sampling Methods**  
+**1. Sampling Methods**  
+**1.1 Rejection Sampling**  
+**1.2 Importance Sampling**  
 
-**1.1 Standard Sampling**  
-
-**1.2 Rejection Sampling**  
-**1.3 Importance Sampling**  
 **2. Markov Chain Monte Carlo**  
 
 MCMC는 앞선 Sampling 알고리즘이 고차원 분포에서 좋지 못한 성능을 보이는 것을 개선할 수 있는 알고리즘이다.  
