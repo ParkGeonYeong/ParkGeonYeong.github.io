@@ -8,16 +8,16 @@ layout: single
 **All the contents in here is very important for various ML algorithm**  
   
 - Data matrix
-  - $$X = (x_1, ..., x_n) (pxn)$$
+  - $$X = (x_1, ..., x_n)$$ (pxn)
   - $$U'X = (U'x_1, ..., U'x_n)$$, each column vector of U is unit vector
     - If they are orthogonal, it can be regarded as projection of data X onto coordinate U  
     
 - Range, Null-space
   - for A: mxn,
-    - range of A: $$R(A) = Ax for some x in n-dimension space$$
+    - range of A: $$R(A) = Ax$$ for some x in n-dimension space
       - Exactly same as column space
     - row space of A : column space or range of A transpose
-    - null space of A : $$N(A) = x for all x in n-dimension space makes Ax=0$$
+    - null space of A : $$N(A) = x$$ for all x in n-dimension space makes Ax=0
       - null space and row space are orthogonal complement
       - So that all linear combination of row vectors are orthogonal to any vector included in null space
     - rank of A : dimension of row or column space of A
@@ -33,21 +33,24 @@ layout: single
       - Because A is square, we can define determinant of A
         - Intuition of determinant : It can be thought of as the volume of the region by applying A to the unit cube
         - = the volume of the hyperilipsoid
-        - Determinant of positive definite matrix : $$|A| = \prod_{i=1}^{p}{\lambda}_i$$, product of eigen-values
+        - Determinant of positive definite matrix : 
+        - $$|A| = \prod_{i=1}^{p}{\lambda}_i$$
         - Because positive definite matrix A can be diagonalized as $$A=UDU'$$ which U is orthogonal-eigen matrix
           - $$|U|=|U'|=1$$
           - [More details](https://parkgeonyeong.github.io/Gaussian-Distribution-(1)/)
-        - If there is all-zero rows or columns, or identical, or linear combination of each other, $$|A|=0$$
-        - Matrix determinant lemma: $$|A+UV'|=|I+V'A^{-1}U||A|$$
+        - If there is all-zero rows or columns, or identical, or linear combination of each other, 
+          - $$|A|=0$$
+        - Matrix determinant lemma: 
+          - $$|A+UV'|=|I+V'A^{-1}U||A|$$
           - [proof](https://en.wikipedia.org/wiki/Matrix_determinant_lemma)
 - Covariance
   - Covariance of ith class: $$\sum_i =E(x-\mu_i)(x-\mu_i)'$$
   - Sample covariance of ith class: $$S^{i}_{sample}=\frac{1}{N}\sum^{N}{(x-\mu_i)(x-\mu_i)'}=XX'$$
   - But it's biased value (N should be N-1)
-  - Covariance of y=CX: $$C{\sigma}C'$$ which $$\sigma$$ is covariance matrix(pxp) of X
+  - Covariance of y=CX: $$C{\sum}C'$$ which $$\sum$$ is covariance matrix(pxp) of X
     - Consider that $$\mu_y = C\mu_x$$
   - $$x'x$$ : Squared distance from the origin
-  - $$x'{\sigma}x$$ : Squared statistical distance which is weighted by variance and covariance term
+  - $$x'{\sum}x$$ : Squared statistical distance which is weighted by variance and covariance term
   - Similarly, $$x'Ax$$ is called as Quadratic form
     - It is so, so frequently expressed in terms of loss function of various linear ML methods
     - PCA, LDA, CCA, SVM, ...
@@ -96,7 +99,7 @@ layout: single
     - So after expansion, it exactly same as ellipsoid form
 - Rayleigh quotient problem
   - Super important
-  - Any kinda problem such as $$max_w{w'A'} s.t. ||w||=1$$
+  - $$max_w{w'A'} s.t. ||w||=1$$
   - can be reformulated as rayleigh quotient $$max_w{\frac{w'Aw}{w'w}}$$
   - By Lagrangian Multiplier approach, it boils down to $$L(w,\lambda)=w'Aw-\lambda(w'w-1)$$
   - By partial derivation of w, it turns into $$Aw={\lambda}w$$ which is EIGENVALUE PROBLEM
