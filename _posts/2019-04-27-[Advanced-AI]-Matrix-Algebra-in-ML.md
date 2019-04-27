@@ -1,15 +1,15 @@
 ---
 title: [Advanced AI] Matrix Algebra in ML
 use_math: true
-classes: single
-layout: wide
+classes: wide
+layout: single
 ---
 **Post for personnel summarizing**  
 **All the contents in here is very important for various ML algorithm**  
   
 - Data matrix
-  - $$X = [x_1, ..., x_n] (pxn)$$
-  - $$U'X = [U'x_1, ..., U'x_n]$$, each column vector of U is unit vector
+  - $$X = (x_1, ..., x_n) (pxn)$$
+  - $$U'X = (U'x_1, ..., U'x_n)$$, each column vector of U is unit vector
     - If they are orthogonal, it can be regarded as projection of data X onto coordinate U  
     
 - Range, Null-space
