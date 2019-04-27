@@ -1,5 +1,5 @@
 ---
-title: [Advanced AI] Matrix Algebra in ML
+title: Matrix Algebra in ML
 use_math: true
 classes: wide
 layout: single
