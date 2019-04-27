@@ -1,5 +1,5 @@
 ---
-title: [Advanced AI] Linear methods in ML
+title: Linear methods in ML
 use_math: true
 classes: single
 layout: wide
