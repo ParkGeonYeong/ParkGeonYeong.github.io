@@ -22,7 +22,7 @@ use_math: true
   - [For more details about range and null space](https://parkgeonyeong.github.io/2019-04-27-Advanced-AI-Matrix-Algebra-in-ML/)
   - Then, $$Ax=Ax_R+Ax_N$$, $$b=b_R+b_N$$
   - $$||Ax-b||^2 = ||Ax-b_R-b_N||^2 = ||Ax-b_R||^2+||b_N||^2$$ 
-  - because $$Ax-b_R{\in}R(A)$$ is orthogonal to $$b_N{\in}N(A^T)$$
+  - because $$Ax-b_R {\in} R(A)$$ is orthogonal to $$b_N {\in} N(A^T)$$
   - Because $$b_N$$ is regardless term with x, problems boils down into minimizing $$(Ax-b_R)^2$$
   - Suppose 'the answer' is $$x^*$$ which minimizes given term so that $$Ax^*=b_R$$. It's possible because both vector is in same linear space
   - Then, $$Ax^*-b = Ax^*-b_R-b_N=-b_N\inN(A^T)$$
