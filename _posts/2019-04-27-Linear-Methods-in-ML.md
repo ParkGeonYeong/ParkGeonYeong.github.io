@@ -1,7 +1,7 @@
 ---
 title: Linear methods in ML
-classes: single
-layout: wide
+classes: wide
+layout: single
 use_math: true
 ---
 
