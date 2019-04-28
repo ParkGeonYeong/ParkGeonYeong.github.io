@@ -21,12 +21,13 @@ use_math: true
   - Let's note vector x from range R(A) as $$x_R$$, and from null space $$N(A^T)$$ as $$x_N$$
   - [For more details about range and null space](https://parkgeonyeong.github.io/2019-04-27-Advanced-AI-Matrix-Algebra-in-ML/)
   - Then, $$Ax=Ax_R+Ax_N$$, $$b=b_R+b_N$$
-  - $$||Ax-b||^2 = ||Ax-b_R-b_N||^2 = ||Ax-b_R||^2+||b_N||^2$$ because $$Ax-b_R{\in}R(A)$$ is orthogonal to $$b_N{\in}N(A^T)$$
+  - $$||Ax-b||^2 = ||Ax-b_R-b_N||^2 = ||Ax-b_R||^2+||b_N||^2$$ 
+  - because $$Ax-b_R{\in}R(A)$$ is orthogonal to $$b_N{\in}N(A^T)$$
   - Because $$b_N$$ is regardless term with x, problems boils down into minimizing $$(Ax-b_R)^2$$
-  - Suppose 'the answer' is $$x*$$ which minimizes given term so that $$Ax*=b_R$$. It's possible because both vector is in same linear space
-  - Then, $$Ax*-b = Ax*-b_R-b_N=-b_N\inN(A^T)$$
-  - Because now $$Ax*-b\inN(A^T)$$, $$A^T(Ax*-b)=0$$
-  - So $$x*=(A^TA)^{-1}b$$, term inside paranthesis is known as pseudo-inverse of A
+  - Suppose 'the answer' is $$x^*$$ which minimizes given term so that $$Ax^*=b_R$$. It's possible because both vector is in same linear space
+  - Then, $$Ax^*-b = Ax^*-b_R-b_N=-b_N\inN(A^T)$$
+  - Because now $$Ax^*-b\inN(A^T)$$, $$A^T(Ax^*-b)=0$$
+  - So $$x^*=(A^TA)^{-1}b$$, term inside paranthesis is known as pseudo-inverse of A
 - Partial derivation (more easier)
   - Exactly same result can be driven from partial derivation of loss function w.r.t. x
 - Intition 
@@ -57,7 +58,7 @@ use_math: true
 - Steepest descent methods: $$G=I$$
 - Newton's method: $$G=H^{-1}$$ which H is hessian matrix of L by $$\theta$$
   - Write above formula in slight different way, 
-  - $$$L(\theta_{t+1}) = L(\theta_t)+g^T(\theta_{t+1}-\theta_t)+\frac{1}{2}(\theta_{t+1}-\theta_{t})^{T}H(\theta_{t+1}-\theta_{t})+...$$
+  - $$L(\theta_{t+1}) = L(\theta_t)+g^T(\theta_{t+1}-\theta_t)+\frac{1}{2}(\theta_{t+1}-\theta_{t})^{T}H(\theta_{t+1}-\theta_{t})+...$$
   - By derivate L with $$\theta_{t+1}$$, we can get $$g+H(\theta_{t+1}-\theta_{t})=0$$
   - $$\theta_{t+1} = \theta_{t}-H^{-1}g$$
 - Levenberg-Marquardt modifications:
@@ -83,16 +84,16 @@ use_math: true
 - Reduce data dimensionality, denoise data, get compact representation of data in low space
 - **Idea : finds a subspace W in a way that maximizes the variance of the data projected onto W**
 - Derivation
-  - 1. Centering data: $$X = (I-\frac{1}{n}11^{T})X$$
+  - Centering data: $$X = (I-\frac{1}{n}11^{T})X$$
     - WHY CENTERING IS NEEDED IN PCA?
       - 1. data should be passed by origin of coordinates so that W can be some subspace of original coordinates
       - 2. Covariance of projected data can be easily described (in next step)
-  - 2. Project onto w: $$X_{new} = w'X$$
-  - 3. Conditioning w so that covariance of projected data can be keeped as much as possible
+  - Project onto w: $$X_{new} = w'X$$
+  - Conditioning w so that covariance of projected data can be keeped as much as possible
     - covariance of new data: $$X_{new}X_{new}^{T}=w'XX'w=w'Cw$$ which C is original covariance
-    - ||w||_2=1
+    - ||w||^{2}=1
       - w/o loss of generality
-  - 4. Solve rayleigh quotient problem
+  - Solve rayleigh quotient problem
     - $$max_w \frac{w^{T}Cw}{w^{T}w}$$
     - **It becomes eigenvector problem!**
 4.3. CCA  
