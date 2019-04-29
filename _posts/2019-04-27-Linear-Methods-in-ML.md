@@ -48,11 +48,11 @@ use_math: true
 - Let f is our loss function, x is updated model parameter $$\theta+{\eta}d$$ which $$\eta$$ is learning rate, and a is $$\theta$$
 - $$L(\theta+{\eta}d)=L(\theta)+{\eta}g^{T}d+...$$
   - Where g is derivation of L by $$\theta$$
-  - **if we can set d such that $$g^{T}d$$ is negative, every update of $$\theta$$ by $${\eta}d$$ assures decrease of loss
+  - **if we can set d such that $$g^{T}d$$ is negative, every update of $$\theta$$ by $${\eta}d$$ assures decrease of loss**
 - What if we set $$d$$ as $$-Gg$$ such that G is positive definite matrix?
   - $$g^{T}d = -g^{T}Gg$ < 0$$ by definition of positive definite matrix
     - [Positive definite in previous post](https://parkgeonyeong.github.io/Matrix-Algebra-in-ML/)
-- As a result, **$$\theta_{t+1} = \theta_{t}-{\eta}Gg$$  
+- As a result, $$\theta_{t+1} = \theta_{t}-{\eta}Gg$$  
   
 **3. Choosing G**  
 - Steepest descent methods: $$G=I$$
@@ -86,8 +86,8 @@ use_math: true
 - Derivation
   - Centering data: $$X = (I-\frac{1}{n}11^{T})X$$
     - WHY CENTERING IS NEEDED IN PCA?
-      - 1. data should be passed by origin of coordinates so that W can be some subspace of original coordinates
-      - 2. Covariance of projected data can be easily described (in next step)
+      - data should be passed by origin of coordinates so that W can be some subspace of original coordinates
+      - Covariance of projected data can be easily described (in next step)
   - Project onto w: $$X_{new} = w'X$$
   - Conditioning w so that covariance of projected data can be keeped as much as possible
     - covariance of new data: $$X_{new}X_{new}^{T}=w'XX'w=w'Cw$$ which C is original covariance
