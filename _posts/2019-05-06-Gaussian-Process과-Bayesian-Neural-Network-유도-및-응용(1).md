@@ -77,3 +77,4 @@ Exploration, Curiosity 쪽 분야의 클래식한 논문인 VIME과 얼마 전 I
 - $$f(x)=b+\sum_{j=1}^{N_H}v_jh(x;u_j)$$으로 two-layer neural network를 나타내자. **이때 $$f(x)$$는 independently weighted random variable의 합이므로 central limit theorem에 따라 gaussian process**로 근사된다.
 
 **1. Variational Inference**  
+- 
