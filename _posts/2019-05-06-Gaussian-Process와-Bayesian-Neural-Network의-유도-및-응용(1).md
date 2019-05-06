@@ -90,9 +90,9 @@ Exploration, Curiosity 쪽 분야의 클래식한 논문인 VIME과 얼마 전 I
 - $$q$$의 범위는 constrained되어야 하는데, 가령 quadratic form이나 linear combination of fixed basis functions 등이 있겠다.
 - 우리가 관측하지 못하는 latent variable을 $$Z$$, 관측한 observation을 $$X$$이라 하자.
 - 우리의 목표는 model evidence $$p(X)$$를 최대한 높이는 것이다. Log-likelihood를 수식으로 전개하면 다음과 같다.
-- $$\begin{align} lnP(x) &= \int{q(w)lnP(x)dw} \\
-&=\int{q(w)ln\frac{P(w \mid x)P(x)}{P(w \mid x)}dw} \\&= \int{q(w)ln\frac{q(w)P(w, x)}{q(w)P(w \mid x)}dw} \\&=\int{q(w)ln\frac{P(x \mid w)p(w)}{q(w)}dw}-\int{q(w)ln\frac{P(w \mid x)}{q(w)}dw} \\&= 
-\int{q(w)ln\frac{P(x \mid w)p(w)}{q(w)}dw}+KL(q \mid\mid p(w \mid x))\end{align}$$
+- $$\begin{align} lnP(X) &= \int{q(w)lnP(X)dw} \\
+&=\int{q(w)ln\frac{P(w \mid X)P(X)}{P(w \mid X)}dw} \\&= \int{q(w)ln\frac{q(w)P(w, X)}{q(w)P(w \mid X)}dw} \\&=\int{q(w)ln\frac{P(X \mid w)p(w)}{q(w)}dw}-\int{q(w)ln\frac{P(w \mid X)}{q(w)}dw} \\&= 
+\int{q(w)ln\frac{P(X \mid w)p(w)}{q(w)}dw}+KL(q \mid\mid p(w \mid X))\end{align}$$
 - 이때 KL-divergence term은 positive하므로 남은 항은 자연스럽게 model evidence의 lower bound가 된다. 즉 이 lower bound term를 maximize하는게 전체 inference 과정을 보장한다. 
   - 이를 variational free energy, 혹은 ELBO라고 부르며 variational inference의 핵심 loss라고 할 수 있다.
   - 보통은 -를 붙여서 minimize free energy라고 한다.
