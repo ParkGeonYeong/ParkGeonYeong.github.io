@@ -97,7 +97,8 @@ Exploration, Curiosity 쪽 분야의 클래식한 논문인 VIME과 얼마 전 I
   - 이를 variational free energy, 혹은 ELBO라고 부르며 variational inference의 핵심 loss라고 할 수 있다.
   - 보통은 -를 붙여서 minimize free energy라고 한다.
   - 물론 lower bound를 가장 tight하게 하는 방법은 KL divergence term을 0으로 만드는 것이지만, true posterior distribution을 모르기 때문에 불가능하다.
-  - lower bound를 maximize하는 과정에서도 KL divergence term은 등장하며, 그 크기가 줄어들어야 하는 regularizer 역할을 한다.
+  - lower bound를 maximize하는 과정에서도 KL divergence term은 등장하며, 그 크기가 줄어들어야 하는 regularizer 역할을 한다.  
+  
 **1.1 Factorized distributions**  
 - 이후에 설명하겠지만 Bayesian neural network에서 Variational distribution을 정의하는 방식으로는 diagonal gaussian distribution을 많이 사용한다.
 - 여기에서는 가장 기초적으로 많이 사용되는 방식인 factorized distribution을 예시로 들겠다.
