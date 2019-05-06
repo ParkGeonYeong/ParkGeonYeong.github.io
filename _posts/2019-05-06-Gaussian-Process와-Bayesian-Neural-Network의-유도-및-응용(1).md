@@ -88,7 +88,7 @@ Exploration, Curiosity 쪽 분야의 클래식한 논문인 VIME과 얼마 전 I
   - 그러나 computationally demanding하고, required distribution을 직접적으로 알아낼 순 없다.
 - Variational inference를 위해서는 우선 varitional distribution $$q$$를 잡아야 한다.
 - $$q$$의 범위는 constrained되어야 하는데, 가령 quadratic form이나 linear combination of fixed basis functions 등이 있겠다.
-- 우리가 관측하지 못하는 latent variable을 $$Z$$, 관측한 observation을 $$X$$이라 하자.
+- 우리가 관측하지 못하는 latent variable을 $$w$$, 관측한 observation을 $$X$$이라 하자. (책에서는 $$w$$가 아닌 $$Z$$를 사용했지만 이후 Neural Net에서 식을 사용할 때는 weight의 개념으로 받아들이기 위해 w로 표기하는 것이 수월하다)
 - 우리의 목표는 model evidence $$p(X)$$를 최대한 높이는 것이다. Log-likelihood를 수식으로 전개하면 다음과 같다.
 - $$\begin{align} lnP(X) &= \int{q(w)lnP(X)dw} \\
 &=\int{q(w)ln\frac{P(w \mid X)P(X)}{P(w \mid X)}dw} \\&= \int{q(w)ln\frac{q(w)P(w, X)}{q(w)P(w \mid X)}dw} \\&=\int{q(w)ln\frac{P(X \mid w)p(w)}{q(w)}dw}-\int{q(w)ln\frac{P(w \mid X)}{q(w)}dw} \\&= 
