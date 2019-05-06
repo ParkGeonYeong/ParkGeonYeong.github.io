@@ -1,8 +1,8 @@
 ---
-title: Gaussian Process과 Variational Inference 유도 및 응용(1)
+title: Gaussian Process과 Bayesian Neural Network 유도 및 응용(1)
 use_math: true
-classes: single
-layout: wide
+classes: wide
+layout: single
 ---
 *본 자료는 다음을 주로 참고하였습니다.*  
 - PRML Chap 6. Kernel Methods
@@ -13,14 +13,13 @@ layout: wide
 
 **Introduction**  
 Gaussian Process과 Variational Inference는 uncertainty in deep learning, variational auto-encoder, bayesian neural network 등의 이론적 기반이다.
-머신 러닝의 확률론적인 적용에 관심이 있다면 반드시 탄탄하게 알아두어야 한다. 여기서는 Gaussian Process, Gaussian Process와 Variational Inference의 연관성, 
-Bayesian neural network까지 이어서 설명하려 한다. 이 후 강화 학습 분야의 적용 예시을 알아보려 한다. 
-Exploration, Curiosity 쪽 분야의 클래식한 논문인 VIME과 얼마 전 ICLR에 발표된 TD-VAE이다.  
+머신 러닝의 확률론적인 적용에 관심이 있다면 반드시 탄탄하게 알아두어야 한다. 여기서는 Gaussian Process, Variational Inference을 먼저 짚고 
+Bayesian neural network까지 이어서 설명하려 한다. 특히 variational inference, bayesian neural network는 최근 강화 학습 분야에도 활발히 적용되고 있기 때문에 그 예시를 알아보려 한다. 
+Exploration, Curiosity 쪽 분야의 클래식한 논문인 VIME과 얼마 전 ICLR에 발표된 TD-VAE가 그것이다.  
   
 **0. Gaussian Process과 Gaussian process regression**  
-
 - Gaussian process의 정의 자체는 단순하다.
-  - A gaussian process is a collection of random variables, any finite number of which have a joint Gaussian distribution
+  - **A gaussian process is a collection of random variables, any finite number of which have a joint Gaussian distribution**
   - 그러나 그 개념을 regression에 적용하면 더 유용하다. 
   - 가령 $$y=w^{T}\phi(x)$$의 regression 식을 생각하자. 이때 $$p(w)=N(w \mid 0, \sum_p)$$의 prior를 도입하면 $$y$$는 linear combination of
   gaussian distributed variables이 되어, 그 자신도 gaussian이 된다.
@@ -69,5 +68,12 @@ Exploration, Curiosity 쪽 분야의 클래식한 논문인 VIME과 얼마 전 I
   - 또한 regression function space로 gaussian process regression을 설명하지 않고, regression의 weight space에서부터 설명하는 방식이 있다.
     - 그러나 복잡한 유도 과정 끝에 얻는 결과는 동일하다.  
     
+**0.1. Gaussian Process와 Bayesian Neural Network의 관계**    
+- 결론적으로 Bayesian Neural Network는 weight을 prior distribution으로 나타낸 neural network이다.
+  - 이를 통해 single point prediction이 아닌, predictive distribution을 얻는다.
+- 왜냐하면 weight를 distribution으로 표현하면 이론적으로 network는 gaussian process에 수렴하기 때문이다.
+  - 이와 관련된 유명한 이론으로 [universal approximation theorem](https://en.wikipedia.org/wiki/Universal_approximation_theorem)이 있는데, two hidden layer로 어떤 함수도 근사가 가능하다는 이론이다.
+  - Universal approximation theorem이 gaussian process regression에도 적용되는 것이다.
+- $$f(x)=b+\sum_{j=1}^{N_H}v_jh(x;u_j)$$으로 two-layer neural network를 나타내자. **이때 $$f(x)$$는 independently weighted random variable의 합이므로 central limit theorem에 따라 gaussian process**로 근사된다.
+
 **1. Variational Inference**  
-- 
