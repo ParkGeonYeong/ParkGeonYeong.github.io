@@ -119,7 +119,8 @@ Exploration, Curiosity 쪽 분야의 클래식한 논문인 VIME과 얼마 전 I
 - ![image](https://user-images.githubusercontent.com/46081019/57234254-3381f300-705b-11e9-9b74-7cc470f1410d.png)  
 - 가령 blue multi-modal gaussian function P가 있고, 이를 두 latent variable $$z_1, z_2$$를 이용한 gaussian distribution의 곱으로 표현하고자 한다.
   - 이때 $$KL(q \mid\mid P)$$를 최소화하는 과정에서, q는 P가 낮은 곳에 value를 assign하지 않는다.
-  - 따라서 두 mode 중 하나에 빠져, KL divergence의 local minimum을 취하게 된다.
+  - 따라서 두 mode 중 하나에 빠져, KL divergence의 local minimum을 취하게 된다.  
+  
 **Appendix**  
 - Proof of conditional gaussian distribution
   - To Be Filled...
