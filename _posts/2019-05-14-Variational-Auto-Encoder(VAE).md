@@ -31,5 +31,7 @@ $$z$$를 아예 모르기 때문에 기존 variational inference에서 많이 �
   
 **따라서 VAE에서는 주어진 x로부터 $$z$$를 "encoding"하는 variational approximation $$\phi$$와, 
 이로부터 다시 x를 생성하는 generative model $$\theta$$ 두가지 모두 end-to-end로 학습하여 문제를 해결한다.**
-과정은 아래 그림과 같다.  
+과정은 아래 그림과 같다. Coding의 관점에서 q는 encoder, p는 decoder로 불린다.   
 ![image](https://user-images.githubusercontent.com/46081019/57665961-18a21680-7639-11e9-8391-154165db5abb.png)  
+  
+**1. Variational Bound**  
