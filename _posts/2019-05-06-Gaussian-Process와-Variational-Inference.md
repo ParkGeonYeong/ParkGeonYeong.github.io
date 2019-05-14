@@ -1,5 +1,5 @@
 ---
-title: Gaussian Process와 Bayesian Neural Network의 유도 및 응용(1)
+title: Gaussian Process와 Variational Inference
 use_math: true
 classes: wide
 layout: single
