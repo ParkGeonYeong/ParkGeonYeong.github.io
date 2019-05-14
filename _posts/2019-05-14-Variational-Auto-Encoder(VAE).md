@@ -42,6 +42,7 @@ $$logP_\theta(x^i) \geq L(\theta, \phi, x^i) = E_{q_\phi(z \mid x)}[-log{q_\phi(
 $$p_\theta(x,z)$$를 분리하여 다시 쓰면 다음과 같다.   
 $$L(\theta, \phi, x^i) = -D_{KL}(q_\phi(z \mid x_i) \mid\mid p_\theta(z)) + E_{q_\phi(z \mid x)}[log{p_\theta}(x^i \mid z)]$$  
   
+(KL-div에 negative가 붙음)
 $$q_\phi, p_\theta$$가 어떤 형태인지는 조금 나중에 알아보고, 식 자체에만 집중해 보자.  
 Lower bound $$L$$을 최대화하기 위해서는 $$\phi$$에 대해 gradient를 구해서 $$\phi$$를 최적화해야 한다. 
 이때 KL divergence는 analytic한 해가 존재한다. (나중에 이를 보인다) 하지만 $$L$$에 포함되어 있는 expectation항은 analytical하게 구하기가 매우 어렵다. 
@@ -59,5 +60,19 @@ Reparameterization는 말 그대로 우리의 관심 대상 parameter를 다시 
 예시를 들어 Reparmeterization function g를 알아보자. 
 만약 우리가 latent variable $$z$$를 multi-variate distribution으로 가정하고, 
 $$\phi$$는 이 multi-variate gaussian의 mean과 covariance를 의미한다고 하자. 
-즉 $$Q(Z \mid X)=N(\mu(X),\sum(X))$$일 때, $$g(\epsilon, \phi, x) = \mu(X) + \sum^{frac{1}{2}}(X)*\epsilon$$이라고 하자.
-
+즉 $$Q(Z \mid X)=N(\mu(X),\sum(X))$$일 때, $$g(\epsilon, \phi, x) = \mu(X) + {\sum}^{\frac{1}{2}}(X)*\epsilon$$이라고 할 수 있을 것이다.   
+식을 보면 g는 $$\phi$$에 대해 미분 가능하며, 따라서 latent variable z의 underlying distribution parameter $$\phi$$를 최적화할 수 있다. 
+이때 $$\epsilon$$를 sampling하는 방식은 함수 $$p$$의 선택에 따라 다양하게 가능하다.  
+  
+**2. Model architecture**  
+VAE의 전체 model 구조를 보면 다음과 같다.  
+![image](https://user-images.githubusercontent.com/46081019/57668350-011b5b80-7642-11e9-9c12-1ec079bdd8f7.png)  
+왼쪽은 monte-carlo sampling 버전, 오른쪽은 reparameterized 버전이다. 파란색 박스가 합쳐져서 우리가 최대화하고자 하는 최종 loss가 된다.  
+하나씩 성분을 살펴보면 다음과 같다. 다시 한 번 강조하면, 모든 항들은 MLE problem으로부터 ELBO를 유도하는 과정에서 나왔으며 
+따라서 ELBO를 이해해야 VAE의 loss를 이해할 수 있다.
+- Encoder
+  - 목적 : $$\phi$$ (여기서는 평균과 공분산)을 encoding한다. 이를 통해 latent variable를 construct할 수 있다.
+  - 모델 : MLP를 사용한다.
+- KL divergence term of ELBO
+  - 목적 : **ELBO에서 negative KL-divergence는 일종의 'regularizer'같은 역할을 한다.** 
+  Latent variable의 prior distribution을 $$p(z;0, I)$$으로 잡을 때 $$\phi$$가 여기서 너무 멀어지지 않도록 한다. 
