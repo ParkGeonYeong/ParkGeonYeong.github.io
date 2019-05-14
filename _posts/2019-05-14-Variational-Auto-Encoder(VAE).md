@@ -53,5 +53,11 @@ Reparameterization이 무엇인지 보기 전에, 우선 최종적으로 구한 
 하지만 $$z$$의 식이 변한 것을 알 수 있는데, reparameterization function $$g_\phi$$, 그리고 어떤 random variable $$\epsilon$$이 등장하였다. 
     
 Reparameterization는 말 그대로 우리의 관심 대상 parameter를 다시 잡는다는 뜻이다. 
-즉 우리의 관심사인 $$z$$를 $$q$$에서 바로 sampling하면 미분이 불가능하기 때문에, $$\epsilon$$를 대신 sampling하여 $$z$$를 indirect하게 구하는 것이다. 
+즉 우리의 관심사인 $$z$$를 $$q$$에서 바로 sampling하면 미분이 불가능하기 때문에, $$\epsilon$$를 대신 sampling하여 $$z$$를 indirect하게 구하는 것이다. 이를 통해 우리는 적어도 $$z$$에 대해서 gradient를 전달할 수 있게 된다. 
+그림으로 표현하면 다음과 같다.  
+![image](https://user-images.githubusercontent.com/46081019/57667976-a2a1ad80-7640-11e9-8b08-588e2870c130.png)  
+예시를 들어 Reparmeterization function g를 알아보자. 
+만약 우리가 latent variable $$z$$를 multi-variate distribution으로 가정하고, 
+$$\phi$$는 이 multi-variate gaussian의 mean과 covariance를 의미한다고 하자. 
+즉 $$Q(Z \mid X)=N(\mu(X),\sum(X))$$일 때, $$g(\epsilon, \phi, x) = \mu(X) + \sum^{frac{1}{2}}(X)*\epsilon$$이라고 하자.
 
