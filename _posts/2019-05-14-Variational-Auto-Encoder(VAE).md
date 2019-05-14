@@ -31,8 +31,8 @@ $$z$$를 아예 모르기 때문에 기존 variational inference에서 많이 �
 ([MCMC와 posterior sampling](https://parkgeonyeong.github.io/Markov-Chain-Monte-Carlo%EC%99%80-Posterior-Sampling/) 참고)  
   
 **따라서 VAE에서는 주어진 x로부터 $$z$$를 "encoding"하는 variational approximation $$\phi$$와, 
-이로부터 다시 x를 생성하는 generative model $$\theta$$ 두가지 모두 end-to-end로 학습하여 문제를 해결한다.**
-과정은 아래 그림과 같다. Coding의 관점에서 q는 encoder, p는 decoder로 불린다.   
+이로부터 다시 x를 확률적으로 생성하는 generative model $$\theta$$ 두가지 모두 end-to-end로 학습하여 문제를 해결한다.**
+과정은 아래 그림과 같다. Coding의 관점에서 q는 encoder, p는 decoder로 불린다. Probabilistic latent encoding를 통해 uncertainty를 부여한다.   
 ![image](https://user-images.githubusercontent.com/46081019/57665961-18a21680-7639-11e9-8391-154165db5abb.png)  
     
 **1. Variational Bound and reparameterization trick**  
@@ -72,7 +72,24 @@ VAE의 전체 model 구조를 보면 다음과 같다.
 따라서 ELBO를 이해해야 VAE의 loss를 이해할 수 있다.
 - Encoder
   - 목적 : $$\phi$$ (여기서는 평균과 공분산)을 encoding한다. 이를 통해 latent variable를 construct할 수 있다.
-  - 모델 : MLP를 사용한다.
+  - 모델 : MLP를 사용
 - KL divergence term of ELBO
   - 목적 : **ELBO에서 negative KL-divergence는 일종의 'regularizer'같은 역할을 한다.** 
-  Latent variable의 prior distribution을 $$p(z;0, I)$$으로 잡을 때 $$\phi$$가 여기서 너무 멀어지지 않도록 한다. 
+  가령 Latent variable의 prior distribution을 $$p(z;0, I)$$으로 잡을 때 $$\phi$$가 여기서 너무 멀어지지 않도록 한다. 
+  Variational Inference에서의 regularizer는 별도의 Nuisance regularization hyperparameter가 필요 없다는 장점이 있고, 
+  단순히 likelihood의 최대화에만 집중하면 useful representation을 쉽게 배우지 못한다. 
+  따라서 latent variable의 prior를 둠으로써 Sparse한 auto-encoder variants를 얻을 수 있다. 
+  **하지만, 지나치게 단순한 prior는 반대로 excessive regularization으로 작용해, 모델의 성능을 저하시킬 수 있으며 
+  최근에는 다양한 prior form이 연구되고 있다.**
+  - 모델 : Multivariate Gaussian의 KL-divergence. 이는 analytical하게 구할 수 있으며 appendix를 참고하면 된다.
+  logarithm이 포함되어 있기 때문에 gaussian distribution의 exponential term이 벗겨지고 polynomial한 distance를 얻을 수 있다.
+- Sampling $$\epsilon$$
+  - 목적 : Reparameterization trick
+  - 모델 : 상황에 따라 다양한 $$p$$를 도입 가능
+- Decoder
+  - 목적 : Given z, try reproducing x
+  - 모델 : MLP를 사용. 이때 gaussian output이 필요한 경우 Gaussian MLP, 단순한 multivariate bernoulli output이 필요한 경우 bernoulli MLP 사용 (Appendix 참고)
+  
+ 
+모델의 결과는 다음과 같다. MNIST와 face manifold 모두 two-dimensional latent space를 활용해 만들었기 때문에 latent space를 2차원에 표현해서 figure를 그렸다. 이때 inverse CDF를 활용하여 latent variable z를 uniform한 grid로 sampling하였다. Manifold가 latent space를 따라 연속적으로 변화하는 것을 알 수 있다. 이를 통해 latent variable이 given input을 robust하게 represent하고 있음을 알 수 있다.  
+![image](https://user-images.githubusercontent.com/46081019/57670907-4b093f00-764c-11e9-9691-1a8bb5979a62.png)
