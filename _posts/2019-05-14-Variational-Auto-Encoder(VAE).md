@@ -1,8 +1,8 @@
 ---
 title: Variational Auto Encoder(VAE)
 use_math: true
-classes: single
-layout: wide
+classes: wide
+layout: single
 ---
 
 *이전 포스트와 이어집니다.*
