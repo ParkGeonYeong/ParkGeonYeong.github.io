@@ -6,7 +6,8 @@ layout: wide
 ---
 
 *이전 포스트와 이어집니다.*
-- [Gaussian Process와 Variational Inference](https://parkgeonyeong.github.io/Gaussian-Process%EC%99%80-Variational-Inference/)  
+- [Gaussian Process와 Variational Inference](https://parkgeonyeong.github.io/Gaussian-Process%EC%99%80-Variational-Inference/)   
+
 *다음 자료를 주로 참고했습니다.*  
 - [Original Paper](https://arxiv.org/pdf/1312.6114.pdf)
 - [Jaejun Yoo님 블로그 포스트](http://jaejunyoo.blogspot.com/2017/04/auto-encoding-variational-bayes-vae-1.html)  
@@ -35,3 +36,13 @@ $$z$$를 아예 모르기 때문에 기존 variational inference에서 많이 �
 ![image](https://user-images.githubusercontent.com/46081019/57665961-18a21680-7639-11e9-8391-154165db5abb.png)  
   
 **1. Variational Bound**  
+$$lnP(x) = \int{q(w)ln\frac{P(X \mid w)p(w)}{q(w)}dw}+KL(q \mid\mid p(w \mid X))$$를 유도했었다. 
+이때 KL-divergence는 non-negative하므로 우변의 첫 항은 MLE의 lower bound, ELBO가 된다. 이 ELBO를 $$L$$로 표현하여 논문의 꼴로 쓰면 다음과 같다.  
+$$logP_\theta(x^i) \geq L(\theta, \phi, x^i) = E_{q_\phi(z \mid x)}[-log{q_\phi(z \mid x)} + log{p_\theta(x, z)}]$$_ 
+$$p_\theta(x,z)$$를 분리하여 다시 쓰면 다음과 같다.   
+$$L(\theta, \phi, x^i) = -D_{KL}(q_\phi(z \mid x_i) \mid\mid p_\theta(z)) + E_{q_\phi(z \mid x)}[log{p_\theta}(x^i \mid z)]$$  
+$
+이 때 $$L$$을 최대화하기 위해 $$\phi$$에 대해 gradient를 구해야 한다. 
+가장 처음 생각해 볼 수 있는 방식은 분포 q를 따르는 z을 sampling하여 expectation 항의 conditional likelihood를 구하는 것인데, 
+이렇게 될 경우 random sampling operation이 들어간 채 back propagation을 해야 하므로 indifferentiable 상태가 된다. 
+이를 굉장히 스마트하게 해결한 방식이 바로 
