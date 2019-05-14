@@ -24,7 +24,7 @@ Variational Inference의 목표를 간단히 정리하면 'Intractable한 poster
 이미 알고 있는 variational distribution으로 근사하는 것'이라 할 수 있다. 
 VAE에서는 given data x에 대한 latent variable z의 분포, $$p(z \mid x)$$가 posterior distribution이다. 
 이때 given x를 잘 represent하는, true z가 정해져 있지 않다는 문제가 생긴다. 가령 우리가 true prior distribution $$p_\theta(z)$$를 잘 알고 있다면, 
-$$z$$을 sampling하고 이에 대응하는 $$x$$를 확률적으로 생성할 수 있을 것이다. ($$p_\theta(x \mid z))  
+$$z$$을 sampling하고 이에 대응하는 $$x$$를 확률적으로 생성할 수 있을 것이다. ($$p_\theta(x \mid z)$$)  
 하지만 현재 우리는 generative model $$\theta$$, latent variable $$z$$을 모두 모르기 때문에 x를 reconstruct하기 쉽지 않다. 
 $$z$$를 아예 모르기 때문에 기존 variational inference에서 많이 활용되어 온 mean-field 방식도 사용할 수 없다. (모든 가능한 $$z_i$$에 대해 integration이 필요하기 때문, 이전 포스트의 1.1 Factorized distribution 참고)  
 굉장히 많은 x에 대해 가능한 z를 모두 sampling하고 이를 validation하는 MCMC도 computational load가 높기 때문에 활용이 어렵다. 
@@ -49,7 +49,7 @@ Lower bound $$L$$을 최대화하기 위해서는 $$\phi$$에 대해 gradient를
 따라서 가장 처음 생각해 볼 수 있는 방식은 분포 q를 따르는 z을 *monte-carlo sampling*하여 expectation 항의 conditional likelihood를 경험적으로 구하는 것이다. 하지만 이렇게 될 경우 random sampling operation이 들어간 채 back propagation을 해야 하므로 indifferentiable 상태가 된다.  
 **이를 굉장히 스마트하게 해결한 방식이 바로 reparameterization trick이며, 논문의 핵심이라고 볼 수 있다.**  
 Reparameterization이 무엇인지 보기 전에, 우선 최종적으로 구한 loss를 보자.   
-![image](https://user-images.githubusercontent.com/46081019/57667711-90733f80-763f-11e9-9e16-ae1d612da463.png)  
+![image](https://user-images.githubusercontent.com/46081019/57672305-768f2800-7652-11e9-8ba3-3cea071c1dd4.png)  
 식 자체는 L개의 latent variable z를 sampling하고, 이를 통해 loss를 구한 것으로 monte-carlo sampling과 큰 차이가 없어 보인다. 
 하지만 $$z$$의 식이 변한 것을 알 수 있는데, reparameterization function $$g_\phi$$, 그리고 어떤 random variable $$\epsilon$$이 등장하였다. 
     
