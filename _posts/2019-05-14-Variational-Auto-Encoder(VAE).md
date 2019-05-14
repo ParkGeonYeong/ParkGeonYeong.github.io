@@ -18,6 +18,18 @@ Variational inference, VAE, bayesian neural network 등은 모두 풀고자 하�
 bayesian neural network는 보다 일반적인 training set에 대해 MLE를 푼다고 할 수 있다. 
 여기서는 VAE의 의의, 수식적 전개와 모델 구조를 주로 알아보겠다. 
 
-**0. 
-
-The variational parameters φ are learned jointly with the generative model parameters θ.
+**0. Introduction**  
+Variational Inference의 목표를 간단히 정리하면 'Intractable한 posterior distribution을, 
+이미 알고 있는 variational distribution으로 근사하는 것'이라 할 수 있다. 
+VAE에서는 given data x에 대한 latent variable z의 분포, $$p(z \mid x)$$가 posterior distribution이다. 
+이때 given x를 잘 represent하는, true z가 정해져 있지 않다는 문제가 생긴다. 가령 우리가 true prior distribution $$p_\theta(z)$$를 잘 알고 있다면, 
+$$z$$을 sampling하고 이에 대응하는 $$x$$를 확률적으로 생성할 수 있을 것이다. ($$p_\theta(x \mid z))  
+하지만 현재 우리는 generative model $$\theta$$, latent variable $$z$$을 모두 모르기 때문에 x를 reconstruct하기 쉽지 않다. 
+$$z$$를 아예 모르기 때문에 기존 variational inference에서 많이 활용되어 온 mean-field 방식도 사용할 수 없다. (모든 가능한 $$z_i$$에 대해 integration이 필요하기 때문, 이전 포스트의 1.1 Factorized distribution 참고)  
+굉장히 많은 x에 대해 가능한 z를 모두 sampling하고 이를 validation하는 MCMC도 computational load가 높기 때문에 활용이 어렵다. 
+([MCMC와 posterior sampling](https://parkgeonyeong.github.io/Markov-Chain-Monte-Carlo%EC%99%80-Posterior-Sampling/) 참고)  
+  
+**따라서 VAE에서는 주어진 x로부터 $$z$$를 "encoding"하는 variational approximation $$\phi$$와, 
+이로부터 다시 x를 생성하는 generative model $$\theta$$ 두가지 모두 end-to-end로 학습하여 문제를 해결한다.**
+과정은 아래 그림과 같다.  
+![image](https://user-images.githubusercontent.com/46081019/57665961-18a21680-7639-11e9-8391-154165db5abb.png)  
