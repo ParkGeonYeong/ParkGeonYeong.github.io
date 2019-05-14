@@ -34,15 +34,24 @@ $$z$$를 아예 모르기 때문에 기존 variational inference에서 많이 �
 이로부터 다시 x를 생성하는 generative model $$\theta$$ 두가지 모두 end-to-end로 학습하여 문제를 해결한다.**
 과정은 아래 그림과 같다. Coding의 관점에서 q는 encoder, p는 decoder로 불린다.   
 ![image](https://user-images.githubusercontent.com/46081019/57665961-18a21680-7639-11e9-8391-154165db5abb.png)  
-  
-**1. Variational Bound**  
+    
+**1. Variational Bound and reparameterization trick**  
 $$lnP(x) = \int{q(w)ln\frac{P(X \mid w)p(w)}{q(w)}dw}+KL(q \mid\mid p(w \mid X))$$를 유도했었다. 
 이때 KL-divergence는 non-negative하므로 우변의 첫 항은 MLE의 lower bound, ELBO가 된다. 이 ELBO를 $$L$$로 표현하여 논문의 꼴로 쓰면 다음과 같다.  
 $$logP_\theta(x^i) \geq L(\theta, \phi, x^i) = E_{q_\phi(z \mid x)}[-log{q_\phi(z \mid x)} + log{p_\theta(x, z)}]$$_ 
 $$p_\theta(x,z)$$를 분리하여 다시 쓰면 다음과 같다.   
 $$L(\theta, \phi, x^i) = -D_{KL}(q_\phi(z \mid x_i) \mid\mid p_\theta(z)) + E_{q_\phi(z \mid x)}[log{p_\theta}(x^i \mid z)]$$  
-$
-이 때 $$L$$을 최대화하기 위해 $$\phi$$에 대해 gradient를 구해야 한다. 
-가장 처음 생각해 볼 수 있는 방식은 분포 q를 따르는 z을 sampling하여 expectation 항의 conditional likelihood를 구하는 것인데, 
-이렇게 될 경우 random sampling operation이 들어간 채 back propagation을 해야 하므로 indifferentiable 상태가 된다. 
-이를 굉장히 스마트하게 해결한 방식이 바로 
+  
+$$q_\phi, p_\theta$$가 어떤 형태인지는 조금 나중에 알아보고, 식 자체에만 집중해 보자.  
+Lower bound $$L$$을 최대화하기 위해서는 $$\phi$$에 대해 gradient를 구해서 $$\phi$$를 최적화해야 한다. 
+이때 KL divergence는 analytic한 해가 존재한다. (나중에 이를 보인다) 하지만 $$L$$에 포함되어 있는 expectation항은 analytical하게 구하기가 매우 어렵다. 
+따라서 가장 처음 생각해 볼 수 있는 방식은 분포 q를 따르는 z을 *monte-carlo sampling*하여 expectation 항의 conditional likelihood를 경험적으로 구하는 것이다. 하지만 이렇게 될 경우 random sampling operation이 들어간 채 back propagation을 해야 하므로 indifferentiable 상태가 된다.  
+**이를 굉장히 스마트하게 해결한 방식이 바로 reparameterization trick이며, 논문의 핵심이라고 볼 수 있다.**  
+Reparameterization이 무엇인지 보기 전에, 우선 최종적으로 구한 loss를 보자.   
+![image](https://user-images.githubusercontent.com/46081019/57667711-90733f80-763f-11e9-9e16-ae1d612da463.png)  
+식 자체는 L개의 latent variable z를 sampling하고, 이를 통해 loss를 구한 것으로 monte-carlo sampling과 큰 차이가 없어 보인다. 
+하지만 $$z$$의 식이 변한 것을 알 수 있는데, reparameterization function $$g_\phi$$, 그리고 어떤 random variable $$\epsilon$$이 등장하였다. 
+    
+Reparameterization는 말 그대로 우리의 관심 대상 parameter를 다시 잡는다는 뜻이다. 
+즉 우리의 관심사인 $$z$$를 $$q$$에서 바로 sampling하면 미분이 불가능하기 때문에, $$\epsilon$$를 대신 sampling하여 $$z$$를 indirect하게 구하는 것이다. 
+
