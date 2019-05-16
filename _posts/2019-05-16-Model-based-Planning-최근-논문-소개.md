@@ -90,11 +90,11 @@ $$p(o_{t+1:t+\tau} \mid o_{<t}, a_{<t+\tau}) = \prod_{r=t+1}^{t+\tau}p(o_r \mid 
   
 이러한 문제를 해결하기 위해 state-space model에서는 RNN을 도입하여 기존의 observation prediction에 대한 정보를 저장하고, 이를 다시 재귀적으로 활용한다. 즉 observation의 transition을 바로 예측했던 auto-regressive model과 달리, state-space model에서는 abstract state가 observation의 transition을 예측하기 위한 정보를 모두 갖고 있다고 가정한다.   
 $$p(s_{t+1} \mid s_{<=t}, a_<{t+\tau}, o_{<=t}) = p(s_{t+1} \mid s_{t}, a_{t})$$  
-따라서 state-space model에서는 observation 단위가 아닌 state 단위에서 predicition을 진행한다. 
+따라서 state-space model에서는 observation 단위가 아닌 state 단위에서 predicition을 진행한다.  
+
 ![image](https://user-images.githubusercontent.com/46081019/57828499-a96a2500-77e6-11e9-9187-0c533031f5df.png)  
   
 논문에서는 state-space model을 두 가지로 분류하는데, underlying dynamics을 stochastic하게 보는 stochastic SSM과 deterministic하게 보는 deterministic SSM이다. 이때 sSSM은 각 action time t에 대해 latent variable $$z_t$$를 둬서 stochastic dynamic을 parameterize한다.   
 즉 $$p(s_{t+1} \mid s_t, a_t)$$를 $$s_{t+1}=g(s_t, a_t, z_{t+1}), z_{t+1} ~ p(z_{t+1} \mid s_t, a_t)$$으로 인코딩한다.   
 논문의 제목이 generative model인 만큼, 결국 dSSM, sSSM 모두 state에서 다시 observation을 만들어 낸다. 이 때 sSSM은 $$z_t$$가 애시당초 stochastic하기 때문에 VAE를 사용하여 observation을 generate한다. (input : $$s_t, z_t$$) dSSM은 상황에 따라 VAE 혹은 deterministic generator을 사용한다. 
-  
 논문에서는 이렇게 만든 state-space model을 reinforcement learning task에 적용한다. 이 때 I2A를 사용하는데, I2A는 observation-space에서 시나리오를 imagine했지만 여기서는 state-space를 사용하였기 때문에 보다 효율적이다는 주장이다. 또한 model을 deterministic하게 취급하였기 때문에 여기에서도 dSSM을 사용한다.
