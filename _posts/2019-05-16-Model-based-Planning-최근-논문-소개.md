@@ -97,4 +97,6 @@ $$p(s_{t+1} \mid s_{<=t}, a_<{t+\tau}, o_{<=t}) = p(s_{t+1} \mid s_{t}, a_{t})$$
 논문에서는 state-space model을 두 가지로 분류하는데, underlying dynamics을 stochastic하게 보는 stochastic SSM과 deterministic하게 보는 deterministic SSM이다. 이때 sSSM은 각 action time t에 대해 latent variable $$z_t$$를 둬서 stochastic dynamic을 parameterize한다.   
 즉 $$p(s_{t+1} \mid s_t, a_t)$$를 $$s_{t+1}=g(s_t, a_t, z_{t+1}), z_{t+1} ~ p(z_{t+1} \mid s_t, a_t)$$으로 인코딩한다.   
 논문의 제목이 generative model인 만큼, 결국 dSSM, sSSM 모두 state에서 다시 observation을 만들어 낸다. 이 때 sSSM은 $$z_t$$가 애시당초 stochastic하기 때문에 VAE를 사용하여 observation을 generate한다. (input : $$s_t, z_t$$) dSSM은 상황에 따라 VAE 혹은 deterministic generator을 사용한다. 
-논문에서는 이렇게 만든 state-space model을 reinforcement learning task에 적용한다. 이 때 I2A를 사용하는데, I2A는 observation-space에서 시나리오를 imagine했지만 여기서는 state-space를 사용하였기 때문에 보다 효율적이다는 주장이다. 또한 model을 deterministic하게 취급하였기 때문에 여기에서도 dSSM을 사용한다.
+논문에서는 이렇게 만든 state-space model을 reinforcement learning task에 적용한다.   
+![image](https://user-images.githubusercontent.com/46081019/57829202-30b89800-77e9-11e9-9014-01ab7a764560.png)  
+이 때 I2A를 사용하는데, I2A는 observation-space에서 시나리오를 imagine했지만 여기서는 state-space를 사용하였기 때문에 보다 효율적이다는 주장이다. 또한 model을 deterministic하게 취급하였기 때문에 여기에서도 dSSM을 사용한다. 이 외에도 figure에서 보이듯 imagined internal action을 딱 선택하지 않고 probabilistic policy vector를 넣어줘서 backpropagation이 가능하도록 만들었다. Imagination core가 선택한 Internal action과 future reward의 연관성을 아무래도 완벽히 신뢰할 수 없기 때문에 일종의 action selection regularizer 역할로써 수정한 것으로 보인다.
