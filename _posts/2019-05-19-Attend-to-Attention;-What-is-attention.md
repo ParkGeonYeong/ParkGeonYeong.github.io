@@ -23,7 +23,7 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
 다음 포스트에서 reinforcement learning, meta-learning 등 타 분야에서의 attention 활용을 알아본다. 
   
   
-**0. Neural Machine Translation by Jointly Learning to Align and Translate**
+**0. Neural Machine Translation by Jointly Learning to Align and Translate**  
 - New keywords introduced : Attention, Additive(MLP) attention
 - 기존 translation model인 seq2seq의 fixed-length-context vector 문제를 해결
   - Seq2seq는 encoder(using source)의 output인 context vector를 고정시키고(hidden states), 이를 이용해 별도의 decoder에서 target sequence를 생성
@@ -54,7 +54,7 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
     - Attention weight 값을 알기 때문에 각 input과 target의 alignment를 visualization할 수 있다.
   
   
-**1. Long Short-Term Memory-Networks for Machine Reading**
+**1. Long Short-Term Memory-Networks for Machine Reading**  
 - New keywords introduced : Self-attention(Intra-attention), LSTMN
 - "How to render sequence-level networks better at 'handling structured input'"
 - Self-attention과 Long Short-Term Memory-Networks을 활용해 Source token의 새로운 representation을 고안
@@ -93,7 +93,7 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
   - Token 간의 valid lexical relations을 인코딩할 수 있음  
   
   
-**2. Show, attend and Tell**
+**2. Show, attend and Tell**  
 - New keywords introduced : Image-Captioning with attention
 - 기존 image-captioning 문제를 attention 도입을 통해 해결
   - 이를 통해 모델이 sailent object에 gaze하는 것을 visualization할 수 있음
@@ -151,4 +151,6 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
     - ![image](https://user-images.githubusercontent.com/46081019/57981366-7091b080-7a71-11e9-9526-a1fdaf3af02f.png)
 
 
-
+**3. Attention is all you need**  
+- Attention without RNN and CNN
+- 
