@@ -39,12 +39,12 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
   - 이때 $$h_i$$는 i번째 annotation으로, bi-directional RNN encoder의 i번째 hidden state를 의미함
     - $$x_i$$에 대한 local한 정보를 주로 갖고 있는 state
   - $$\alpha_{ij}$$는 해당 annotation이 $$y_i$$를 위한 정보를 얼마나 갖고 있는지에 대한 importance weight라고 생각할 수 있음
-    - 이 weight가 곧 어떤 input token에 attention을 크게 줄 지 결정
+    - 이 weight가 곧 어떤 input token에 attention을 크게 줄지 결정
   - 이 weight는 다음과 같이 계산됨
   - ![image](https://user-images.githubusercontent.com/46081019/57978986-dec67b00-7a51-11e9-94fd-b964cd5642b3.png)  
     - $$a$$는 two-layered-tanh-MLP이다. $$a$$의 output이 softmax를 거쳐 확률로 변환되고, 이는 각 $$h_j$$에 곱해진다.
-    - 즉 attention weight는 target decoder의 $$i-1$$번째 hidden state와, encoder의 모든 $$h_j$$ hidden state를 MLP에 넣어 어떤 $$h_j$$가 
-    현재 우리의 관심사인 i-th decoder output token or hidden state와 연관이 높은지 학습한다.
+    - **즉 attention weight는 target decoder의 $$i-1$$번째 hidden state와, encoder의 모든 $$h_j$$ hidden state를 MLP에 넣어 어떤 $$h_j$$가 
+    현재 우리의 관심사인 i-th decoder output token or hidden state와 연관이 높은지 학습한다.**
   - 참고로 decoder의 hidden state $$s_i$$는 다음과 같이 학습된다.
   - ![image](https://user-images.githubusercontent.com/46081019/57979082-80020100-7a53-11e9-99e8-bfcba6e14d92.png)  
     - 모든 hidden state은 n-dimensional이며, 새롭게 계산된 context vector $$c_i$$는 (2n,) dimension이다. (Bi-directional RNN이기 때문)
@@ -71,4 +71,26 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
 - 이 점에서 단순한 LSTM, RNN은 self-attention에 적합하지 않다. 
 네트워크 내부적으로 Memory에 input이 재귀적으로 더해지면서 'compression'이 일어나고, 시퀀스를 정확하게 기억하기 어려워진다.
 - 따라서 RNN에 별도의 memory와 attention을 도입함으로써 implicit relation between tokens을 학습
+  - Long Short-Term Memory-Networks
+  - LSTM의 Next state $$h_{t+1}$$는 항상 current state $$h_t$$을 통해 만들어진다
+  - **이는 곧 hidden state 간의 Markov property를 가정하는 것이며, $$f(h_{t+1} \mid h_1, h_2, ..., h_{t-1}, h_t) = f(h_{t+1} \mid h_t)$$
+  - 그러나 실제로는 LSTM이 bounded memory를 갖고 있기 때문에, sequence가 길거나 메모리가 작은 경우 예외 발생
+  - 따라서 모든 token에 대한 information을 aggregate하지 않고, token 간의 관계를 explicit하게 학습하는 과정이 없다
+- LSTMN : Memory-Network, LSTM의 memory cell을 network로 span하여 기존의 token을 explicit한 input으로 받음
+  - $$h_t$$가 non-markovian manner로 표현 가능하며, memory를 read할 때 attention을 사용할 수 있다.
+  - ![image](https://user-images.githubusercontent.com/46081019/57979464-e89fac80-7a58-11e9-9415-958a07d83f11.png)  
+- Current input $$x_t$$와 $$x_1, ..., x_{t-1}$$의 관계를 $$h_1, ..., h_{t-1}$$로 표현
+  - LSTMN 구조 (자세한 notation은 original paper 참고)
+  - ![LSTMN](https://user-images.githubusercontent.com/46081019/57979977-96ae5500-7a5f-11e9-9c7d-cbba57f7b252.png)  
+  - Hidden/Memory state 'tape'이 previous token과의 relationship을 저장하고 있다. 
+- 모델 구조
+  - ![image](https://user-images.githubusercontent.com/46081019/57979993-f1e04780-7a5f-11e9-9554-4ef31346d6bb.png)  
+    - Shallow attention : LSTMN이 사용된 점을 제외하면 일반적인 additive attention과 동일하다. (Intra attention=self attention)
+    - Deep attention : Additive attention에서 $$h_t, c_t$$가 아닌 hidden, memory 'tape' $$h'_t, c'_t$$를 사용
+      - 따라서 encoder의 hidden states group과 decoder의 group 사이 Deep한 관계를 표현 가능
+- 결과
+- ![image](https://user-images.githubusercontent.com/46081019/57980044-b42fee80-7a60-11e9-8e97-e880f41ede9a.png)
+  - Token 간의 valid lexical relations을 인코딩할 수 있음
+**2. Show, attend and Tell**
+- New keywords introduced : Image-Captioning with attention
 - 
