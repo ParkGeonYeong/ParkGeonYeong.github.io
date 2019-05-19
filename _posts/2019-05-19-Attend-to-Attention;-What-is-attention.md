@@ -198,4 +198,10 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
     - 그 다음에야 encoder에서 abstracted된 key, value 정보를 받아 다시 attention을 적용한다.
     - 위에 첨부한 model behavior GIF을 잘 보면 번역 토큰을 생성할 때 먼저 기존 번역 결과를 받고 나서 encoder의 정보를 받는 것을 볼 수 있다.
     - 이후 FFN을 똑같이 적용한다.
-- 
+- Model Complexity
+  - Complexity per layer를 비교하면, transformer의
+  Self-attention의 경우 ($$d$$ dim key와 query간의 내적, $$N$$ dim value와의 내적, $$N$$개의 나머지 query에 대한 반복)으로 $$O(n^{2}d)$$이다.
+  - 반면 recurrent의 경우 $$O(n^{2}d)$$가 $$O(n)$$번 반복되어, 훨씬 더 오래 걸린다. (Usually n<<d이기 때문)
+  
+**4. Attention과 NeuroScience**
+- To be Filled
