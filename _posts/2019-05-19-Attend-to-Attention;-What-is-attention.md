@@ -52,3 +52,23 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
   - 결과
   - ![image](https://user-images.githubusercontent.com/46081019/57979116-dd964d80-7a53-11e9-9680-b5c0e102f00f.png)  
     - Attention weight 값을 알기 때문에 각 input과 target의 alignment를 visualization할 수 있다.
+  
+  
+**1. Long Short-Term Memory-Networks for Machine Reading**
+- New keywords introduced : Self-attention(Intra-attention), LSTMN
+- "How to render sequence-level networks better at 'handling structured input'"
+- Self-attention과 Long Short-Term Memory-Networks을 활용해 Source token의 새로운 representation을 고안
+  - 현재 token을 이전 tokens의 정보로 표현하여 machine reading, abstractive summarization 분야에 많이 활용됨
+  - 'Attention is all you need' 논문에서도 self-attention을 이용해 input sequence를 abstract하면서 시작함
+- ![image](https://user-images.githubusercontent.com/46081019/57979166-affdd400-7a54-11e9-891a-44d5de9c2afe.png)  
+- 이는 인간의 읽기 과정과도 비슷한데, 문장을 word-by-word로 읽어 가면서 현재 발화에 대한 정보 및 의미를 이전 발화의 묶음에서부터 추출함
+- Sequence-level network 문제 제기
+  - Vanishing and Exploding gradient
+  - Input sequence should be compressed into a single vector
+  - *Input의 구조적 특징을 학습, 확인할 수 없음*
+    - 한 번에 뭉개서 context vector를 만드는 경우, 언어 및 문장 내 inherent structure 등을 파악할 수 없음
+    - 이 점이 self-attention을 통해 해결할 수 있는 가장 큰 장점
+- 이 점에서 단순한 LSTM, RNN은 self-attention에 적합하지 않다. 
+네트워크 내부적으로 Memory에 input이 재귀적으로 더해지면서 'compression'이 일어나고, 시퀀스를 정확하게 기억하기 어려워진다.
+- 따라서 RNN에 별도의 memory와 attention을 도입함으로써 implicit relation between tokens을 학습
+- 
