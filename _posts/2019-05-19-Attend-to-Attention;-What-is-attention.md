@@ -162,7 +162,7 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
     - [출처: Google AI blog post](https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html)
     - 모델을 굉장히 직관적으로 잘 설명하고 있는 gif라고 생각한다.
 - 모델 구조
-  - 
+  - ![image](https://user-images.githubusercontent.com/46081019/57982024-3f69ae00-7a7a-11e9-88ae-59c391080022.png)  
   - 모델의 주요 성분 위주로 정리한다.
   **1) Encoder**
   **Source sequence의 Self attention abstraction, 이를 decoder에 전달**
