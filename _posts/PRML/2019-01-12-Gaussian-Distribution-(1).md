@@ -1,14 +1,12 @@
 ---
-title : "Gaussian Distribution (1)"
+title : "Symmetric matrix and Jacobian"
 use_math : True
 layout: single
 classes: wide
 ---
 
-**본 포스트는 gaussian distribution을 설명하기 위한 선형대수학적 기초를 먼저 정리하고 있습니다.**  
+**본 포스트는 gaussian distribution을 설명하기 위한 선형대수학적 기초입니다.**  
 - Symmetric matrix, Meaning of jacobian에 대해 다룹니다.  
-**Gaussian distribution에 대한 내용은 (2)에서 확인하실 수 있습니다.**  
-부족함으로 인해 포스트에 오류가 있을 수 있습니다. 
 
 **0. Symmetic matrix**  
 
