@@ -1,5 +1,5 @@
 ---
-title: "Model based Planning 최근 논문 소개"
+title: "Model based Planning and some recent works"
 use_math: true
 classes: wide
 layout: single
@@ -31,7 +31,8 @@ layout: single
 딥마인드 외에도 다양한 그룹 (벤지오 교수님, 이홍락 교수님 등)이 planning에 많은 관심을 갖고 연구를 진행 중이신 것으로 보인다.
 여기서는 pixel-based planning의 성공적인 연구로서 많은 관심을 받은 I2A을 시작으로 
 몇몇 연구들이 model을 어떻게 인코딩하고 있는지, 이를 어떻게 planning에 활용하고 있는지 정리한다. 
-  
+많은 model-learning 알고리즘이 one-step prediction에 몰려 있지만, 이는 에이전트의 multiple step 이후 error가 쌓여 
+policy learning에 catastrophic한 결과를 야기할 수 있다. 여기서는 주로 n-step planning의 논문에 초점을 맞춰 소개한다.   
   
 **1. Imagination-Augmented Agents for Deep Reinforcement Learning**
 - NIPS 2017, Deepmind  
