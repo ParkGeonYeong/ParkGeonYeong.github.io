@@ -90,7 +90,65 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
       - 따라서 encoder의 hidden states group과 decoder의 group 사이 Deep한 관계를 표현 가능
 - 결과
 - ![image](https://user-images.githubusercontent.com/46081019/57980044-b42fee80-7a60-11e9-8e97-e880f41ede9a.png)
-  - Token 간의 valid lexical relations을 인코딩할 수 있음
+  - Token 간의 valid lexical relations을 인코딩할 수 있음  
+  
+  
 **2. Show, attend and Tell**
 - New keywords introduced : Image-Captioning with attention
-- 
+- 기존 image-captioning 문제를 attention 도입을 통해 해결
+  - 이를 통해 모델이 sailent object에 gaze하는 것을 visualization할 수 있음
+  - 이 과정은 Hard attention / Soft attention으로 나뉜다.
+    - Hard attention : Feature map의 특정 부분만을 context vector로 제공
+    - Soft attention : Weight assigning
+- 전체 구조
+- ![image](https://user-images.githubusercontent.com/46081019/57980597-5c958100-7a68-11e9-8a3a-9fc42ccd145b.png)  
+- 문제 세팅
+  - **Encoder : Use previous caption token AND visual context information from convolutional feature map**
+    - Let sequence of caption token $$y={y_1, ..., y_C}, y_i \in R^k$$
+      - $$k$$ : size of vocabulary
+      - $$C$$ : Caption 길이
+    - Encoder takes another input as annotation vectors; feature vector extracted from convolutional map
+      - $$a={a_1, ..., a_L}, a_i \in R^D$$
+      - L : Feature-map-wise vector의 개수 (논문에서는 14x14)
+      - D : Feature map의 개수 (논문에서는 512)
+  - Decoder : Use LSTM
+    - ![image](https://user-images.githubusercontent.com/46081019/57980760-1ccf9900-7a6a-11e9-8c84-e1d56cd7424b.png)  
+    - $$T_{D+m+n, n}$$ : (Context+embedding+hidden dimension, hidden dimension)
+    - $$\hat{z}_t = \phi(\left\{a_i\right\}, \left\{\alpha_i\right\})$$
+      - Context vector
+    - Hard attention
+      - Strictly assign choice probability of specific i-th location out of L vectors as 0 or 1
+      - $$p(s_{t,i}=1 \mid s_{j<t}, a)=\alpha_{t,i}$$
+      - $$\hat{z}_t = \sum{s_{t,i}*a_i}$$
+      - 이 때 $$s_{t,i}$$ sampling distribution은 multinoulli distribution을 따름
+      - By jensen's inequality, 
+        - ![image](https://user-images.githubusercontent.com/46081019/57981193-974ee780-7a6f-11e9-92cb-e279973a75b0.png)  
+        - Our loss's lower bound is denoted by $$L_s$$
+      - 따라서 lower bound을 tighten하기 위해 gradient optimization을 사용해야 한다.
+      - 그러나 현재 $$s_{t,i}$$를 랜덤하게 샘플링하고 있기 때문에 미분이 불가능한 loss 식이다.
+        - VAE의 reparameterization trick과 비슷
+        - [VAE and reparameterization 포스트 참고](https://parkgeonyeong.github.io/Variational-Auto-Encoder(VAE)/)
+      - 이를 극복하기 위해 monte-carlo sampling을 거쳐 gradient를 근사한다.
+        - ![image](https://user-images.githubusercontent.com/46081019/57981223-0593aa00-7a70-11e9-9989-6d5410325fbb.png)  
+        - N개의 feature vector을 sampling 했음
+      - 이 때 sampling으로 인해서 log-likelihood $$logp(y \mid s^n, a)$$가 크게 bias될 수 있으므로, 이동 평균 기법을 사용해 variance를 줄인다.
+        - $$b_k = 0.9*b_{k-1}+0.1*logp(y \mid s^n, a)$$
+        - 이를 log-likelihood의 baseline으로 사용해서, baseline보다 높아지는 경우 positive하게 update해준다.
+        - 또한 s 분포의 entropy를 더해서 regularization한다.
+      - 결국 최종 update식은 다음과 같다.
+        - ![image](https://user-images.githubusercontent.com/46081019/57981262-881c6980-7a70-11e9-9b7c-60a7667cc79a.png)  
+      - **Policy를 $$s^n$$의 선택이라고 생각해 보자. 이때 식이 (current likelihood-baseline)을 reward로 하고, policy entropy가 더해진, policy gradient와 동일함을 알 수 있다.**
+        - [Policy gradient algorithm 포스트 참고](https://parkgeonyeong.github.io/Policy-Gradient,-Actor-Critic-and-A3C/)
+      - 따라서 REINFORCE(Williams, 1992) 알고리즘을 사용해 learning이 가능하다.
+    - Soft attention
+      - 사실 길게 설명했지만 hard attention은 잘 안쓴다.
+        - Learning도 복잡하고, vector 선택을 binary하게 강제하기 때문에 성능이 좋지 않으며 시각화에도 안 좋다
+      - Soft attention은 앞서 0. Neural Machine Translation by Jointly Learning to Align and Translate에서 사용한 additive attention model을 사용한다.
+      - Doubly Stochastic Attention : i-th token에 대한 attention weight는 당연히 전체 vector에 대해서 합이 1이여야 한다. 
+      그런데 이때 모델의 attention이 너무 특정 픽셀군에만 쏠리면 제대로 정규화가 안 되었다고 볼 수 있다. 
+      따라서 이에 대한 regularization 효과로 $$\sum{\alpha_{ti}}=1$$을 Loss에 추가해준다. 
+  - 결과
+    - ![image](https://user-images.githubusercontent.com/46081019/57981366-7091b080-7a71-11e9-9526-a1fdaf3af02f.png)
+
+
+
