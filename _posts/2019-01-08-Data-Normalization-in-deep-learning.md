@@ -1,5 +1,5 @@
 ---
-title: "19/01/08 Today I Learned
+title: "Data Normalization in Deep learning"
 layout: single
 classes: wide
 ---
