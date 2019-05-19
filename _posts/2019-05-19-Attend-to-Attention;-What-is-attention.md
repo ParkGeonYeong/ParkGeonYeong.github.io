@@ -152,5 +152,50 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
 
 
 **3. Attention is all you need**  
-- Attention without RNN and CNN
+- **Translation without RNN and CNN. Exploit Attention only**
+  - Transformer 이름으로 더 많이 불리는 논문
+  - 학습 과정에서 RNN은 sequential한 특성 때문에 병렬화가 어렵고, CNN은 long-term dependency 구현이 어려우며 연산량이 많아진다는 단점이 있다.
+  - 이를 feed forward와 attention만으로 해결한 논문
+  - 빠른 학습 특성 때문에 Image, RL 등에도 많이 활용되고 있는 모델이다
+- Model behavior
+  - ![transform20fps](https://user-images.githubusercontent.com/46081019/57981592-2eb63980-7a74-11e9-8ecc-ee9a2475759c.gif)
+    - [출처: Google AI blog post](https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html)
+    - 모델을 굉장히 직관적으로 잘 설명하고 있는 gif라고 생각한다.
+- 모델 구조
+  - 
+  - 모델의 주요 성분 위주로 정리한다.
+  **1) Encoder**
+  **Source sequence의 Self attention abstraction, 이를 decoder에 전달**
+  - Input embedding : $$d_{model}=512$$의 vector embedding
+  - Positional encoding : RNN을 사용하지 않기 때문에 임베딩된 토큰에 positional-temporal information이 없는 상황이다.
+  타 토큰과의 상대적 혹은 절대적인 관계 및 포지션 정보를 주는 과정이다. 임베딩 디멘션과 동일한 $$d_{model}$$의 sine/cosine 함수를 더해주었다.
+  - **Multi-Head attention**
+  - ![image](https://user-images.githubusercontent.com/46081019/57981629-ddf31080-7a74-11e9-83bc-032447afbe58.png)  
+  - 모델 이해에 핵심인 figure이다. (Q, K, V)는 각각 previous decoder hidden state, encoder hidden input states, encoder hidden input states
+    - Neural Machine Translation에서 query는 곧 우리의 관심사라고 생각하면 된다. self-attention인 경우 우리가 abstract하고자 하는 그 대상, decoder에 있는 레이어인 경우 번역의 결과가 될 output 토큰의 hidden state이다.
+    - 이 쿼리와 함께 내적되었을 때 가장 가까운, 즉 attention을 더 많이 받을 'key'를 찾아야 한다.
+    - 따라서 여러 후보군 key들과 내적을 거친다. 이를 통해 각 후보군의 weight를 softmax로 근사할 수 있다. 이 weight를 그대로 value에 씌워 주면 attention을 구현할 수 있다. 
+  - $$Attention(Q, K, V) = softmax(\frac{QK^T}{\sqrt{d_k}})V$$
+    - sqrt 항은 빼고 dimension만 생각해보면 다음처럼 그릴 수 있다.
+    - ![Attention](https://user-images.githubusercontent.com/46081019/57981783-54910d80-7a77-11e9-87bf-7a338e97e07c.png)  
+    - 이를 통해 $$d_v$$ dimension의 새로운 abstracted 쿼리를 얻을 수 있다.
+    - 이때 sqrt 항을 통해 noramlize하는 이유는, $$d_k$$가 너무 클 경우 $$QK^T$$ 내적 과정에서 분산이 너무 커질 수 있기 때문이다.
+      - softmax를 거쳤을 때 값이 굉장히 치우쳐져 gradient가 소멸될 수 있다.
+    - 논문에서는 또 multi-head를 통해 여러가지 attention의 경우의 수를 만들었다.
+    - ![image](https://user-images.githubusercontent.com/46081019/57981839-f6b0f580-7a77-11e9-8653-2c8576865da2.png)
+  - Position-wise feed-forward networks
+    - Multi-head를 거치고 나면 $$d_{model}$$ dimension vector가 생긴다.
+    - 각 dimension에 대해 *1-D convolution*을 두 번 거치는 과정이 position-wise FFN이다.
+    - 그냥 단순한 fully-connected FFN을 적용하지 않는 이유는 position 정보를 마찬가지로 계속 가져가기 위함으로 보인다.
+    - FCN을 넣어버리면 attention, positional encoding 등으로 유지하고 있던 모든 정보가 뒤섞여버린다.
+    - $$FFN(x) = max(0, xW_1+b_1)W_2+b_2$$
+  **2) Decoder**
+  **Encoder에서 전달 받은 정보와, masked self-attended target 토큰을 합침**
+  - Encoder와 구조 자체는 크게 다르지 않지만, Masked Multi-Head attention이 추가 되었다.
+    - Encoder는 단지 내가 가지고 있는 input sequence를 self-attention으로 잘 abstract하면 되지만, 
+    target sequence를 다룰 때는 이전 token의 번역 결과 정보도 함께 사용해야 한다.
+    - 이 경우 decoder에서 우선적으로 이전 target token을 key로 사용해 현재 objective token을 self-attention으로 표현한다.
+    - 그 다음에야 encoder에서 abstracted된 key, value 정보를 받아 다시 attention을 적용한다.
+    - 위에 첨부한 model behavior GIF을 잘 보면 번역 토큰을 생성할 때 먼저 기존 번역 결과를 받고 나서 encoder의 정보를 받는 것을 볼 수 있다.
+    - 이후 FFN을 똑같이 적용한다.
 - 
