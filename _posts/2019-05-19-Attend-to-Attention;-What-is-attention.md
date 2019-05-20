@@ -163,9 +163,9 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
     - 모델을 굉장히 직관적으로 잘 설명하고 있는 gif라고 생각한다.
 - 모델 구조
   - ![image](https://user-images.githubusercontent.com/46081019/57982024-3f69ae00-7a7a-11e9-88ae-59c391080022.png)  
-  - 모델의 주요 성분 위주로 정리한다.
-  **1) Encoder**
-  **Source sequence의 Self attention abstraction, 이를 decoder에 전달**
+  - 모델의 주요 성분 위주로 정리한다.  
+  **1) Encoder**  
+  **Source sequence의 Self attention abstraction, 이를 decoder에 전달**  
   - Input embedding : $$d_{model}=512$$의 vector embedding
   - Positional encoding : RNN을 사용하지 않기 때문에 임베딩된 토큰에 positional-temporal information이 없는 상황이다.
   타 토큰과의 상대적 혹은 절대적인 관계 및 포지션 정보를 주는 과정이다. 임베딩 디멘션과 동일한 $$d_{model}$$의 sine/cosine 함수를 더해주었다.
@@ -188,9 +188,9 @@ attention을 사용한다. 과거의 어떤 key가 현재 인지한 object와 �
     - 각 dimension에 대해 *1-D convolution*을 두 번 거치는 과정이 position-wise FFN이다.
     - 그냥 단순한 fully-connected FFN을 적용하지 않는 이유는 position 정보를 마찬가지로 계속 가져가기 위함으로 보인다.
     - FCN을 넣어버리면 attention, positional encoding 등으로 유지하고 있던 모든 정보가 뒤섞여버린다.
-    - $$FFN(x) = max(0, xW_1+b_1)W_2+b_2$$
-  **2) Decoder**
-  **Encoder에서 전달 받은 정보와, masked self-attended target 토큰을 합침**
+    - $$FFN(x) = max(0, xW_1+b_1)W_2+b_2$$  
+  **2) Decoder**  
+  **Encoder에서 전달 받은 정보와, masked self-attended target 토큰을 합침**  
   - Encoder와 구조 자체는 크게 다르지 않지만, Masked Multi-Head attention이 추가 되었다.
     - Encoder는 단지 내가 가지고 있는 input sequence를 self-attention으로 잘 abstract하면 되지만, 
     target sequence를 다룰 때는 이전 token의 번역 결과 정보도 함께 사용해야 한다.
