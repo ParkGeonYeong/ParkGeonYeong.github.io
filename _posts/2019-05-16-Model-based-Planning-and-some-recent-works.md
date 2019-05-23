@@ -122,5 +122,17 @@ VAE 등 generative model에서는 true latent variable이 정해져 있지 않�
 $$max_{\eta} E_{q_\phi(z_t \mid h_{t-1}, b_t)}[logp_\eta(b \mid z)]$$  
 Auxiliary loss를 제외한 나머지 ELBO 유도 과정은 다음과 같다.  
 ![image](https://user-images.githubusercontent.com/46081019/58233353-d6827e80-7d76-11e9-8dbd-678710c6e00d.png)  
+여기서 $$O_{0:T}$$를 forward RNN의 hidden state로 바꾸고, backward RNN의 hidden state를 $$q_\phi$$에 추가해준다. 그리고 log-likelihood term을 bayes rule에 의해 observation과 action prediction 항으로 분해해준다. 결과는 다음과 같다.  
+![image](https://user-images.githubusercontent.com/46081019/58233594-80faa180-7d77-11e9-9593-85144293cee6.png)  
+$$\theta, \phi$$는 각각 generative model of observation and action, encoder of latent variable을 의미한다.
+마지막으로 log-likelihood term에 auxiliary cost $$logp_\eta(b \mid z)$$를 더해주면 다음과 같다. $$\beta$$가 ratio coefficient로 붙어있다.   
+![image](https://user-images.githubusercontent.com/46081019/58233690-b1424000-7d77-11e9-909e-ebee1f690b4c.png)  
 
+- Applications  
+논문에서는 모델을 Imitation learning과 Reinforcement learning에 활용한다. 그 중에서도 RL의 경우 몇 가지 디테일한 트릭을 사용했는데, 이는 위의 I2A 등의 모델과 달리 explicit한 policy가 없다는 단점에서 비롯되는 것이라 생각한다.   
+우선 RL의 objective function은 $$max_{a}E[\sum_{t=1}^{t=T}r_t]$$이다. 이 때 latent variable로부터 action를 확률적으로 예측하고, action에 대해서 objective function을 계속 업데이트하면 추후 test 과정에서 train 과정과 매우 다른 action이 나왔을 때 제대로 대처하기 어렵다. 따라서 논문에서는 보다 근본적인 접근 방식으로 latent variable $$z$$에 대해 $$max_{z_{1:T}}E[\sum_{t=1}^{t=T}r_t]$$을 정의한다.  
+
+좋은 latent variable set을 찾는 방식은 Model Predictive Control에 의존한다. 우선 episode length T만큼의 sequence를 여러개 생성한다. 
+이후 각 sequence를 평가하여 가장 좋은 k개의 sequence와 이를 맡았던 latent variable $$z_{1:k}$$를 뽑는다. (1 latent for a sequence) 그 다음 뽑은 latent variable을 기반으로 $$a_{1:k}$$ action을 뽑아 실행한다. 결과로 얻은 observation에서 다시 re-planning을 거친다.   
   
+이때 trajectory를 뽑는 과정에서 기존의 익숙한 trained sequence에만 집중하다보면 future reward와 큰 관련이 없는 poor action을 할 수 있다. 따라서 exploration 과정이 필요한데, 논문에서는 이를 위해 explorative policy $$\pi_w$$를 따로 정의한다. 이는 기존 모델이 예측하는 trajectory와 다른 trajectory를 예측하는 방향으로 loss를 추가한다. 
