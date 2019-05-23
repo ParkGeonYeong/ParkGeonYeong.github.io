@@ -66,7 +66,7 @@ Non-sensical prediction이 포함되어 있을 수 있고,
 또 다른 trajectory를 확인했을 때 value와 관련 높은 정보를 추출하거나, 필요 없는 trajectory인 경우 무시(forget)하는 것이 가능하다. 
 이렇게 imagination의 각 step에 따른 LSTM의 output을 concatenate하여 'single imagination code'을 얻는다.  
 - Aggregator  
-Encoder에 의해 임베딩된 single imaginatino code와, model-free agent의 feature을 합쳐 전체 정보를 얻는다. 
+Encoder에 의해 임베딩된 single imagination code(=Stack of hidden states of GRU)와, model-free agent의 feature을 합쳐 전체 정보를 얻는다. 
 해당 feature map은 A3C와 동일한 방식으로 projection을 거쳐 $$\pi$$와 $$V$$를 얻는다. 
   
 - Results  
@@ -100,4 +100,27 @@ $$p(s_{t+1} \mid s_{<=t}, a_<{t+\tau}, o_{<=t}) = p(s_{t+1} \mid s_{t}, a_{t})$$
 논문의 제목이 generative model인 만큼, 결국 dSSM, sSSM 모두 state에서 다시 observation을 만들어 낸다. 이 때 sSSM은 $$z_t$$가 애시당초 stochastic하기 때문에 VAE를 사용하여 observation을 generate한다. (input : $$s_t, z_t$$) dSSM은 상황에 따라 VAE 혹은 deterministic generator을 사용한다. 
 논문에서는 이렇게 만든 state-space model을 reinforcement learning task에 적용한다.   
 ![image](https://user-images.githubusercontent.com/46081019/57829202-30b89800-77e9-11e9-9014-01ab7a764560.png)  
-이 때 I2A를 사용하는데, I2A는 observation-space에서 시나리오를 imagine했지만 여기서는 state-space를 사용하였기 때문에 보다 효율적이다는 주장이다. 또한 model을 deterministic하게 취급하였기 때문에 여기에서도 dSSM을 사용한다. 이 외에도 figure에서 보이듯 imagined internal action을 딱 선택하지 않고 probabilistic policy vector를 넣어줘서 backpropagation이 가능하도록 만들었다. Imagination core가 선택한 Internal action과 future reward의 연관성을 아무래도 완벽히 신뢰할 수 없기 때문에 일종의 action selection regularizer 역할로써 수정한 것으로 보인다.
+이 때 I2A를 사용하는데, I2A는 observation-space에서 시나리오를 imagine했지만 여기서는 state-space를 사용하였기 때문에 보다 효율적이다는 주장이다. 또한 model을 deterministic하게 취급하였기 때문에 여기에서도 dSSM을 사용한다. 이 외에도 figure에서 보이듯 imagined internal action을 딱 선택하지 않고 probabilistic policy vector를 넣어줘서 backpropagation이 가능하도록 만들었다. Imagination core가 선택한 Internal action과 future reward의 연관성을 아무래도 완벽히 신뢰할 수 없기 때문에 일종의 action selection regularizer 역할로써 수정한 것으로 보인다.  
+  
+  
+**3. Learning improved dynamics model in RL by incorporating the long term future**  
+- ICLR, 2019  
+벤지오 교수님 연구실에서 출판한 작년 ICLR 논문이다. 주제를 한 문장으로 설명한다면 'Building Generative model with latent-variable incorporating the long-term future'라고 할 수 있을 것 같다. Stochastic한 환경을 주요 학습 대상으로 한다는 점과, generative model(VAE)를 사용했다는 점이 위 논문들과의 차이점이다.   
+  
+- **Model of the environment should reason about long-term transition dynamics**  
+위와 마찬가지로 $$p(o_{t+1:t+\tau} \mid o_{<t}, a_{<t+\tau})$$를 최대화하는 auto-regressive model을 얻고자 한다.  
+이때 단순히 one-step prediction에 집중하지 않고(=focusing $$o_{t+1}$$ only), 더 먼 미래를 가늠하고 이를 매 prediction step마다 반영하는 과정이 필요하다. 논문에서는 이를 위해 'latent variables capture long-term dynamics'를 도입한다.   
+![image](https://user-images.githubusercontent.com/46081019/58231793-c9fc2700-7d72-11e9-9d40-6112a353b301.png)  
+우선 figure의 왼쪽이 모델의 주요 뼈대이다. 주어진 initial observation $$o_0$$에서부터 new hidden representation $$h$$, action $$a$$, new observation $$o$$을 예측, 생성하는 generative model이다. 이때 모든 generation에는 latent variable $$z$$이 관여하고 있음을 알 수 있다. 수식으로 표현하면 다음과 같다.  
+![image](https://user-images.githubusercontent.com/46081019/58232222-f5cbdc80-7d73-11e9-94a1-b13ca02a6a68.png)  
+이때 'latent prior'에 future observation representation $$b_t$$가 관여하는 것이 논문의 주요 아이디어이다.   
+  
+- Back-ward RNN and auxiliary loss  
+VAE 등 generative model에서는 true latent variable이 정해져 있지 않다는 어려움이 있었다. 즉 latent variable의 정보를 기반으로 future observation을 예측하려 해도, 우리가 갖고 있는 latent variable이 고차원적인 observation의 특징이나 long-term transition에 대한 정보를 제대로 포함하기 쉽지 않다. 이는 곧 strong autoregressive 모델을 만드는 데에 장애가 된다. 
+논문에서는 이를 해결하기 위해 z-forcing (Goyal, 2017)의 아이디어를 차용한다. **우선 dynamic model이 future sequence information에 대한 정보를 받을 수 있도록 backward recurrent network를 augment한다.** 따라서 latent variable $$z$$는 $$h_t$$에만 의존하지 않고, backward RNN의 hidden state $$b_t$$도 받는다. 즉 encoder of latent variable은 $$q_\phi(z_t \mid h_{t-1}, b_t)$$이 된다. 오른쪽 figure의 빨간 박스가 backward RNN이다.    
+더 나아가, latent variable이 summary of future(=hidden state)을 잘 예측하도록 강제시킨다. 이는 latent variable이 실제로 true future model dynamic을 잘 학습하도록 하는 regularizer 역할을 한다. 이를 위해서 원래 loss에 auxiliary loss를 더해주는데, 구체적으로는 given latent variable $$z$$을 통해 backward state $$b$$를 생성하는 모델 $$p_\eta$$를 학습시킨다. 수식으로는 다음과 같다.  
+$$max_{\eta} E_{q_\phi(z_t \mid h_{t-1}, b_t)}[logp_\eta(b \mid z)]$$  
+Auxiliary loss를 제외한 나머지 ELBO 유도 과정은 다음과 같다.  
+![image](https://user-images.githubusercontent.com/46081019/58233353-d6827e80-7d76-11e9-8dbd-678710c6e00d.png)  
+
+  
