@@ -36,6 +36,7 @@ Isomap은 가장 오래되고 기초적인 manifold learning 알고리즘 중 �
 Isomap은 각 데이터 별로 충분히 가까운 데이터들에 대한 인접 그래프를 얻어 매니폴드를 표현하는 과정이다. 
 이때 두 데이터(노드) 간의 최단 경로를 euclidean distance를 기반으로 구하며, 이는 곧 high-dimensional space에서도 
 충분히 local한 영역에 대해서는 euclidean space를 합당하게 가정할 수 있기 때문이다. 
+  
 ![i1-4](https://user-images.githubusercontent.com/46081019/58704022-90b45e80-83e5-11e9-92ad-6157137ef982.png)  
   
 **1. Locally Linear Embedding(LLE)**  
@@ -43,7 +44,9 @@ LLE 역시 geometric intuition에 기반한 linear model를 이용해 manifold�
 High-dimensional data는 Global한 관점에서 non-linear하지만, 이를 우선 무시하고 
 Isomap과 비슷하게 각 데이터의 이웃들이 locally linear하다고 해보자. 
 원 데이터 $$D=[x_1, x_2, ..., x_N], x\in R^d$$을 $$[z_1, z_2, ..., z_N], z\in R^K$$으로 보내는 것이 목적이다.  
+  
 ![다운로드 (1)](https://user-images.githubusercontent.com/46081019/58705042-edfddf00-83e8-11e9-8323-7886cd428e4f.png)  
+  
 과정은 다음과 같다. 
 - Isomap과 동일하게 각 data point별로 L(hyper-parameter) nearest neighbor set $$\xi$$를 찾는다
 - $$\xi$$의 모든 data point에 임의에 weight를 부과한다. 이후 Least-square 문제를 풀어 weight를 구한다.
@@ -65,7 +68,9 @@ High dimensional space에서 어떤 data point와의 거리가 가까울 수록 
   
 가령 i-th data point 관점에서 j-th point에 대한 neighborhood 혹은 영향력은 조건부 확률 형식을 빌려, 
 $$p_{j \mid i}$$으로 표현한다. 이를 gaussian distribution 형식으로 표현하면 다음과 같다. 
+  
 ![image](https://user-images.githubusercontent.com/46081019/58705689-e2131c80-83ea-11e9-96d7-630f38e6c5b7.png)   
+  
 - 이때 $$\sigma_i$$는 각 데이터에 대해 개별적인 hyper-parameter이다. 
 - Softmax의 temperature parameter와 비슷한 역할을 하는데, $$sigma$$가 작을 수록 두 데이터 포인트의 차이는 보다 부각되며 local한 영향력이 커진다. 
 - 반면 $$sigma$$가 작다면 보다 넓은 범위의 point들이 영향력을 미치게 된다. 
@@ -91,5 +96,7 @@ $$q_ij = \frac{(1 + \parallel y_i - y_j \parallel^2)^{-1}}{\sum_{k,l} (1 + \para
 이는 t-distribution의 chi-squared 항이 반영된 것으로 보인다. 1이 붙은 이유는 역수를 취하는 과정에서 inf가 나오지 않도록 추가한 것이다. 
 직관적으로는 (i, j)가 가까울 수록 확률적으로 두 data point는 가까운 state이며, 따라서 $$y_i, y_j$$가 크게 변하지 않을 가능성이 높다.  
 MNIST에 적용한 예시는 다음과 같다.   
+  
 ![visualizing-data-using-tsne-53-638](https://user-images.githubusercontent.com/46081019/58706879-2d7afa00-83ee-11e9-836a-c20f1d7ca27f.jpg)
+  
 
