@@ -82,8 +82,8 @@ $$q_{j \mid i} = \frac{exp(\parallel y_i -y_j \parallel^2)}{\sum_k exp(\parallel
 이렇게 i-th data point에 대해 high, low-dimensional neighborhood probabilistic distribution $$P_i, Q_i$$를 얻었다. 
 SNE의 핵심은 서로 다른 두 space에서 구한 distribution이 크게 차이가 나지 않도록 만든다는 것이다. 
 - Cost $$C=\sum_i KL(P_i \mid\mid Q_i)=\sum_i\sum_j p_{j \mid i}log(\frac{p_{j \mid i}}{q_{j \mid i}})$$
-즉 각 embedded new data points $$y_i$$에 대해 cost를 편미분하여, $$\triangledown{y_i}$$을 구한다.  
-  
+- 각 embedded new data points $$y_i$$에 대해 cost를 편미분하여, $$\triangledown{y_i}$$을 구한다.  
+    
 t-SNE는 SNE와 본질적으로 크게 다르지 않은 알고리즘이다.
 SNE에서는 conditional probability로 (i, j) 관계를 표현하였으며 이는 진정한 distance metric이라 할 수 없는데, asymmetric하기 때문이다. 
 따라서 이를 보완하고, SNE의 gaussian 대신 t-distribution을 사용한 것이 t-SNE이다. 
