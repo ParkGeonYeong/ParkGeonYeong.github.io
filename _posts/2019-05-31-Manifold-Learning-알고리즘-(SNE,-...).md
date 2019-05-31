@@ -90,5 +90,6 @@ df=1일 때 t-SNE에서 neighborhood representation $$q_{ij}$$는 다음과 같�
 $$q_ij = \frac{(1 + \parallel y_i - y_j \parallel^2)^{-1}}{\sum_{k,l} (1 + \parallel y_k - y_k \parallel^2)^{-1}}$$  
 이는 t-distribution의 chi-squared 항이 반영된 것으로 보인다. 1이 붙은 이유는 역수를 취하는 과정에서 inf가 나오지 않도록 추가한 것이다. 
 직관적으로는 (i, j)가 가까울 수록 확률적으로 두 data point는 가까운 state이며, 따라서 $$y_i, y_j$$가 크게 변하지 않을 가능성이 높다.  
-MNIST에 적용
+MNIST에 적용한 예시는 다음과 같다.   
+![visualizing-data-using-tsne-53-638](https://user-images.githubusercontent.com/46081019/58706879-2d7afa00-83ee-11e9-836a-c20f1d7ca27f.jpg)
 
