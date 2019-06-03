@@ -62,7 +62,7 @@ latent variable이 physical dynamics을 잘 인코딩하도록 유도한다. ($$
   - 따라서 Variational Lower Bound는 다음과 같다. 
   - ![image](https://user-images.githubusercontent.com/46081019/58810289-9cf42200-8658-11e9-8509-3eff193dd343.png)  
 - 전체 모델 구조는 다음과 같다.  
-  - ![image](https://user-images.githubusercontent.com/46081019/58810304-a54c5d00-8658-11e9-860c-1123f611041e.png)  
+  - ![image](https://user-images.githubusercontent.com/46081019/58810506-0411d680-8659-11e9-83b6-0ed047088caa.png)  
   - 가장 중요한 최종 latent variable은 다음과 같이 weight를 부여 받아 계산된다. 
   - $$z_{t+1}=A_{t}z_{t}+B_{t}u_{t}+C_{t}w_{t}$$
   - $$A, B, C$$는 기존의 latent variable(=environment가 어디 정도인지 가늠하는 정보), 현재 액션, 현재 observation과 액션을 통해 인코딩된 transition parameter 세 가지 정보가 조합되는 가중치이다. 이때 이 가중치는 $$q_\phi(v_t)$$에서 나온 것으로, 즉 현재 sample과는 무관하게 
