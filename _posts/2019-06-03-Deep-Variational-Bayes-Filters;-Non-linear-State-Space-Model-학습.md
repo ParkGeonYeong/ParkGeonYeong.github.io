@@ -1,5 +1,5 @@
 ---
-title: "Deep Variational Bayes Filters: Non-linear State Space Model 학습"
+title: "Deep Variational Bayes Filters; Non-linear State Space Model 학습"
 use_math: true
 classes: wide
 layout: single
