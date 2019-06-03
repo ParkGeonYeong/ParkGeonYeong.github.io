@@ -15,7 +15,7 @@ layout: single
   
   
 <요약>  
-논문을 한 문장으로 요약하자면 **"State-Space Model Learning using Temporal(or transitional) informative Latent variable"**
+논문을 한 문장으로 요약하자면 **State-Space Model Learning using Temporal(or transitional) informative Latent variable**
 이라 하겠다. State-Space Model(SSM)은 환경과 객체의 dynamics을 표현하는 모델이다. 
 논문에서 제기하는 문제는, 기존 state-space model이 지나치게 "reconstruction of observation"에 집중하여 proper future prediction에 대한 
 정보를 잃고 있다는 점이다. 따라서 곧 SSM이 one-step transition만을 올바르게 예측하게 된다. 
@@ -41,15 +41,14 @@ latent variable이 physical dynamics을 잘 인코딩하도록 유도한다. ($$
   High-dimensional domain에서는 그렇지 않다.
 - 논문에서는 SSM이 "good compression only" (like VAE)와 같은 SSM에 빠지지 않아야 한다고 주장한다. 
   - Cost of decreasing the reconstruction을 감수하고 prediction에 더 집중해야 한다. 
-  - **"We force the latent space to fit the transition--reversing the direction, and thus achieving the state space model assumptions and full information in the latent states"**
+  - **We force the latent space to fit the transition--reversing the direction, and thus achieving the state space model assumptions and full information in the latent states**
   
   
 **1. Model structure**   
 - 논문에서 dynamics을 위해 latent space를 학습시킨 원리는 다음 한 문장으로 설명 가능하다.
-  - **"We establish gradient paths through transitions over time so that the transition becomes the driving factor for shaping the latent space"**
+  - **We establish gradient paths through transitions over time so that the transition becomes the driving factor for shaping the latent space**
 - $$z_{t+1}=f(z_t, u_t, \beta_t)$$
-  - 그래프로 표현하면 다음과 같다.
-  - ![image](https://user-images.githubusercontent.com/46081019/58803385-54356c80-864a-11e9-8a9e-a46b3a41c9b2.png)  
+  - 그래프로 표현하면 다음과 같다.  
   - $$\beta$$는 현재 환경의 전반적 transition dynamic에 대한 meaningful prior이며, 위 그래프처럼 $$v_t, w_t$$로 나뉜다. 
     - $$w_t$$는 현재 sample data에 dependent한, sample-specific noise 역할이다.
     - $$v_t$$는 sample에 independent한 universal transition parameter로, 개인적인 생각으로는 환경의 global한 특징 및 
@@ -57,19 +56,14 @@ latent variable이 physical dynamics을 잘 인코딩하도록 유도한다. ($$
   - 본 논문에서는 VAE의 인코더와 같이 기능하는 모델을 recognition model $$q$$이라 칭한다. 이때 $$q$$는 다음과 같이 factorize 가능하다.
     - $$q_\phi(\beta_{1:T} \mid x_{1:T})=q_\phi(w_{1:T} \mid x_{1:T})q_\phi(v_{1:T})$$
     - 즉 베타는 일종의 transition parameter, 혹은 another latent rather than z이라 할 수 있겠고 이는 $$x$$ dependent와 independent 파트로 나뉜다.
-- $$z$$를 $$z, u, \beta$$로 표현할 수 있으므로 위의 (2)는 다음과 같이 바뀐다.
-  - ![image](https://user-images.githubusercontent.com/46081019/58804562-19810380-864d-11e9-8391-76ff051c1a1c.png)  
-  - 따라서 Variational Lower Bound는 다음과 같다.
-  - ![image](https://user-images.githubusercontent.com/46081019/58804183-336e1680-864c-11e9-9676-109adf18fa50.png)   
-- 전체 모델 구조는 다음과 같다.
-  - ![image](https://user-images.githubusercontent.com/46081019/58804100-f99d1000-864b-11e9-8420-f2cf8262f864.png)    
+- $$z$$를 $$z, u, \beta$$로 표현할 수 있으므로 위의 (2)는 다음과 같이 바뀐다. 
+  - 따라서 Variational Lower Bound는 다음과 같다. 
+- 전체 모델 구조는 다음과 같다.  
   - 가장 중요한 최종 latent variable은 다음과 같이 weight를 부여 받아 계산된다. 
   - $$z_{t+1}=A_{t}z_{t}+B_{t}u_{t}+C_{t}w_{t}$$
   - $$A, B, C$$는 기존의 latent variable(=environment가 어디 정도인지 가늠하는 정보), 현재 액션, 현재 observation과 액션을 통해 인코딩된 transition parameter 세 가지 정보가 조합되는 가중치이다. 이때 이 가중치는 $$q_\phi(v_t)$$에서 나온 것으로, 즉 현재 sample과는 무관하게 
-  $$q_\phi$$가 universal environment dynamics을 파악해 감에 따라서 적절하게 조정될 것이다. 
-  - ![image](https://user-images.githubusercontent.com/46081019/58804947-fefb5a00-864d-11e9-8251-f37c60a4a54c.png)  
+  $$q_\phi$$가 universal environment dynamics을 파악해 감에 따라서 적절하게 조정될 것이다.   
   - 단 각 $$(i)$$ matrices가 "조합"되어 최종 가중치를 만드는 것은 $$z_t, u_t$$에 dependent하다
-  - ![image](https://user-images.githubusercontent.com/46081019/58805017-2a7e4480-864e-11e9-8317-bc19d46bc1be.png)  
 - 요약하자면 latent variable $$z_{t+1}$$은 현재 액션 $$u_t$$ 외에도 직전 latent variable $$z_t$$와, 
 transition parameter $$w$$에 의존적이다. 
 또한 이 세 가지 정보가 각자 가중치를 부여 받을 때 "각 observation at timepoint"와 "universal transition parameter"에 모두 영향을 받는다.
@@ -80,8 +74,6 @@ transition parameter $$w$$에 의존적이다.
 - 실험은 거의 proof of concept 수준으로 진행되었으며, 결과 역시 깔끔하다.
 - Non-markovian pendulum의 각, 각속도를 observation 삼아 학습시켰다.
   - z dimension은 visualize를 위해 3으로 고정했다. 
-- ![image](https://user-images.githubusercontent.com/46081019/58805891-ee4be380-864f-11e9-9ab0-7732e7149fcf.png)  
   - $$z_1$$ 축을 따라 angle velocity가, $$(z_0, z_2)$$ plane을 따라 angle이 인코딩되었다. 
   - 반면 Deep Kalman filter는 각속도 인코딩에 실패했다.
-  - ![dvbf_latentwalk](https://user-images.githubusercontent.com/46081019/58805986-28b58080-8650-11e9-8fdc-f5c2f7bb3421.gif)  
   - 학습한 latent variable manifold를 따라 latent variable이 나선형으로 walking하는 것을 알 수 있다.
