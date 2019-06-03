@@ -57,9 +57,29 @@ latent variable이 physical dynamics을 잘 인코딩하도록 유도한다. ($$
     - $$q_\phi($$\beta_{1:T} \mid \x_{1:T})=q_\phi(w_{1:T} \mid x_{1:T})q_\phi(v_{1:T})$$
     - 즉 베타는 일종의 transition parameter, 혹은 another latent rather than z이라 할 수 있겠고 이는 $$x$$ dependent와 independent 파트로 나뉜다.
 - $$z$$를 $$z, u, \beta$$로 표현할 수 있으므로 위의 (2)는 다음과 같이 바뀐다.
-  - ![image](https://user-images.githubusercontent.com/46081019/58804100-f99d1000-864b-11e9-8420-f2cf8262f864.png)   
+  - ![image](https://user-images.githubusercontent.com/46081019/58804562-19810380-864d-11e9-8391-76ff051c1a1c.png)  
   - 따라서 Variational Lower Bound는 다음과 같다.
-  - ![image](https://user-images.githubusercontent.com/46081019/58804440-d7f05880-864c-11e9-8fae-e9b501dd8e0c.png)  
+  - ![image](https://user-images.githubusercontent.com/46081019/58804183-336e1680-864c-11e9-9676-109adf18fa50.png)   
 - 전체 모델 구조는 다음과 같다.
-  - ![image](https://user-images.githubusercontent.com/46081019/58804183-336e1680-864c-11e9-9676-109adf18fa50.png)  
-  - 가장 중요한 최종 latent variable은 다음과 같이 weight uncertainty를 부여 받아 계산된다. 
+  - ![image](https://user-images.githubusercontent.com/46081019/58804100-f99d1000-864b-11e9-8420-f2cf8262f864.png)    
+  - 가장 중요한 최종 latent variable은 다음과 같이 weight를 부여 받아 계산된다. 
+  - $$z_{t+1}=A_{t}z_{t}+B_{t}u_{t}+C_{t}w_{t}$$
+  - $$A, B, C$$는 기존의 latent variable(=environment가 어디 정도인지 가늠하는 정보), 현재 액션, 현재 observation과 액션을 통해 인코딩된 transition parameter 세 가지 정보가 조합되는 가중치이다. 이때 이 가중치는 $$q_\phi(v_t)$$에서 나온 것으로, 즉 현재 sample과는 무관하게 
+  $$q_\phi$$가 universal environment dynamics을 파악해 감에 따라서 적절하게 조정될 것이다. 
+  - ![image](https://user-images.githubusercontent.com/46081019/58804947-fefb5a00-864d-11e9-8251-f37c60a4a54c.png)  
+  - 단 각 $$(i)$$ matrices가 "조합"되어 최종 가중치를 만드는 것은 $$z_t, u_t$$에 dependent하다
+  - ![image](https://user-images.githubusercontent.com/46081019/58805017-2a7e4480-864e-11e9-8317-bc19d46bc1be.png)  
+- 요약하자면 latent variable $$z_{t+1}$$은 현재 액션 $$u_t$$ 외에도 직전 latent variable $$z_t$$와, 
+transition parameter $$w$$에 의존적이다. 
+또한 이 세 가지 정보가 각자 가중치를 부여 받을 때 "각 observation at timepoint"와 "universal transition parameter"에 모두 영향을 받는다.
+  - 따라서 end-to-end training 과정을 거치면 latent variable이 Model dynamics에 민감해진다.
+  
+  
+**2. Experiments results**  
+- 실험은 거의 proof of concept 수준으로 진행되었으며, 결과 역시 깔끔하다.
+- Non-markovian pendulum의 각, 각속도를 observation 삼아 학습시켰다.
+  - z dimension은 visualize를 위해 3으로 고정했다. 
+- ![image](https://user-images.githubusercontent.com/46081019/58805891-ee4be380-864f-11e9-9ab0-7732e7149fcf.png)  
+  - $$z_1$$ 축을 따라 angle velocity가, $$(z_0, z_2)$$ plane을 따라 angle이 인코딩되었다. 
+  - 반면 Deep Kalman filter는 각속도 인코딩에 실패했다.
+  - ![dvbf_latentwalk](https://user-images.githubusercontent.com/46081019/58805986-28b58080-8650-11e9-8fdc-f5c2f7bb3421.gif)   - 학습한 latent variable manifold를 따라 latent variable이 나선형으로 walking하는 것을 알 수 있다.
