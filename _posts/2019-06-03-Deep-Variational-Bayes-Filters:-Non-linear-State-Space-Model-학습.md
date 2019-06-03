@@ -20,7 +20,7 @@ layout: single
 latent variable이 physical dynamics을 잘 인코딩하도록 유도한다. ($$u_t: action, \beta_t: transition parameters$$)
 그 결과 $$z_t$$는 모델의 inherent physical manifold를 잘 학습하게 된다.
   
-
+  
 **0. Introduction**  
 - State space model : Powerful tool to analyze and control the dynamics
 - State space model을 활용하여 probabilistic한 환경에서 $$x_{1:T}$$에 대한 추론을 할 수 있다.
