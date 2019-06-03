@@ -34,20 +34,18 @@ latent variable이 physical dynamics을 잘 인코딩하도록 유도한다. ($$
 - 본 논문에서 위의 SSM을 변형한 방식: Transition Parameter $$\beta$$를 도입
   - Latent variable이 dynamics을 잘 인코딩하지 못 할 경우 미래 예측이 diverge할 수 있다.
   - 따라서 transition에 대한 정보를 갖고 있는 $$\beta$$를 도입하여 일종의 bayesian regularizing prior로 활용한다.
-  - $$ (1) = \int\int{p(x_{1:T} \mid z_{1:T}, u_{1:T})p(z_{1:T} \mid u_{1:T}, \beta_{1:T})p(\beta_{1:T})dz_{1:T}d\beta_{1:T}}  (2)$$
+  - $$\int\int{p(x_{1:T} \mid z_{1:T}, u_{1:T})p(z_{1:T} \mid u_{1:T}, \beta_{1:T})p(\beta_{1:T})dz_{1:T}d\beta_{1:T}}$$
   - 이때 기타 SSM과 동일하게 $$z_t$$는 markovian을 가정하며, $$u_{1:T}$$ 의존도는 없다고 가정하고 생략할 수 있다.
   - Linear한 Gaussian state transition model을 가정하면 kalman 등의 classic한 방법으로 풀 수 있는 문제지만, 
   High-dimensional domain에서는 그렇지 않다.
 - 논문에서는 SSM이 "good compression only" (like VAE)와 같은 SSM에 빠지지 않아야 한다고 주장한다. 
   - Cost of decreasing the reconstruction을 감수하고 prediction에 더 집중해야 한다. 
-  - **"We force the latent space to fit the transition--reversing the direction, and thus achieving the state space model assumptions
-  and full information in the latent states"**
+  - **"We force the latent space to fit the transition--reversing the direction, and thus achieving the state space model assumptions and full information in the latent states"**
   
   
 **1. Model structure**   
 - 논문에서 dynamics을 위해 latent space를 학습시킨 원리는 다음 한 문장으로 설명 가능하다.
-  - **"We establish gradient paths through transitions over time so that the transition becomes the driving factor for shaping 
-  the latent space"**
+  - **"We establish gradient paths through transitions over time so that the transition becomes the driving factor for shaping the latent space"**
 - $$z_{t+1}=f(z_t, u_t, \beta_t)$$
   - 그래프로 표현하면 다음과 같다.
   - ![image](https://user-images.githubusercontent.com/46081019/58803385-54356c80-864a-11e9-8a9e-a46b3a41c9b2.png)  
@@ -84,4 +82,5 @@ transition parameter $$w$$에 의존적이다.
 - ![image](https://user-images.githubusercontent.com/46081019/58805891-ee4be380-864f-11e9-9ab0-7732e7149fcf.png)  
   - $$z_1$$ 축을 따라 angle velocity가, $$(z_0, z_2)$$ plane을 따라 angle이 인코딩되었다. 
   - 반면 Deep Kalman filter는 각속도 인코딩에 실패했다.
-  - ![dvbf_latentwalk](https://user-images.githubusercontent.com/46081019/58805986-28b58080-8650-11e9-8fdc-f5c2f7bb3421.gif)   - 학습한 latent variable manifold를 따라 latent variable이 나선형으로 walking하는 것을 알 수 있다.
+  - ![dvbf_latentwalk](https://user-images.githubusercontent.com/46081019/58805986-28b58080-8650-11e9-8fdc-f5c2f7bb3421.gif)  
+  - 학습한 latent variable manifold를 따라 latent variable이 나선형으로 walking하는 것을 알 수 있다.
