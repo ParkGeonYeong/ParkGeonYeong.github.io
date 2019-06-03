@@ -4,6 +4,8 @@ use_math: true
 classes: wide
 layout: single
 ---
+  
+  
 다음 논문을 정리했습니다. 개인적 해석이 다수 포함되어 있습니다. 
 - [DEEP VARIATIONAL BAYES FILTERS: UNSUPERVISED LEARNING OF STATE SPACE MODELS FROM RAW DATA](https://arxiv.org/pdf/1605.06432.pdf)  
 이전 포스트와 연관이 있습니다.  
