@@ -54,7 +54,7 @@ latent variable이 physical dynamics을 잘 인코딩하도록 유도한다. ($$
     - $$v_t$$는 sample에 independent한 universal transition parameter로, 개인적인 생각으로는 환경의 global한 특징 및 
     과거 observation과의 temporal한 correlation 정보를 포함하고 있는 것으로 보인다. 
   - 본 논문에서는 VAE의 인코더와 같이 기능하는 모델을 recognition model $$q$$이라 칭한다. 이때 $$q$$는 다음과 같이 factorize 가능하다.
-    - $$q_\phi($$\beta_{1:T} \mid \x_{1:T})=q_\phi(w_{1:T} \mid x_{1:T})q_\phi(v_{1:T})$$
+    - $$q_\phi(\beta_{1:T} \mid \x_{1:T})=q_\phi(w_{1:T} \mid x_{1:T})q_\phi(v_{1:T})$$
     - 즉 베타는 일종의 transition parameter, 혹은 another latent rather than z이라 할 수 있겠고 이는 $$x$$ dependent와 independent 파트로 나뉜다.
 - $$z$$를 $$z, u, \beta$$로 표현할 수 있으므로 위의 (2)는 다음과 같이 바뀐다.
   - ![image](https://user-images.githubusercontent.com/46081019/58804562-19810380-864d-11e9-8391-76ff051c1a1c.png)  
