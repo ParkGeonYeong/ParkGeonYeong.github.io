@@ -14,7 +14,7 @@ layout: single
 - [State-Space Model](https://parkgeonyeong.github.io/Model-based-Planning-and-some-recent-works/)
   
   
-<요약>  
+**요약**  
 논문을 한 문장으로 요약하자면 **State-Space Model Learning using Temporal(or transitional) informative Latent variable**
 이라 하겠다. State-Space Model(SSM)은 환경과 객체의 dynamics을 표현하는 모델이다. 
 논문에서 제기하는 문제는, 기존 state-space model이 지나치게 "reconstruction of observation"에 집중하여 proper future prediction에 대한 
