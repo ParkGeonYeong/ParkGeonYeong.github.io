@@ -49,6 +49,7 @@ latent variable이 physical dynamics을 잘 인코딩하도록 유도한다. ($$
   - **We establish gradient paths through transitions over time so that the transition becomes the driving factor for shaping the latent space**
 - $$z_{t+1}=f(z_t, u_t, \beta_t)$$
   - 그래프로 표현하면 다음과 같다.  
+  - ![image](https://user-images.githubusercontent.com/46081019/58810214-746c2800-8658-11e9-9483-9e48eef985db.png)  
   - $$\beta$$는 현재 환경의 전반적 transition dynamic에 대한 meaningful prior이며, 위 그래프처럼 $$v_t, w_t$$로 나뉜다. 
     - $$w_t$$는 현재 sample data에 dependent한, sample-specific noise 역할이다.
     - $$v_t$$는 sample에 independent한 universal transition parameter로, 개인적인 생각으로는 환경의 global한 특징 및 
@@ -57,13 +58,17 @@ latent variable이 physical dynamics을 잘 인코딩하도록 유도한다. ($$
     - $$q_\phi(\beta_{1:T} \mid x_{1:T})=q_\phi(w_{1:T} \mid x_{1:T})q_\phi(v_{1:T})$$
     - 즉 베타는 일종의 transition parameter, 혹은 another latent rather than z이라 할 수 있겠고 이는 $$x$$ dependent와 independent 파트로 나뉜다.
 - $$z$$를 $$z, u, \beta$$로 표현할 수 있으므로 위의 (2)는 다음과 같이 바뀐다. 
+  - ![image](https://user-images.githubusercontent.com/46081019/58810256-8c43ac00-8658-11e9-8e95-30ad001e402a.png)  
   - 따라서 Variational Lower Bound는 다음과 같다. 
+  - ![image](https://user-images.githubusercontent.com/46081019/58810289-9cf42200-8658-11e9-8509-3eff193dd343.png)  
 - 전체 모델 구조는 다음과 같다.  
+  - ![image](https://user-images.githubusercontent.com/46081019/58810304-a54c5d00-8658-11e9-860c-1123f611041e.png)  
   - 가장 중요한 최종 latent variable은 다음과 같이 weight를 부여 받아 계산된다. 
   - $$z_{t+1}=A_{t}z_{t}+B_{t}u_{t}+C_{t}w_{t}$$
   - $$A, B, C$$는 기존의 latent variable(=environment가 어디 정도인지 가늠하는 정보), 현재 액션, 현재 observation과 액션을 통해 인코딩된 transition parameter 세 가지 정보가 조합되는 가중치이다. 이때 이 가중치는 $$q_\phi(v_t)$$에서 나온 것으로, 즉 현재 sample과는 무관하게 
   $$q_\phi$$가 universal environment dynamics을 파악해 감에 따라서 적절하게 조정될 것이다.   
   - 단 각 $$(i)$$ matrices가 "조합"되어 최종 가중치를 만드는 것은 $$z_t, u_t$$에 dependent하다
+  - 
 - 요약하자면 latent variable $$z_{t+1}$$은 현재 액션 $$u_t$$ 외에도 직전 latent variable $$z_t$$와, 
 transition parameter $$w$$에 의존적이다. 
 또한 이 세 가지 정보가 각자 가중치를 부여 받을 때 "각 observation at timepoint"와 "universal transition parameter"에 모두 영향을 받는다.
@@ -76,4 +81,6 @@ transition parameter $$w$$에 의존적이다.
   - z dimension은 visualize를 위해 3으로 고정했다. 
   - $$z_1$$ 축을 따라 angle velocity가, $$(z_0, z_2)$$ plane을 따라 angle이 인코딩되었다. 
   - 반면 Deep Kalman filter는 각속도 인코딩에 실패했다.
+  - ![image](https://user-images.githubusercontent.com/46081019/58810347-b6956980-8658-11e9-8197-ac0ac7524f39.png)  
   - 학습한 latent variable manifold를 따라 latent variable이 나선형으로 walking하는 것을 알 수 있다.
+  - ![dvbf_latentwalk](https://user-images.githubusercontent.com/46081019/58810367-bdbc7780-8658-11e9-8ed5-00aacdecd6ae.gif)  
