@@ -67,9 +67,16 @@ Latent dynamics을 배우고, 이를 기반으로 Fast Online planning in latent
     - deterministic $$h_t = f(h_{t-1}, s_{t-1}, a_{t-1})$$
     - stochastic $$s_t \sim p(s_t \mid h_t)$$
     - observation $$o_t \sim p(o_t \mid h_t, s_t)$$
-    - Reward $$r_t \sim p(r_t \mid h_t, s_t)$$
-**2. Latent Overshooting**  
+    - Reward $$r_t \sim p(r_t \mid h_t, s_t)$$  
+  - **이는 model의 각 $$state_t$$를 stochastic part와 deterministic part로 나눠 인코딩했다고 할 수 있다.**  
   
+**2. Latent Overshooting**  
+- Latent Overshooting은 [reddit discussion](https://www.reddit.com/r/MachineLearning/comments/aqzll1/r_planet_a_deep_planning_network_for/)에서도 다뤄지고 있다. 
+  - 개인적으로 성능과 관계 없이 논문의 핵심 아이디어 중 하나라고 생각한다.
+- Latent space가 multi-step prediction을 위한 정보를 갖도록 강제하는 것은 많은 SSM의 숙제이다.
+  - **Latent overshooting은 VAE를 학습시키는 데에 있어 KL-divergence regularizer가 단지 one-step prior에만 의존하는 것을 개선하고자 한다.** 
+  - 이는 반대로 얘기하면 학습 과정에서 gradient가 근시적 관점으로만 전달된다는 것이다. 
+  - 따라서 이러한 limited capacity를 극복하고, multi-step prediction에 관련된 prior를 loss에 추가함으로써 전체적으로 la
 
 **3. Results**  
 
