@@ -76,7 +76,7 @@ Latent dynamics을 배우고, 이를 기반으로 Fast Online planning in latent
 - Latent space가 multi-step prediction을 위한 정보를 갖도록 강제하는 것은 많은 SSM의 숙제이다.
   - **Latent overshooting은 VAE를 학습시키는 데에 있어 KL-divergence regularizer가 단지 one-step prior에만 의존하는 것을 개선하고자 한다.** 
   - 이는 반대로 얘기하면 학습 과정에서 gradient가 근시적 관점으로만 전달된다는 것이다. 
-  - 따라서 이러한 limited capacity를 극복하고, multi-step prediction에 관련된 prior를 loss에 추가함으로써 전체적으로 la
+  - 따라서 이러한 limited capacity를 극복하고, multi-step prediction에 관련된 prior를 loss에 추가함으로써 전체적으로 latent
 
 **3. Results**  
 
