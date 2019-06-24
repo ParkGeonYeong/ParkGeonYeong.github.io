@@ -15,7 +15,7 @@ classes: wide
 - [Deep Variational Bayes Filter](https://parkgeonyeong.github.io/Deep-Variational-Bayes-Filters;-Non-linear-State-Space-Model-%ED%95%99%EC%8A%B5/)  
   
   
-**요약**
+**요약**  
 이번 ICML 2019에 oral로 발표된 Google Brain의 논문이며, 이홍락 교수님이 포함되어 계신다. PlaNet(planning network)라고도 불린다.  
 Latent dynamics을 배우고, 이를 기반으로 Fast Online planning in latent space를 목표로 한다는 점에서 
 기존 state-space planning 연구들과 비슷하다. 그러나 2가지 정도의 major novel contribution(RSSM, Latent Overshooting)이 보인다. 
@@ -76,7 +76,16 @@ Latent dynamics을 배우고, 이를 기반으로 Fast Online planning in latent
 - Latent space가 multi-step prediction을 위한 정보를 갖도록 강제하는 것은 많은 SSM의 숙제이다.
   - **Latent overshooting은 VAE를 학습시키는 데에 있어 KL-divergence regularizer가 단지 one-step prior에만 의존하는 것을 개선하고자 한다.** 
   - 이는 반대로 얘기하면 학습 과정에서 gradient가 근시적 관점으로만 전달된다는 것이다. 
-  - 따라서 이러한 limited capacity를 극복하고, multi-step prediction에 관련된 prior를 loss에 추가함으로써 전체적으로 latent ss
+  - 따라서 이러한 limited capacity를 극복하고, multi-step prediction에 관련된 prior를 loss에 추가함으로써 전체적으로 latent space를 개선하는 기법이 latent overshooting이다. 
+    - Latent Overshooting이 반영된 Loss는 다음과 같다. 
+    - ![image](https://user-images.githubusercontent.com/46081019/60013693-0c8a8980-96ba-11e9-9183-c540b8acc07f.png)  
+    - 여기서 KL divergence 항에 prior $$p$$가 단순히 $$p(s_t \mid s_{t-1})$$으로 구해지지 않고, 이전 여러 d step에 대해서 먼저 
+    $$p(s_{t-1})$$이 구해진 것을 알 수 있다. 
+    - 즉 prior의 prior를 여러 step에 반복해서 구했다는 것인데, 이렇게 loss를 정의할 경우 각 state에(=$$p(s_{t-d})$$) gradient가 전달되기 때문에 각 prior distribution이 d-step prediction에 대한 정보를 인코딩하도록 유도할 수 있다. 
+    - 이때 논문에서 사용한 트릭으로, posterior distribution에는 굳이 해당 loss에 대한 gradient를 전달하지 않는다. (=$$q$$)
+      - 어차피 이 latent overshooting의 목적은 말 그대로 prior state가 "overshoot"하여 미래에 유용할 latent variable을 잘 배우는 것이기 때문이다. One-step and Multi-step prediction의 consistency를 위한 regularizer라고 볼 수 있다.
+  - "Future-informative" latent space를 인코딩하기 위한 비슷한 고민을 담고 있는 논문들을 소개한다.
+    - Modeling the Long Term Future in Model-Based Reinforcement Learning, 2019 ICLR (2번째 참고 포스트)
+    - Temporal Difference Variational Auto-Encoder, 2019 ICLR (oral, 포스트 예정)
 
-**3. Results**  
 
