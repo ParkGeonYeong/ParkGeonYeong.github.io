@@ -52,4 +52,30 @@ layer jacobian이 singular value를 모두 1에 가깝게 갖도록 유도한다
   
   
 **1. Weight Normalization and Layer Normalization**  
-Batch Normalization 이후 나온 많은 normalization paper들이 
+Batch Normalization 이후 나온 많은 normalization paper들이 ICS 자체보다는 gradient와 learning rate의 안정화에 집중했다. 그 중에서도 weight normalization과 layer normalization은 batch 단위가 아닌 weight와 layer 단위에서 normalize함으로써 batch의 statistics 추정에서 오는 noise를 최소화했고 RNN의 적용 가능성을 높였다. 
+  
+![BTQ0zj5](https://user-images.githubusercontent.com/46081019/60778673-dc8bbd80-a172-11e9-8c88-1afeeb4c5fcc.png)  
+Weight Normalization은 gradient의 whietening, layer normaliztion은 fisher information의 stabilize라고 요약할 수 있겠다. 
+이 두 논문을 보다 쉽게 이해하기 위해서 우선 fisher information을 살펴 본다.   
+**1.1 Fisher Information**  
+
+**1.2 Weight Normalization**  
+Gradient의 whietening은 dimension 간의 correlation을 줄임으로써 업데이트 과정을 '쉽고 예측 가능하게' 만들어 준다고 생각한다. 
+Weight Normalization 이전에는 gradient에 fisher information matrix의 approximate inverse를 곱하거나, fisher information matrix을 diagonalize하는 식의 연구가 있었다고 한다. Weight normalization은 fisher information matrix을 explicit하게 다룬다기 보다, weight space를 reparameterize하는 방식이다. 
+  
+$$y=\phi(w*x+b)$$에서 $$w=\frac{g}{\mid\mid v \mid\mid}v$$으로 reparameterize한다. 이렇게 weight의 direction과 magnitude를 분리함으로써 convergence의 속도를 높일 수 있다. 우선 각 g, v에 대한 gradient를 구하면 다음과 같다. 
+![image](https://user-images.githubusercontent.com/46081019/60780608-2330e600-a17a-11e9-8853-ce07a74398c8.png)  
+이때 v gradient를 다시 쓰면 다음과 같다. 
+![image](https://user-images.githubusercontent.com/46081019/60780632-3c399700-a17a-11e9-872c-ec87afdf26ef.png)  
+식을 보면 v gradient가 w와 orthogonal한 방향임을 알 수 있다. 이 때 w는 v와 proportional하기 때문에, v는 그 자신의 gradient와 orthogonal하다. 즉 업데이트된 $$v'$$의 크기는 피타고라스 정리에 의해 $$\mid\mid v'\mid\mid^2 = \sqrt{1+C^2}\mid\mid v\mid\mid \geq \mid\mid v\mid\mid$$으로 non-decreasing한다. 따라서 large-step에 의해 업데이트된 $$v'$$는 norm의 크기 역시 큰 폭으로 증가하기 때문에 자체적으로 learning-rate를 stabilize하는 역할을 한다. 어느 정도 update step을 크게 겪고 난 이후에는 weight space가 잘 바뀌지 않기 때문에 사용 가능한 learning rate의 범위가 더 넓어진다. 이는 이어지는 layer normalization 논문에서도 비슷하게 지적하는 내용이다.   
+  
+**1.3 Layer Normalization**  
+Weight Normalization이 weight space를 normalize하는 반면, layer normalization은 output activation을 normalize한다. 
+
+
+weight reparameterization에 의해 
+
+
+결국 '급격한 gradient update를 피하자'
+
+
