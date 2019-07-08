@@ -48,7 +48,7 @@ Batch Normalization에서는 데이터를 feature-wise로 normalize한다. 즉 C
 **논문을 읽으면서 internal covariate shift에 대한 논의가 부족하다고 생각했다. 직관적으로 internal covariate shift는 모델이 sharp local minima에 취약한 이유가 될 수 있다고 생각했지만, 이론적으로 이에 대한 수식이나 실험이 뒷받침되지는 않았다.** 오히려 이후에 살펴볼 "How Batch Normalization Help Optimization?"에서 이를 엄밀하게 검증하는데, internal covariate shift(ICS)가 모델의 성능에 방해가 되지 않으며 심지어 BN이 ICS를 줄이지도 않는다고 주장한다. **오히려 BN 논문에서 보다 매력적으로 느낀 부분은 BN이 parameter growth를 제한할 수 있다는 점과 
 layer jacobian이 singular value를 모두 1에 가깝게 갖도록 유도한다는 점이다. **
 딥러닝 학습을 하다 보면 파라미터가 점점 커져서 그 범위가 튀어버릴 때가 많은데, activation output을 강제로 normalize하면 이런 explosion이 발생활 확률을 현저히 낮춰 준다. 이는 이후 논문들에서 loss와 gradient의 lipschitzness를 구할 때 기본이 되는 가정으로, batch normalization도 이를 implicit하게 갖고 있지만 논문에서 수식적으로 보이지 않은 것으로 보인다. 
-또한 $$z=Fx$$에서 layer $$F$$를 단순히 linear transformation으로 가정하고, normalized x와 z를 각각 uncorrelated gaussian으로 가정할 때 $$I = cov(z) = Fxx^{T}F^{T} = FF^T$$으로, F의 singular value는 1이 되어 gradient의 magnitude를 제한한다. 물론 실제로는 non-linear transformation이지만 BN이 학습을 안정화시킨다는 간접적인 증거이다.  
+또한 $$z=Fx$$에서 layer $$F$$를 단순히 linear transformation으로 가정하고, normalized x와 z를 각각 uncorrelated gaussian으로 가정할 때 $$I = cov(z) = Fxx^{T}F^{T} = FF^T$$으로, F의 singular value는 1이 되어 gradient의 magnitude를 제한한다. 물론 실제로는 non-linear transformation이지만 BN이 학습을 안정화시킨다는 간접적인 증거이다. 이런 내용과 관련된 논의는 2. How Batch Normalization Help Optimization?에서 알아본다.  
   
   
 **1. Weight Normalization and Layer Normalization**  
@@ -65,17 +65,32 @@ Weight Normalization 이전에는 gradient에 fisher information matrix의 appro
   
 $$y=\phi(w*x+b)$$에서 $$w=\frac{g}{\mid\mid v \mid\mid}v$$으로 reparameterize한다. 이렇게 weight의 direction과 magnitude를 분리함으로써 convergence의 속도를 높일 수 있다. 우선 각 g, v에 대한 gradient를 구하면 다음과 같다. 
 ![image](https://user-images.githubusercontent.com/46081019/60780608-2330e600-a17a-11e9-8853-ce07a74398c8.png)  
-이때 v gradient를 다시 쓰면 다음과 같다. 
-![image](https://user-images.githubusercontent.com/46081019/60780632-3c399700-a17a-11e9-872c-ec87afdf26ef.png)  
+이때 v gradient를 다시 쓰면 다음과 같다.   
+![image](https://user-images.githubusercontent.com/46081019/60780632-3c399700-a17a-11e9-872c-ec87afdf26ef.png)   
 식을 보면 v gradient가 w와 orthogonal한 방향임을 알 수 있다. 이 때 w는 v와 proportional하기 때문에, v는 그 자신의 gradient와 orthogonal하다. 즉 업데이트된 $$v'$$의 크기는 피타고라스 정리에 의해 $$\mid\mid v'\mid\mid^2 = \sqrt{1+C^2}\mid\mid v\mid\mid \geq \mid\mid v\mid\mid$$으로 non-decreasing한다. 따라서 large-step에 의해 업데이트된 $$v'$$는 norm의 크기 역시 큰 폭으로 증가하기 때문에 자체적으로 learning-rate를 stabilize하는 역할을 한다. 어느 정도 update step을 크게 겪고 난 이후에는 weight space가 잘 바뀌지 않기 때문에 사용 가능한 learning rate의 범위가 더 넓어진다. 이는 이어지는 layer normalization 논문에서도 비슷하게 지적하는 내용이다.   
   
 **1.3 Layer Normalization**  
 Weight Normalization이 weight space를 normalize하는 반면, layer normalization은 output activation을 normalize한다. 
+물론 그 과정에서 weight을 implicit하게 고려하게 된다. 
+RNN을 예로 들면 다음과 같다.     
+![image](https://user-images.githubusercontent.com/46081019/60782482-c76a5b00-a181-11e9-85bc-b91de5dd0e92.png)
+  
+반복해서 강조하지만 normalization의 목표 중 하나는 gradient의 안정화이다. 따라서 loss의 "curvature"를 살펴 보는 것이 좋다. Riemannian manifold에서의 curvature는 riemannian metric 혹은 $$ds^2$$으로 확인할 수 있는데, 이는 parameter space을 따라 model의 output이 얼마나 급격하게 바뀌는지를 의미한다. 말이 어렵지만 단순하게 보면 결국 $$D_{KL}[P(y \mid x; \theta) \mid\mid P(y \mid x; \theta+\delta)]$$를 의미하며 이는 앞 절에서 살펴 보았듯이 fisher information matrix F로 근사할 수 있다. ($$\frac{1}{2}\delta^{T}F(\theta)\delta$$)   
+  
+![image](https://user-images.githubusercontent.com/46081019/60782969-883d0980-a183-11e9-9abd-434e9bc7f0ad.png)  
+결국 parameter space를 geometric한 관점에서 봤을 때 fisher matrix는 model의 outcome(y)이 parameter 변화(delta)에 얼마나 민감한지를 의미하는 metric이다. 논문에서는 GLM을 기반으로 한 실험을 통해 normalization이 fisher information matrix에 어떤 영향을 미치는 지 밝혔다. 
+Normalized되지 않은 GLM에서 fisher matrix은 incoming weight, data의 scale에 큰 영향을 받지만, layer normalized GLM은 정규화를 거치기 때문에 fisher matrix가 정규화된 prediction error에 영향을 받는다.   
+  
+![image](https://user-images.githubusercontent.com/46081019/60783267-d7376e80-a184-11e9-84e2-824582d7a4f6.png)  
 
-
-weight reparameterization에 의해 
-
-
-결국 '급격한 gradient update를 피하자'
+따라서 input과 parameter의 scale에 큰 영향을 받지 않기 때문에 더 안정적이고 좋은 gradient를 얻게 된다. 또한 이는 weight space의 scale에 따른 learning rate reduction 효과도 얻을 수 있는데, fisher matrix가 normalization scalar $$\sigma$$에 반비례하기 때문에 weight norm이 커질 경우 fisher matrix 값이 줄어들게 된다. 이는 곧 weight space 방향의 curvature가 원만해지는 것을 의미하며, 따라서 weight vector의 norm이 굉장히 클 경우 gradient update를 통해 weight의 방향을 확 바꾸는 것이 어려워진다. 이를 통해 학습이 진행됨에 따라 weight training이 자동으로 "early-stop"되는 효과를 기대할 수 있다.   
+한편 앞 절에서 살펴본 weight normalization은 data의 정규화 과정이 없기 때문에, fisher information matrix가 input data scale에 영향을 받게 된다. 개인적으로는 이 점 때문에 weight normalization보다 layer normalization에 더 신뢰가 간다. Weight normalization의 역할을 layer normalization이 똑같이 혹은 더 잘 해줄 수 있다고 생각한다. 
+![image](https://user-images.githubusercontent.com/46081019/60783320-0c43c100-a185-11e9-8a7e-d071873619b8.png)  
+  
+  
+**2. How Batch Normalization Help Optimization?**
+지금까지 흐름을 정리하면, normalization의 목표는 결국 '급격한 gradient update를 피하자'라고 할 수 있겠다. 보다 smooth한, 보다 flat한, 보다 stable한 loss space와 gradient를 얻어야 학습의 수렴성과 일반성을 기대할 수 있을 것이다. 이를 위해 Hessian of negative log-likelihood의 근사라고 할 수 있는 fisher information과 layer normalization까지 알아 보았다.  
+  
+비슷한 관점에서 batch normalization의 효과를 해석하는 논문이 2018년도 NIPS에 나왔다. 많은 사람들이 이 논문을 기점으로 batch normalization을 다르게 해석하고 있다. 
 
 
