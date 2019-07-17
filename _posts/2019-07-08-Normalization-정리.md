@@ -1,5 +1,5 @@
 ---
-title: "Normalization 정리 (이론 중심)"
+title: "Normalization 정리"
 use_math: true
 layout: single
 classes: wide
@@ -19,7 +19,7 @@ Batch Normaliazation 등장 이후 Activation, Weight, Layer 단위에서의 Nor
 대부분의 모델 구조에서 사용되는 Normalization이지만, 그 이론적 기반은 아직도 논의 중이며 
 최근에는 loss, gradient landscape의 smoothing이 주목 받고 있다. 
 따라서 Normalization paper에서 해결하고자 하는 문제와 수학적 테크닉은 근본적으로 대부분 비슷하다. 
-여기서는 normalization에 사용되는 수학적 기반(lipschitzness, fisher information, Hessian 등)을 위주로 지난 벤치마크 논문들을 되돌아 본다. 
+여기서는 실험보다는 normalization에 사용되는 이론적 기반(lipschitzness, fisher information, Hessian 등)을 위주로 지난 벤치마크 논문들을 되돌아 본다. 
   
 **0. Batch Normalization**  
 많이 알려져 있듯이 Original Batch normalization 논문이 제기했던 문제는 internal covariate shift의 해결이다. 
@@ -88,9 +88,38 @@ Normalized되지 않은 GLM에서 fisher matrix은 incoming weight, data의 scal
 ![image](https://user-images.githubusercontent.com/46081019/60783320-0c43c100-a185-11e9-8a7e-d071873619b8.png)  
   
   
-**2. How Batch Normalization Help Optimization?**
+**2. How Batch Normalization Help Optimization?**  
 지금까지 흐름을 정리하면, normalization의 목표는 결국 '급격한 gradient update를 피하자'라고 할 수 있겠다. 보다 smooth한, 보다 flat한, 보다 stable한 loss space와 gradient를 얻어야 학습의 수렴성과 일반성을 기대할 수 있을 것이다. 이를 위해 Hessian of negative log-likelihood의 근사라고 할 수 있는 fisher information과 layer normalization까지 알아 보았다.  
   
-비슷한 관점에서 batch normalization의 효과를 해석하는 논문이 2018년도 NIPS에 나왔다. 많은 사람들이 이 논문을 기점으로 batch normalization을 다르게 해석하고 있다. 
-
-
+비슷한 관점에서 batch normalization의 효과를 해석하는 논문이 2018년도 NIPS에 나왔다. Batch normalization이 잘 되는 이유는 loss 및 gradient의 landscape을 부드럽게 만들기 때문이라는 것이다. 이를 통해 gradient는 보다 stabilize되고 predictable하며, 따라서 보다 큰 learning rate을 사용할 수 있고 수렴 속도가 빨라진다. 이런 특징은 앞서 언급한 다른 normalization 기법들과 비슷하다. 
+  
+논문이 이에 앞서 우선 강조한 내용은 batch-norm paper의 주장과 달리 batch-normalization은 internal covariate shift을 해결하지 않으며, 그럼에도 성능은 향상된다는 것이다.  
+![image](https://user-images.githubusercontent.com/46081019/61360602-ba541700-a8b9-11e9-84ea-049d25b0bad4.png)  
+위 실험은 hidden layer의 중간에 time-varying whiten noise를 추가했는데, batch normalization이 있는 분홍색 네트워크가 noise로 인한 artificial internal covariate shift를 해결하지 못하고 있다. 그럼에도 성능은 기존 batch normalization과 비슷하다.  
+  
+![image](https://user-images.githubusercontent.com/46081019/61360760-0a32de00-a8ba-11e9-988a-e16d6624de2d.png)  
+더 나아가 위 실험에서는 internal covariate shift를 직접 formulate하여 정량화했다. ICS의 식으로 저자들이 제안한 방식은 어떤 $$ith$$ layer를 기준으로, previous layer들이 gradient에 의해 업데이트된 다음 계산한 gradient와, previous layer가 그대로 유지됬을 때 계산한 gradient의 차이이다. 식으로는 다음과 같다.  
+$$G_{t, i} = \triangledown_{W_i^{(t)}} L(W_1^{(t)}, ..., W_k^{(t)}; x^{(t)}, y^{(t)})$$  
+$$G'_{t, i} = \triangledown_{W_i^{(t)}} L(W_1^{(t+1)}, ..., W_{i-1}^{(t+1)}, W_{i}^{(t)}, W_{i+1}^{(t)},W_k^{(t)}; x^{(t)}, y^{(t)})$$  
+$$ ICS = \parallel G'_{t, i} - G_{t, i} \parallel_2 $$  
+이 때 그래프를 보면 Batch Normalization을 추가했을 때 성능은 좋아졌지만, ICS의 polar coordinate value는 더 unstable하다.   
+  
+논문은 이에 이어서 batch normalization이 잘 되는 이론적 근거로 BN이 loss의 Lipschitzness을 낮추는 것을 근거로 들고 있다. Lipschitzness에 대한 위키피디아의 설명이 굉장히 잘 되어 있다;  
+>Intuitively, **a Lipschitz continuous function is limited in how fast it can change: there exists a real number such that, for every pair of points on the graph of this function, the absolute value of the slope of the line connecting them is not greater than this real number;** the smallest such bound is called the Lipschitz constant of the function (or modulus of uniform continuity).   
+  
+수식으로 연속 함수 f의 Lipschitz condition L을 표현하면 다음과 같다;  
+$$ \mid f(t, u) - f(t, v) \mid \leq L \mid u - v \mid $$
+그리고 필수 조건은 아니지만, 이를 다음 식으로도 판정할 수 있다;  
+*If a partial derivative of f is bounded s.t.*  
+$$\mid \frac{df}{dy}(x, y) \mid \leq K,    \forall (x, y) \in D, Then Lip(f)=K$$  
+증명은 임의의 닫힌 구간 [u, v]를 정의하여 주어진 식을 적분하고, 부등호 관계를 적용하면 위의 lipschitz condition과 동일하게 만들 수 있다.   
+  
+우리 네트워크를 non-linear function space의 한 점 f로 보고, f의 loss와 gradient에 대해서 Lipschitzness (혹은 Beta-smoothness)를 낮춘다고 하자. 이는 곧 loss function이 보다 부드럽고, 따라서 gradient가 reliable해짐을 의미한다. 다시 말해 batch-normalization이 없을 때의 loss function에 비해 sharp minima를 줄일 수 있고, exploding or vanishing gradient의 문제도 완화할 수 있다. 이로 인해 gradient가 predictable하면, 다시 말해 방향이 보장되기 때문에, step size를 크게 가져갈 수 있고 이는 학습 속도의 향상으로 연결된다.  
+  
+  
+Batch Normalization은, Batch Normalization이 적용된 후의 gradient norm이 normalization전의 gradient norm보다 매우 높은 확률로 lower bound임을 보임으로써 이를 증명한다.   
+![image](https://user-images.githubusercontent.com/46081019/61368093-1756c980-a8c8-11e9-8669-07e2e2f46a9d.png)  
+$$\gamma / \sigma$$의 scale로 gradient norm이 줄어드는데, 이는 경험적으로 empirical variance $$\sigma^2$$가 크기 때문에 lipschitz constant의 flatness에 기여할 수 있다.  
+  
+*Concept of Proof)*  
+Batch Normalization의 gradient 유도를 먼저 
