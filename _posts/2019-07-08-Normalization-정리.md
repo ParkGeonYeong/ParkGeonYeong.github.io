@@ -133,3 +133,21 @@ $$\frac{df}{dx} = \frac{df}{d\hat{x}}\frac{d\hat{x}}{dx} + \frac{df}{d\mu}\frac{
 Thm 1은 Output-space 단에서 Loss의 Lipschitzness를 보였다. 비슷한 방식으로 weight-space에서의 lipschitzness를 보일 수 있다.   
 ![image](https://user-images.githubusercontent.com/46081019/61382722-441ad900-a8e8-11e9-82e0-1a16dd461f2d.png)  
 이를 통해 Loss 단에서 gradient의 magnitude를 제한하고 stabilize하는 것을 알 수 있다.
+  
+  
+**3. Weight Standardization**   
+Batch Normalization의 성능을 loss smoothing 관점에서 설명한 이래 다양한 normalization 기법이 이를 모사하면서도 BN의 단점은 보완하기 위해 등장했다. Weight Standardization은 그 예시 중 하나로 layer normalization처럼 Batch normalization이 batch size에 민감하다는 점을 보완하면서 loss landscape은 그대로 smoothing하는 연구이다. 주로 CNN의 filter를 standardize하는데에 사용된다.    
+논문 제목에서 보이듯이 CNN의 weight를 standardize한다.  
+![image](https://user-images.githubusercontent.com/46081019/61385386-492e5700-a8ed-11e9-85eb-bd3cd0c8b8c9.png)  
+Batch Normalization과 달리 mean value, variance value는 따로 rescaling하지 않는다. 이 코드 두줄로 구현할 수 있는 standardization은 loss의 lipschitz constant를 줄임으로써 gradient 안정화에 기여한다.  
+  
+위의 식을 따시 re-formulate하면 다음과 같은데, 
+![image](https://user-images.githubusercontent.com/46081019/61385386-492e5700-a8ed-11e9-85eb-bd3cd0c8b8c9.png)  
+이에 대한 gradient를 구하기 위해 앞서 Batch Normalization에서 살펴보았듯이 empirical mean, variance에 대해서도 편미분이 필요하다.   
+$$\frac{dL}{d\dot{w}} = \frac{dL}{d\hat{w}}\frac{d\hat{w}}{d\dot{w}} + \frac{dL}{d\hat{w}}\frac{d\hat{w}}{d\sigma}\frac{d\sigma}{d\dot{w}}$$  
+위 식을 그대로 적용하면 각 $$\dot{w}$$와 $$W$$에 대해 다음 gradient을 얻을 수 있다.  
+![image](https://user-images.githubusercontent.com/46081019/61386414-3caafe00-a8ef-11e9-9941-2c28ea0bb5ec.png)  
+  
+이때 각 gradient에 대해 2-norm을 계산하면, 각각 기존 standardization이 되지 않았을 때의 gradient norm보다 significant하게 줄어드는 것을 알 수 있다.  
+![image](https://user-images.githubusercontent.com/46081019/61386581-80056c80-a8ef-11e9-9131-5eff340a22f4.png)  
+![image](https://user-images.githubusercontent.com/46081019/61386624-90b5e280-a8ef-11e9-825f-0f05697d8d2f.png)
