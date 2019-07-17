@@ -117,9 +117,19 @@ $$\mid \frac{df}{dy}(x, y) \mid \leq K,    \forall (x, y) \in D, Then Lip(f)=K$$
 우리 네트워크를 non-linear function space의 한 점 f로 보고, f의 loss와 gradient에 대해서 Lipschitzness (혹은 Beta-smoothness)를 낮춘다고 하자. 이는 곧 loss function이 보다 부드럽고, 따라서 gradient가 reliable해짐을 의미한다. 다시 말해 batch-normalization이 없을 때의 loss function에 비해 sharp minima를 줄일 수 있고, exploding or vanishing gradient의 문제도 완화할 수 있다. 이로 인해 gradient가 predictable하면, 다시 말해 방향이 보장되기 때문에, step size를 크게 가져갈 수 있고 이는 학습 속도의 향상으로 연결된다.  
   
   
-Batch Normalization은, Batch Normalization이 적용된 후의 gradient norm이 normalization전의 gradient norm보다 매우 높은 확률로 lower bound임을 보임으로써 이를 증명한다.   
+**Thm 1)** Batch Normalization은, Batch Normalization이 적용된 후의 gradient norm이 normalization전의 gradient norm보다 매우 높은 확률로 lower bound임을 보임으로써 이를 증명한다.   
 ![image](https://user-images.githubusercontent.com/46081019/61368093-1756c980-a8c8-11e9-8669-07e2e2f46a9d.png)  
 $$\gamma / \sigma$$의 scale로 gradient norm이 줄어드는데, 이는 경험적으로 empirical variance $$\sigma^2$$가 크기 때문에 lipschitz constant의 flatness에 기여할 수 있다.  
   
 *Concept of Proof)*  
-Batch Normalization의 gradient 유도를 먼저 
+Batch Normalization의 gradient 유도가 우선 필요하다;   
+![image](https://user-images.githubusercontent.com/46081019/61381597-3fedbc00-a8e6-11e9-87f6-0f2f785505b1.png)  
+
+복잡해 보이지만 결국 위의 식은 [Gradient of BN](https://kevinzakka.github.io/2016/09/14/batch_normalization/)을 formulate한 것으로,   
+$$\frac{df}{dx} = \frac{df}{d\hat{x}}\frac{d\hat{x}}{dx} + \frac{df}{d\mu}\frac{d\mu}{dx} + \frac{df}{d\sigma^2}\frac{d\sigma^2}{dx}$$의 각각의 항에 대응된다.   
+위의 식을 거의 그대로 사용하여 gradient의 norm을 구할 수 있다.   
+
+**Thm 2)**  
+Thm 1은 Output-space 단에서 Loss의 Lipschitzness를 보였다. 비슷한 방식으로 weight-space에서의 lipschitzness를 보일 수 있다.   
+![image](https://user-images.githubusercontent.com/46081019/61382722-441ad900-a8e8-11e9-82e0-1a16dd461f2d.png)  
+이를 통해 Loss 단에서 gradient의 magnitude를 제한하고 stabilize하는 것을 알 수 있다.
