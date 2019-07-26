@@ -56,7 +56,7 @@ Information Bottleneck 이론은 Naftali Tishby 교수님이 2000년대 초 처�
 - 이제 여기서도 analytical하게 $$p(\tilde{x} \mid x)$$를 구해보자.
   - ![image](https://user-images.githubusercontent.com/46081019/61928946-0b989080-afb5-11e9-89f7-0bcd279a3bec.png)  
   - 이때 $$x, \tilde{x}, y$$ 사이에 markov chain을 가정하기 때문에 위와 같은 식을 얻을 수 있다. 
-  - **처음 distortion function d를 가정하고 얻었던 식과 비교 했을때, $$d(x, \tilde{x}) = D_{KL}[p(y \mid x) \mid p(y \mid \tilde{x})]임을 알 수 있다**
+  - **처음 distortion function d를 가정하고 얻었던 식과 비교 했을때, $$d(x, \tilde{x}) = D_{KL}[p(y \mid x) \mid p(y \mid \tilde{x})]$$임을 알 수 있다**
     - 이는 Distortion에 어떠한 가정을 하지 않은 채 얻은 결과이다. 즉 Distortion은 $$\tilde{x}$$가 true joint disribution $$p(x, y)$$를 얼마나 잘 설명하는지에 대한 값이라고 할 수 있다. 
   - **우리가 데이터를 많이 갖는 것이 meaningful feature extraction에 얼마나 중요한 지를 보여주고 있다.**
     - True joint distribution을 sparse하게 estimate할 경우, $$\tilde{x}$$가 실제 분포와는 무의미한 정보를 인코딩하게 될 수도 있다. 
