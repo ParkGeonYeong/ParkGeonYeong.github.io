@@ -81,7 +81,8 @@ $$D_{IB} = I(h_{i-1}; h_i) + \beta{I(Y; h_{i-1} \mid h_i)}$$
 이를 그래프로 표현하면 다음과 같다.  
 ![image](https://user-images.githubusercontent.com/46081019/62421936-18b82c80-b6e5-11e9-9d5c-e81d11f3f25d.png)   
 그래프에서 black line은 신호의 각 description length(R)당 정해진 optimal IB limit이다. Discription Length가 길어질 수록 IB는 낮아지지만, discrption cost는 늘어날 것이다. Green Line으로 표시된 딥 뉴럴 네트워크 역시 Compression이 진행될수록 discrption length는 짧아지고, 그 대가로 IB는 상승하는 것을 알 수 있다. Blue line은 어떤 critical beta 값에 의해 나타날 수 있는 suboptimal bifurcation이다. Green Line에서도 압축이 진행됨에 따라 이 blue line과 만날 수 있는데, beta를 얼마나 조절했느냐에 따라 어디서 만나는지가 결정될 것이다. 가령 beta를 줄일 수록 압축이 더 진행되는 것이고, 이는 green line의 위로 올라갈 수록 empirical하게 beta를 줄였다고 볼 수 있다. 그렇다면 beta 설정에 의한 trade-off의 optimal point는 과연 어떻게 결정할 수 있을까? 이는 유한한 data로 인한 finite sample bound (orange line)을 통해 확인할 수 있다; 신호의 복잡도는 최소화하면서 IB distortion은 너무 높이지 않는, 주황색 그래프의 극소점을 true trade off point라고 할 수 있다. 현재 최종 압축 형태인 $$\hat{y}$$와의 거리를 각각 $$\triangle{C}, \triangle{G}$$으로 표현할 수 있다. 참고로 이 유한한 데이터로 인한 finite bound는 다음 두 empirical equation을 통해 구할 수 있다고 한다; 신기한 점은 empirical information estimation의 boundary가 hidden state의 cardinality $$K=\mid \hat{X} \mid$$에만 의존한다는 점이다; 즉 다시 말해 데이터의 inherent한 복잡도 $$\mid \hat{X} \mid$$에는 큰 영향을 받지 않으며 이는 뉴럴 네트워크가 복잡한 데이터도 튜닝에 의해 학습할 수 있음을 의미한다. 
-
+![image](https://user-images.githubusercontent.com/46081019/62422064-7a799600-b6e7-11e9-80a1-bbf558c1877a.png)  
+![image](https://user-images.githubusercontent.com/46081019/62422072-8d8c6600-b6e7-11e9-9e57-239f95c1f9bc.png)  
 **2. Deep Variational Information Bottleneck**  
 
 **2.1. Applications in RL: InfoBot**  
