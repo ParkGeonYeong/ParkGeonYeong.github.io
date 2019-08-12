@@ -33,7 +33,8 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
   
   
 **1. Weight Uncertainty in Neural Networks**  
-- TBD
+- TBD  
+  
 **2. Dropout as Bayesian Approximation**  
 - **핵심 아이디어: Bernoulli dropout만으로도 Gaussian Process의 integration over weight space을 근사할 수 있다.** 
   - NN의 W1, W2, b를 이용해 PSD kernel 정의 
@@ -42,6 +43,8 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
   - 이 과정에서 dropout과 reparameterization trick(Kingma et al.,)을 통해 ELBO의 계산량을 확 줄임
   - 정확히는 Monte-Carlo dropout만으로도 ELBO를 얻을 수 있게 함!
   - 결국은 reparameterization trick을 두 번 쓴 셈
-  - 이를 통해 RL 실험에서는 posterior sampling을 근사하기도 함 
+  - 이를 통해 RL 실험에서는 posterior sampling을 근사하기도 함   
+  
+  
 **3. Further Discussion about Dropout**  
-- TBD
+- TBD  
