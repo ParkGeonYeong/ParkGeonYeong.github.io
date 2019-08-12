@@ -20,7 +20,8 @@ layout: single
 Bayesian Neural Network은 weight를 probabilistic distribution으로 표현함으로써 uncertainty를 estimate할 수 있는 모델로써, 
 흔히들 "모르는 것을 모른다고 말하는" 모델이라 부른다. 활용 방안과 가치, 개략적인 소개 등은 다양한 자료가 존재하므로 대체한다.  
 - [NIPS 2016 BNN 워크샵](https://www.youtube.com/channel/UC_LBLWLfKk5rMKDOHoO7vPQ)
-- [Taeoh Kim님의 블로그 포스팅](https://taeoh-kim.github.io/blog/bayesian-deep-learning-introduction/)  
+- [Taeoh Kim님의 블로그 포스팅](https://taeoh-kim.github.io/blog/bayesian-deep-learning-introduction/)    
+
 여기서는 bayesian neural network의 중요한 기반이 되는 두 논문 Blundell et al., "Weight Uncertainty in Neural Networks"과 
 Gal et al., "Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning"을 수식 중심으로 구체적으로 
 살펴보고, 구현체도 참고한다. [Bayes by Backprop 구현체](http://krasserm.github.io/2019/03/14/bayesian-neural-networks/)
