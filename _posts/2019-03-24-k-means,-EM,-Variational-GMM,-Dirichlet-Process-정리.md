@@ -75,18 +75,15 @@ cluster를 'soft'하게 assign하는 알고리즘이 EM을 이용한 GMM 방식�
   - 가령 특정 gaussian 분포가 collapse하는 임계점에 도달하면 다시 평균과 공분산을 initialize하여 새로운 local minima에 빠지도록 유도한다.
 
 **1.2.1 Concept of EM and Evidence Lower Bound**      
-Expectation-Maximization 알고리즘(EM)은 우리의 parameter와 latent variable의 조절을 통해, 
-Observation 데이터에 대한 Maximum likelihood solution을 찾아내는 것입니다. 
-Parameter 뿐만 아니라 latent variable을 정의하고, 두 변수의 interaction을 고려해 
-업데이트를 진행한다는 점이 타 알고리즘과의 차별점입니다. 우선 latent variable을 정의하는 과정이 필요하고, 이에 대한 
-확률 분포를 얻어야 하기 때문에 다소 제약이 있지만, 생각보다 광범위한 모델에 적용 가능하다고 합니다. 
-  
-알고리즘은 어떤 latent variable z을 고려하는 것부터 시작합니다. 
-기존의 log likelihood $$lnP(Xㅣ\theta)$$는 $$z$$의 marginalization으로 인해 $$ln(\sum_{z}P(X,Z|\theta))$$으로 표현되고 
-이는 $$\sum$$이 로그 안에 들어있기 때문에 계산의 어려움이 있습니다.  
-따라서 이를 밖으로 빼주는 과정이 필요한데 이 과정에서 로그 함수가 concave임을 활용합니다.  
-  
-우선 위의 식을 $$ln(\sum_{z}q(Z)\frac{P(x,Zㅣ\theta)}{q(Z)})$$  
+- Expectation-Maximization 알고리즘(EM)은 parameter와 latent variable의 교차 최적화를 통해, Maximum likelihood solution을 찾아낸다.
+  - 이때 Expectation step은 old-parameter에 대해 latent variable을 re-compute, Maximization step은 given latent variable에 대해 new-parameter를 estimate
+  - local minima에 빠질 가능성이 높고 iteration도 많이 돌아야 하지만, 수렴성이 증명되어 유용함. 
+- Evidence Lower Bound의 conceptual derivation
+  - 앞서 likelihood가 logarithm of summation 형태임을 해결하기 위해, logarithm funciton이 concave임을 활용하여 jensen's inequality 적용.  
+  - $$likelihood \\ 
+  = ln(\sum_{z} P(x,Z|\theta)) \\ 
+  = ln(\sum_{z}q(Z)\frac{P(x,Zㅣ\theta)}{q(Z)})$$  
+  - $$P(x, z)$$에 대해 쓴 꼴은 likelihood의 complete 꼴이라 부름 (1.2.2 참고)
 으로 변형합니다. $$q(Z)$$는 latent variable에 대한 확률 분포입니다.
 Jensen's inequality에 따라 $$ln(\sum_{z}q(Z)\frac{P(x,Zㅣ\theta)}{q(Z)})\geq\sum_{z}q(Z)ln(\frac{P(x,Zㅣ\theta)}{q(Z)}) $$
 이 됩니다. 우변의 분모, 분자를 분리하면 $$\sum_{z}q(Z)ln(P(x,Zㅣ\theta))-\sum_{z}q(Z)ln(q(Z))$$으로, 
