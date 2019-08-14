@@ -97,6 +97,34 @@ cluster를 'soft'하게 assign하는 알고리즘이 EM을 이용한 GMM 방식�
   
   
 **1.2.2 EM for GMM**  
-- 
-**1.2.3 Generalized EM**  
+- $$ln p(x) = \sum_{i=1}^N lnp(X \mid \pi, \mu, \Sigma) = \sum_{i=1}^N ln \sum_k \pi_k N(x_i \mid \mu_k, \Sigma_k)$$
+- $$\pi_k$$는 일단 무시하고, 모델 파라미터 $$\mu_k, \Sigma_k, \pi_k$$에 대해서 partial differentiation을 취해보면 다음과 같다.
+  - $$\mu_k, \Sigma_k$$의 경우 단순히 multivariate gaussian의 differentiation
+  - $$\mu_k = \frac{1}{N_k} \sum_{i=1}^{N} \gamma(z_{ik})x_i$$
+  - $$\Sigma_k = \frac{1}{N_k} \sum_{i=1}^{N} \gamma(z_{ik})(x_i - \mu_k)(x_i - \mu_k)^T$$
+  - 결과를 보면 k-th cluster에 각 i-th data point가 갖는 responsibility를 weight로 하여, sample mean과 sample covariance를 구한 것
+    - 굉장히 직관적이다.
+  - $$\pi_k$$의 경우 $$\sum \pi_k = 1$$ 라그랑지안 조건을 걸어준다. 
+  - 미분을 취한 다음 $$\pi_j$$을 곱해 j에 대해서 summation하는 트릭을 사용해 라그랑지안 계수를 구한다. 
+  - 결과적으로 $$\pi_k = \frac{N_k}{N}$$이 된다. 
+- 이때 모든 term에 대해서 $$\gamma$$가 포함되어 있기 때문에 closed-form solution을 구할 수 없다.
+- 따라서 앞서 언급하였듯이 iterative algorithm을 사용한다. 
+- 이 과정은 결국 latent variable $$z$$를 old-parameter $$\theta_{old}$$에 대해서 추정하고, 이 정보와 observation을 결합하여 새로운 $$\theta^{new} = argmax_{\theta} \sum_z p(z \mid x, \theta^{old})p(x, z \mid \theta)$$을 찾아내는 것이라 할 수 있다. 
+- $$p(x, z)$$을 complete-data log likelihood라고 한다.
+  - 결국 latent z을 꾸준히 inference하여, 각 z에 대한 평균적인 complete-data log likelihood $$p(x, z)$$를 최대화하려는 노력이다.  
+  
+- 이렇게 latent variable $$z$$를 inference하는 관점에서 위의 GMM 과정을 다시 살펴보자.
+- $$ln p(x, z \mid \mu, \Sigma, \pi) = \sum_{n=1}^{N} \sum_{k=1}^{K} z_{nk} {ln \pi_k + lnN(x_n \mid \mu_k, \Sigma_k)}$$
+- $$\pi$$ 외에 $$z$$ latent variable을 추가해서 식을 정리하였더니 logarithm 꼴이 보다 깔끔하게 바뀐 것을 알 수 있다.
+  - 이것이 latent variable $$z$$를 도입하여 얻을 수 있는 효과이다. 
+  - 이때 똑같이 $$\pi_k$$에 대해서 라그랑지안 제약을 걸고 식을 전개하면 아래 결과를 얻을 수 있다.
+  - $$\pi_k = \frac{1}{N} \sum_{n=1}^N z_{nk}$$
+  - 즉 mixing coefficient $$\pi$$가 실제로 얼마나 많은 데이터가 k-th cluster에 assign 되었는가에 대한 비율이라 할 수 있다.
+- 이때 모델이 현재 추정한 $$z_{nk}$$들에 대해서 expectation을 취하면 $$\gamma(z_{nk})$$을 얻을 수 있다. 
+- 이에 기반하여 추정한 z에 대해 평균적인 complete-data log likelihood를 구하면,
+- $$E_z[ln p(x, z \mid \mu, \Sigma, \pi)] = \sum_{n=1}^{N} \sum_{k=1}^{K} \gamma_{nk} {ln \pi_k + lnN(x_n \mid \mu_k, \Sigma_k)}$$
+  
+  
+**2.1. Variational GMM **  
+**2.2. Dirichlet Process**
   
