@@ -84,33 +84,19 @@ cluster를 'soft'하게 assign하는 알고리즘이 EM을 이용한 GMM 방식�
   = ln(\sum_{z} P(x,Z|\theta)) \\ 
   = ln(\sum_{z}q(Z)\frac{P(x,Zㅣ\theta)}{q(Z)})$$  
   - $$P(x, z)$$에 대해 쓴 꼴은 likelihood의 complete 꼴이라 부름 (1.2.2 참고)
-으로 변형합니다. $$q(Z)$$는 latent variable에 대한 확률 분포입니다.
-Jensen's inequality에 따라 $$ln(\sum_{z}q(Z)\frac{P(x,Zㅣ\theta)}{q(Z)})\geq\sum_{z}q(Z)ln(\frac{P(x,Zㅣ\theta)}{q(Z)}) $$
-이 됩니다. 우변의 분모, 분자를 분리하면 $$\sum_{z}q(Z)ln(P(x,Zㅣ\theta))-\sum_{z}q(Z)ln(q(Z))$$으로, 
-$$E_{q(Z)}ln(P(x,Z|\theta))+H(q)$$와 동일한 식이 됩니다. 따라서 jensen's inequality를 통해 log likelihood의 lower bound을 찾았습니다. 
+  - 참고로, 다른 방식으로도 적용 가능
+    - $$ln(\sum_{z}q(Z)\frac{P(x,Zㅣ\theta)}{q(Z)})\geq\sum_{z}q(Z)ln(\frac{P(x,Zㅣ\theta)}{q(Z)}) $$
+    - 우변의 분모, 분자를 분리하면 $$\sum_{z}q(Z)ln(P(x,Zㅣ\theta))-\sum_{z}q(Z)ln(q(Z))$$
+    - $$E_{q(Z)}ln(P(x,Z|\theta))+H(q)$$
+- 첫 번째 식에서 log-likelihood의 lower-bound를 tight시킬 조건은 latent variable의 distribution $$q(Z)$$가 $$P(Z|x, \theta)$$와 일치할 때
+  - 따라서 완벽히 학습되지 않은 old-parameter $$\theta$$를 기반으로 우선 $$q(Z)$$를 구하고, 
+    - (첫 번째 Lower bound tighten)
+  - 다시 q(Z)를 통해 parameter $$\theta$$를 $$argmax_{\theta}E_{q^0(Z)}ln(P(x,Z|\theta^0)$$으로 업데이트
+    - (두 번째 Lower bound tighten)
+- 이러한 두 변수 $$q(Z), \theta$$의 interaction을 통해 log-likelihood의 Lower Bound을 꾸준히 maximize할 수 있음
   
-또 다른 방식으로 lower bound을 찾아보면 다음과 같습니다. 
-$$ln(\sum_{z} P(x,Z|\theta))\\
-= ln(\sum_{z} P(Z|x,\theta)P(x|\theta))\\
-= ln(\sum_{z}q(Z)\frac{P(Z|x,\theta)P(x|\theta)}{q(Z)})\\
-= ln(\sum_{z}q(Z)\frac{P(Z|x,\theta)}{q(Z)})+ln(\sum_{z}q(Z)P(x|\theta))\\
-= ln(P(x|\theta))-KL(q(Z)||P(Z|x,\theta))$$  
   
-즉 원래 log-likelihood의 lower-bound를 tight시킬 조건은
-latent variable의 distribution $$q(Z)$$가 $$P(Z|x, \theta)$$와 일치할 때입니다.  
-따라서 완벽히 학습되지 않은 parameter $$\theta$$를 기반으로 우선 $$q(Z)$$를 구하고, 
-다시 q(Z)를 통해 parameter $$\theta$$를 업데이트합니다. 
-이러한 두 변수 $$q(Z), \theta$$의 interaction을 통해 log-likelihood의 Lower Bound을 꾸준히 maximize할 수 있습니다.
-  
-처음 구한 lower bound 식을 $$Q(\theta, q)$$, KL-divergence를 포함하고 있는 식을 $$L(\theta|q)$$라고 합시다.  
-이때 슈도-알고리즘 순서는 다음과 같습니다.  
-
-1) time=0에서 $$\theta^0$$ 초기화  
-2) $$q^0(Z) = P(Z|x, \theta^0)$$, $$L(\theta|q)$$ is tighten  
-3) $$\theta^1 = argmax_{\theta}E_{q^0(Z)}ln(P(x,Z|\theta^0)$$, $$Q(\theta, q)$$ is tighten  
-  
-이를 likelihood가 수렴할 때까지 time-step t에 대해 반복합니다.
 **1.2.2 EM for GMM**  
-  
+- 
 **1.2.3 Generalized EM**  
   
