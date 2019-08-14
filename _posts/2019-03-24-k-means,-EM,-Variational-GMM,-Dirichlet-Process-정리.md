@@ -80,14 +80,17 @@ cluster를 'soft'하게 assign하는 알고리즘이 EM을 이용한 GMM 방식�
   - local minima에 빠질 가능성이 높고 iteration도 많이 돌아야 하지만, 수렴성이 증명되어 유용함. 
 - Evidence Lower Bound의 conceptual derivation
   - 앞서 likelihood가 logarithm of summation 형태임을 해결하기 위해, logarithm funciton이 concave임을 활용하여 jensen's inequality 적용.  
-  - $$likelihood \\ 
-  = ln(\sum_{z} P(x,Z|\theta)) \\ 
-  = ln(\sum_{z}q(Z)\frac{P(x,Zㅣ\theta)}{q(Z)})$$  
+  - $$\begin{equation}
+\begin{split}
+likelihood  
+  &= ln(\sum_{z} P(x,Z\mid \theta)) \\ 
+  &= ln(\sum_{z}q(Z)\frac{P(x,Z \mid \theta)}{q(Z)})
+  \end{split}
+ \end{equation}$$  
   - $$P(x, z)$$에 대해 쓴 꼴은 likelihood의 complete 꼴이라 부름 (1.2.2 참고)
   - 참고로, 다른 방식으로도 적용 가능
-    - $$ln(\sum_{z}q(Z)\frac{P(x,Zㅣ\theta)}{q(Z)})\geq\sum_{z}q(Z)ln(\frac{P(x,Zㅣ\theta)}{q(Z)}) $$
-    - 우변의 분모, 분자를 분리하면 $$\sum_{z}q(Z)ln(P(x,Zㅣ\theta))-\sum_{z}q(Z)ln(q(Z))$$
-    - $$E_{q(Z)}ln(P(x,Z|\theta))+H(q)$$
+    - $$ln(\sum_{z}q(Z)\frac{P(x,Z \mid \theta)}{q(Z)})\geq\sum_{z}q(Z)ln(\frac{P(x,Z \mid \theta)}{q(Z)}) $$
+    - 우변의 분모, 분자를 분리하면 $$\sum_{z}q(Z)ln(P(x,Z \mid \theta))-\sum_{z}q(Z)ln(q(Z)) = E_{q(Z)}ln(P(x,Z|\theta))+H(q)$$
 - 첫 번째 식에서 log-likelihood의 lower-bound를 tight시킬 조건은 latent variable의 distribution $$q(Z)$$가 $$P(Z \mid x, \theta)$$와 일치할 때
   - 따라서 완벽히 학습되지 않은 old-parameter $$\theta$$를 기반으로 우선 $$q(Z)$$를 구하고, 
     - (첫 번째 Lower bound tighten)
@@ -114,7 +117,7 @@ cluster를 'soft'하게 assign하는 알고리즘이 EM을 이용한 GMM 방식�
   - 결국 latent z을 꾸준히 inference하여, 각 z에 대한 평균적인 complete-data log likelihood $$p(x, z)$$를 최대화하려는 노력이다.  
   
 - 이렇게 latent variable $$z$$를 inference하는 관점에서 위의 GMM 과정을 다시 살펴보자.
-- $$ln p(x, z \mid \mu, \Sigma, \pi) = \sum_{n=1}^{N} \sum_{k=1}^{K} z_{nk} {ln \pi_k + lnN(x_n \mid \mu_k, \Sigma_k)}$$
+- $$ln p(x, z \mid \mu, \Sigma, \pi) = \sum_{n=1}^{N} \sum_{k=1}^{K} z_{nk} [{ln \pi_k + lnN(x_n \mid \mu_k, \Sigma_k)}]$$
 - $$\pi$$ 외에 $$z$$ latent variable을 추가해서 식을 정리하였더니 logarithm 꼴이 보다 깔끔하게 바뀐 것을 알 수 있다.
   - 이것이 latent variable $$z$$를 도입하여 얻을 수 있는 효과이다. 
   - 이때 똑같이 $$\pi_k$$에 대해서 라그랑지안 제약을 걸고 식을 전개하면 아래 결과를 얻을 수 있다.
@@ -122,7 +125,7 @@ cluster를 'soft'하게 assign하는 알고리즘이 EM을 이용한 GMM 방식�
   - 즉 mixing coefficient $$\pi$$가 실제로 얼마나 많은 데이터가 k-th cluster에 assign 되었는가에 대한 비율이라 할 수 있다.
 - 이때 모델이 현재 추정한 $$z_{nk}$$들에 대해서 expectation을 취하면 $$\gamma(z_{nk})$$을 얻을 수 있다. 
 - 이에 기반하여 추정한 z에 대해 평균적인 complete-data log likelihood를 구하면,
-- $$E_z[ln p(x, z \mid \mu, \Sigma, \pi)] = \sum_{n=1}^{N} \sum_{k=1}^{K} \gamma_{nk} {ln \pi_k + lnN(x_n \mid \mu_k, \Sigma_k)}$$
+- $$E_z[ln p(x, z \mid \mu, \Sigma, \pi)] = \sum_{n=1}^{N} \sum_{k=1}^{K} \gamma_{nk} [{ln \pi_k + lnN(x_n \mid \mu_k, \Sigma_k)}]$$
   
   
 **2.1. Variational GMM **  
