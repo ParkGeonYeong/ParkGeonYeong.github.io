@@ -90,7 +90,7 @@ likelihood
   - $$P(x, z)$$에 대해 쓴 꼴은 likelihood의 complete 꼴이라 부름 (1.2.2 참고)
   - 참고로, 다른 방식으로도 적용 가능
     - $$ln(\sum_{z}q(Z)\frac{P(x,Z \mid \theta)}{q(Z)})\geq\sum_{z}q(Z)ln(\frac{P(x,Z \mid \theta)}{q(Z)}) $$
-    - 우변의 분모, 분자를 분리하면 $$\sum_{z}q(Z)ln(P(x,Z \mid \theta))-\sum_{z}q(Z)ln(q(Z)) = E_{q(Z)}ln(P(x,Z|\theta))+H(q)$$
+    - 우변의 분모, 분자를 분리하면 $$\sum_{z}q(Z)ln(P(x,Z \mid \theta))-\sum_{z}q(Z)ln(q(Z)) = E_{q(Z)}ln(P(x,Z \mid \theta))+H(q)$$
 - 첫 번째 식에서 log-likelihood의 lower-bound를 tight시킬 조건은 latent variable의 distribution $$q(Z)$$가 $$P(Z \mid x, \theta)$$와 일치할 때
   - 따라서 완벽히 학습되지 않은 old-parameter $$\theta$$를 기반으로 우선 $$q(Z)$$를 구하고, 
     - (첫 번째 Lower bound tighten)
