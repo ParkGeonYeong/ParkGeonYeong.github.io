@@ -88,10 +88,10 @@ cluster를 'soft'하게 assign하는 알고리즘이 EM을 이용한 GMM 방식�
     - $$ln(\sum_{z}q(Z)\frac{P(x,Zㅣ\theta)}{q(Z)})\geq\sum_{z}q(Z)ln(\frac{P(x,Zㅣ\theta)}{q(Z)}) $$
     - 우변의 분모, 분자를 분리하면 $$\sum_{z}q(Z)ln(P(x,Zㅣ\theta))-\sum_{z}q(Z)ln(q(Z))$$
     - $$E_{q(Z)}ln(P(x,Z|\theta))+H(q)$$
-- 첫 번째 식에서 log-likelihood의 lower-bound를 tight시킬 조건은 latent variable의 distribution $$q(Z)$$가 $$P(Z|x, \theta)$$와 일치할 때
+- 첫 번째 식에서 log-likelihood의 lower-bound를 tight시킬 조건은 latent variable의 distribution $$q(Z)$$가 $$P(Z \mid x, \theta)$$와 일치할 때
   - 따라서 완벽히 학습되지 않은 old-parameter $$\theta$$를 기반으로 우선 $$q(Z)$$를 구하고, 
     - (첫 번째 Lower bound tighten)
-  - 다시 q(Z)를 통해 parameter $$\theta$$를 $$argmax_{\theta}E_{q^0(Z)}ln(P(x,Z|\theta^0)$$으로 업데이트
+  - 다시 q(Z)를 통해 parameter $$\theta$$를 $$argmax_{\theta}E_{q^0(Z)}ln(P(x,Z \mid \theta^0)$$으로 업데이트
     - (두 번째 Lower bound tighten)
 - 이러한 두 변수 $$q(Z), \theta$$의 interaction을 통해 log-likelihood의 Lower Bound을 꾸준히 maximize할 수 있음
   
