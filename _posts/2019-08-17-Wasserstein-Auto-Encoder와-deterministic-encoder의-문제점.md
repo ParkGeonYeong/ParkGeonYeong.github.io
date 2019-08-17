@@ -41,12 +41,27 @@ Optimal Transport Problem을 도입하여, 기존 VAE의 regularizer 형태를 �
   - Regularizer 항을 비교하면, VAE의 경우 모든 $$x_i$$에 대해 $$Q(z \mid x_i)$$와 $$P(z)$$ prior 간의 KL-divergence으로 정의되어 있는 한편, 
   WAE의 경우 모든 $$x_i$$에 대해 aggregated된 하나의 $$Q_z$$가 regularized되고 있다. 
 
-- 이 regularizer는 사실 보이기보다 큰 차이이다.
+- 이 regularizer는 사실 보기보다 큰 차이이다.
   - [Disentagling and VAE 이전 포스트 참고 (작성중)](https://parkgeonyeong.github.io/VAE%EC%99%80-Disentanglement/)
   - [ELBO surgery 참고](http://approximateinference.org/accepted/HoffmanJohnson2016.pdf)
   - 요약하자면 기존 VAE regularizer는 $$KL(q(z) \parallel p(z))$$ 외에 $$x_i$$와 $$z$$의 mutual information을 추가로 포함하는 항이다. 
-  - 이 information을 분리시키면서 더 좋은 d
-  
+  - 이 information을 분리시키면서 더 좋은 representation learning을 할 수 있다.
 - ![image](https://user-images.githubusercontent.com/46081019/63205693-18576280-c0e3-11e9-869c-1579594a197b.png)  
 - 위의 figure가 WAE의 장점을 잘 요약하고 있다.  
-- 
+- VAE는 *each latent distribution*이 prior에 정규화되지만, WAE는 *aggregated latent distribution*이 prior에 정규화된다.
+  - VAE의 경우 모든 latent distribution이 동일한 global prior에 가까워지면서 distribution 간의 overlapping이 생길 수 있고, 
+  이는 곧 분포가 서로 몰려 reconstruction이 collapse될 수 있음을 의미한다. 
+  - 반면 WAE는 $$Q_z$$에 대해 정의되었기 때문에 굳이 stochastic encoder를 사용할 필요가 없다.
+  - 기존 VAE는 stochastic encoding으로 인해 z의 randomness가 발생했고, 이 random한 z을 통해 제대로 x'을 reconstruct하는게 어려웠다.  
+  따라서 WAE가 deterministic encoder을 사용할 수 있다는 점은 굉장히 큰 변화를 시사한다. 
+  (하지만 바로 다음 페이퍼에서 곧 stochastic encoder가 더 필요함을 보였다...)
+- 아무튼 WAE에서 정규화항이 일반적인 divergence metric에 대해 정의되어 있기 때문에, 두 가지 loss를 활용해 실험을 진행한다.
+  - WAE-GAN은 divergence metric을 JS-divergence로 잡고 GAN을 통해 풀어낸다.
+    - 참고로 일반적인 GAN처럼 unknown complex data distribution이 아니라 simple unimodal gaussian $$P_Z$$에 대한 JS-div이기 때문에 학습이 더 쉽다고 한다.
+    - 그러나 어쨌든 min-max 방식이기 때문에 나중에는 2번째 방식인 WAE-MMD을 더 많이 쓴다.
+  - WAE-MMD는 maximum-mean-discrepancy라는 metric을 잡는다.
+  - 결국 두 방식 모두 deterministic encoder로 가능하기 때문에 잡은 것 같다. 
+  - 물론 KL-divergence로 stochastic하게 해도 상관은 없을 것이다.
+- 실험 결과는 생략한다. 
+
+**1. On the Latent Space of Wasserstein Auto-encoders**  
