@@ -45,7 +45,10 @@ Optimal Transport Problem을 도입하여, 기존 VAE의 regularizer 형태를 �
   - [Disentagling and VAE 이전 포스트 참고 (작성중)](https://parkgeonyeong.github.io/VAE%EC%99%80-Disentanglement/)
   - [ELBO surgery 참고](http://approximateinference.org/accepted/HoffmanJohnson2016.pdf)
   - 요약하자면 기존 VAE regularizer는 $$KL(q(z) \parallel p(z))$$ 외에 $$x_i$$와 $$z$$의 mutual information을 추가로 포함하는 항이다. 
-  - 이 information을 분리시키면서 더 좋은 representation learning을 할 수 있다.
+  - 이 중요한 information 항은 regularizer에서 분리시키면서 더 좋은 representation learning을 할 수 있다.
+  - 또한 다음 페이퍼에서 이 항의 역할을 한 문장으로 잘 설명하고 있다.
+  - > To better understand the difference, note that $$Q_Z$$ is the distribution obtained by averaging conditional
+distributions $$Q(Z \mid X = x)$$ for all different points $$x$$ drawn from the data distribution $$P_X$$. **This means that WAEs explicitly control the shape of the entire encoded dataset while VAEs constrain every input point separately.**
 - ![image](https://user-images.githubusercontent.com/46081019/63205693-18576280-c0e3-11e9-869c-1579594a197b.png)  
 - 위의 figure가 WAE의 장점을 잘 요약하고 있다.  
 - VAE는 *each latent distribution*이 prior에 정규화되지만, WAE는 *aggregated latent distribution*이 prior에 정규화된다.
@@ -65,3 +68,16 @@ Optimal Transport Problem을 도입하여, 기존 VAE의 regularizer 형태를 �
 - 실험 결과는 생략한다. 
 
 **1. On the Latent Space of Wasserstein Auto-encoders**  
+- WAE의 1저자인 Ilya Tolstikhin이 참여한 후속 연구이다.
+- 바로 실험 결과를 확인해 보자.
+- ![image](https://user-images.githubusercontent.com/46081019/63206511-8b1b0a80-c0f0-11e9-9f21-6f9ddbf2a6c7.png)  
+  - Deterministic encoder와 Random encoder을 비교하는 figure이다.
+  - 데이터는 manifold의 차원($$dim_I$$) = 1인 간단한 toy 데이터이다.
+  - 현재 latent z의 차원 = 2로, $$dim_Z >> dim_I$$인 상황이다. 
+  - 이때 deterministic encoder을 이용해 two-dimensional latent space 위에 one-dimensional data을 코딩하면, 2차원 상에서 이상하게 꼬인 하나의 non-linear entity가 나온다. (Up-middle)
+  - 반대로 stochastic encoder를 이용해 전체 latent space 위에 확률적으로 data를 코딩하면, latent variable $$z$$의 평균은 one-dimensional data를 $$z2$$ 축을 따라 잘 설명하게 된다. 이때 나머지 한 $$z1$$ 축은 random noise로 채워진다.
+  - 즉 encoder가 모든 latent space를 활용하여 z를 코딩하기 때문에, decoder가 latent space의 'hole'을 신경쓰지 않고 reconstruction을 할 수 있다.
+  - 반면 deterministic encoder를 쓴 경우 latent space의 unknown-region이 많아지기 때문에 decoder가 제대로 학습되기 어렵다.
+- 이때 만약 stochastic encoder를 쓰더라도, latent dimension이 지나치게 크면 전체 data에 대해서 제대로 dimension reduction이 이뤄지기 어렵고, 특정 latent variable이 그냥 단일 constant로 collapse해버리는 상황이 벌어진다고 한다.
+  - 이는 곧 stochasticity가 의미 없어지고 deterministic encoder로 수렴하는 상황을 의미한다.
+- 따라서 논문에서는 이를 막기 위해 latent space의 각 dimension에 대해 logarithm of encoded variance를 regularizer로 넣어줘서 encoded variance가 1로 되게끔 만들었다고 한다.
