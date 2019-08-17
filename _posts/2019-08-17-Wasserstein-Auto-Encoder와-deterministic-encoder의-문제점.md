@@ -45,7 +45,7 @@ Optimal Transport Problem을 도입하여, 기존 VAE의 regularizer 형태를 �
   - [Disentagling and VAE 이전 포스트 참고 (작성중)](https://parkgeonyeong.github.io/VAE%EC%99%80-Disentanglement/)
   - [ELBO surgery 참고](http://approximateinference.org/accepted/HoffmanJohnson2016.pdf)
   - 요약하자면 기존 VAE regularizer는 $$KL(q(z) \parallel p(z))$$ 외에 $$x_i$$와 $$z$$의 mutual information을 추가로 포함하는 항이다. 
-  - 이 information을 dro
+  - 이 information을 분리시키면서 더 좋은 d
   
 - ![image](https://user-images.githubusercontent.com/46081019/63205693-18576280-c0e3-11e9-869c-1579594a197b.png)  
 - 위의 figure가 WAE의 장점을 잘 요약하고 있다.  
