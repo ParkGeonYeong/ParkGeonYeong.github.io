@@ -26,7 +26,7 @@ Evidence of Lower Bound (ELBO)는 이름을 보더라도, 전개 과정을 보�
 [출처](http://paulrubenstein.co.uk/variational-autoencoders-are-not-autoencoders/)  
   
   
-경험적으로 VAE는 이러한 posterior collapse에 취약한 듯 하다. 굳이 data의 complexity 등을 따지지 않아도, 인코더 자체가 stochastic한 분포를 학습해야 하기 때문에 ELBO에서 'reconstruction loss' 자체를 강건하게 줄이기가 어렵다. 또한 강한 regularizer인 prior loss term이 존재하기 때문에 posterior distribution은 곧 prior에 빠르게 collapse되면서 유의미한 정보를 인코딩하는데에 실패하곤 한다. 이로 인해 reconstruction error을 꾸준히 줄이기가 어려워진다.  
+경험적으로 VAE는 이러한 posterior collapse에 취약한 듯 하다. 굳이 data의 complexity 등을 따지지 않아도, 인코더 자체가 stochastic한 분포를 학습해야 하기 때문에 ELBO에서 'reconstruction loss' 자체를 강건하게 줄이기가 어렵다. 또한 강한 regularizer인 prior loss term이 존재하기 때문에 posterior distribution은 곧 prior에 빠르게 collapse되면서 유의미한 정보를 인코딩하는데에 실패하곤 한다. 이로 인해 reconstruction error을 꾸준히 줄이기가 어려워진다. 위의 증명에서 $$q(z \mid x) = p(z), \theta \sim \theta_{subopt}$$인 상황이라고 볼 수 있겠다.
   
 WAE는 이러한 상황에 대한 한 가지 해결책으로 each individual posterior distribution이 아니라 aggregated posterior distribution과 prior distribution과의 prior loss을 계산한다. 이를 통해 각 latent distribution이 code 상에서 멀어지는 것을 꾀한다.  
   
