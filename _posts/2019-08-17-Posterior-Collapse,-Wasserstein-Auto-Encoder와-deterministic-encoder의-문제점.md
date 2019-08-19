@@ -1,5 +1,5 @@
 ---
-title: Wasserstein Auto Encoder와 deterministic encoder의 문제점
+title: Posterior Collapse, Wasserstein Auto Encoder와 deterministic encoder의 문제점
 use_math: true
 classes: wide
 layout: single
@@ -8,12 +8,27 @@ layout: single
 본 자료는 다음을 참고했습니다.  
 - [Wasserstein auto encoder](https://arxiv.org/abs/1711.01558)  
 - [On the Latent Space of Wasserstein Auto-Encoders](https://arxiv.org/abs/1802.03761)  
-
+- [reddit discussion](https://www.reddit.com/r/MachineLearning/comments/al0lvl/d_variational_autoencoders_are_not_autoencoders/)
+- [Blog post on VAE and posterior collapse, by Paul Rubenstein](http://paulrubenstein.co.uk/variational-autoencoders-are-not-autoencoders/)
   
 Wasserstein Auto-Encoders(WAE)는 ICLR 2018의 full oral paper로써 기존 VAE의 stochastic encoding에서 오는 문제점을 해결하는 방식을 제안했다. 
 Optimal Transport Problem을 도입하여, 기존 VAE의 regularizer 형태를 바꾸고 deterministic encoder를 enable했다는 점에서 많은 주목을 받았다. 
 그러나 이후 후속 연구에서 deterministic encoder의 한계점에 대해 서술하며 stochastic encoder에 특정 regularizer를 더한 형식이 가장 유리하다고 
-주장했다. 일련의 과정을 공부하면서 VAE의 장단점에 대해 좀 더 깊이 이해해보자.  
+주장했다. 여기서는 우선 기존 VAE 학습 과정에서 나타나는 문제점을 살펴 보고, WAE와 그 후속 연구에 대해 공부하면서 VAE의 장단점에 대해 좀 더 깊이 이해해보자.  
+    
+  
+**-1. VAE and Posterior Collapse**   
+Evidence of Lower Bound (ELBO)는 이름을 보더라도, 전개 과정을 보더라도 결국 $$p_{\theta}(x)$$ likelihood을 최대화하는 것이 목적이다.  
+이를 Latent Variable Model의 관점에서 조금 다르게 보면, $$KL[p_{data} \parallel p_{\theta}]$$을 좁히는 것이다. 
+(잠시 후 보겠지만 Wasserstein Auto-Encoders 역시 이 관점에서 출발한다) 이때 보통은 data가 복잡하고 decoder의 capacity가 한정되어 있기 때문에 이 $$KL$$을 쉽게 좁히기 어렵다. 그러나 만약 decoder가 굉장히 expressive하거나, simple gaussian-like data를 사용한다면 이야기가 달라진다. 굳이 latent variable에 대해 신경쓰지 않아도 optimal latent-independent decoder $$p_{\theta^*}(x \mid z) = p_{data}(x)$$를 찾을 수 있게 된다. 비슷한 원리로 input-independent encoder $$q_{\phi^*}(z \mid x) = p(z)$$를 찾을 수 있다. 즉 encoded latent distribution이 prior distribution과 일치하는, **posterior collapse** 현상이 발생하는 것이다.   
+상기한 블로그에서는 이 상황이 곧 VAE의 single global optimum이 될 수 있음을 보였다.   
+![image](https://user-images.githubusercontent.com/46081019/63268075-52d12300-c2ce-11e9-9d87-2380ae7c8084.png)  
+[출처](http://paulrubenstein.co.uk/variational-autoencoders-are-not-autoencoders/)  
+  
+  
+경험적으로 VAE는 이러한 posterior collapse에 취약한 듯 하다. 굳이 data의 complexity 등을 따지지 않아도, 인코더 자체가 stochastic한 분포를 학습해야 하기 때문에 ELBO에서 'reconstruction loss' 자체를 강건하게 줄이기가 어렵다. 또한 강한 regularizer인 prior loss term이 존재하기 때문에 posterior distribution은 곧 prior에 빠르게 collapse되면서 유의미한 정보를 인코딩하는데에 실패하곤 한다. 이로 인해 reconstruction error을 꾸준히 줄이기가 어려워진다.  
+  
+WAE는 이러한 상황에 대한 한 가지 해결책으로 each individual posterior distribution이 아니라 aggregated posterior distribution과 prior distribution과의 prior loss을 계산한다. 이를 통해 각 latent distribution이 code 상에서 멀어지는 것을 꾀한다.  
   
   
 **0. Wasserstein Auto-Encoders**  
