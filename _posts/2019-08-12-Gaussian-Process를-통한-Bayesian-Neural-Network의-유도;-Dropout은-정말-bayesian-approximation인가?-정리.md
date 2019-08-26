@@ -81,7 +81,7 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
 **2. Dropout as Bayesian Approximation**  
 - **핵심 아이디어: Bernoulli dropout만으로도 Gaussian Process의 integration over weight space을 근사할 수 있다.** 
   - NN의 W1, W2, b를 이용해 PSD kernel 정의 
-  - Kernel을 통해 p(y|x, w)을 GP로 만들 수 있음을 보임
+  - Kernel을 통해 $$p(y \mid x, w)$$을 GP로 만들 수 있음을 보임
   - 이때 Intractable True Weight Posterior를 ELBO로 학습함
   - 이 과정에서 dropout과 reparameterization trick(Kingma et al.,)을 통해 ELBO의 계산량을 확 줄임
   - 정확히는 Monte-Carlo dropout만으로도 ELBO를 얻을 수 있게 함!
