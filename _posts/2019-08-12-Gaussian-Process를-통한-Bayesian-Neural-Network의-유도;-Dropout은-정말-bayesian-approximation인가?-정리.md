@@ -36,17 +36,48 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
 - Bayes by Backprop 혹은 BBB라 불린다고도 한다. 
   - 제목 그대로 weight를 parameterize하여 uncertainty를 부과한다.
   - 또한 Kingma의 reparameterization trick을 활용해 backprop으로 학습한다.
-- 기존의 많은 NN은 대부분 deterministic layer으로 구성되어 있다.
+- 기존의 많은 NN은 대부분 deterministic layer이자 weight의 posterior point estimates으로 구성되어 있다.
   - 반면 weight를 "분포"화하면, weight의 sampling에 따라 ensemble of networks를 학습시킬 수 있다.
-    - 여기까지 보면 어떤 면에서 dropout과 비슷하다.
+  - ![image](https://user-images.githubusercontent.com/46081019/63660859-44fe2f00-c7f3-11e9-9e01-623e7c029d4c.png)  
+    - 여기까지 보면 하고자 하는 목표가 dropout과 비슷하다.
     - 실제로 그 다음 논문은 weight의 posterior 분포를 dropout으로 근사한다.
   - 이를 통해 data sample에 대한 uncertainty을 quantify할 수 있고, overfitting을 피할 수 있다. 
   - 여기서는 NN의 앙상블을 학습시키면서도 weight를 mean과 diagonal covariance $$\mu, \rho$$으로 근사하기 때문에, 파라미터가 크게 늘어나지 않는다.
     - 그 다음 논문에서는 이것도 많다며 아예 추가 파라미터를 도입하지 않는다.
-- 이렇게 weight의 분포를 잡으면 문제는 MLE에서 MAP으로 바뀐다.
+- **이렇게 weight의 분포를 잡으면 문제는 MLE에서 MAP으로 바뀐다.**
   - $$W^{MLE} = argmax_{w} logP(D \mid w)$$
   - $$W^{MAP} = argmax_{w} logP(w \mid D) = argmax_{w} logP(D \mid w) + logP(w)$$
+- 이 posterior weight distribution은 당연히 intractable하다.
+  - $$P(w \mid y, x) = \int P(y \mid x, w)P(w)dw$$
+  - 여기서 우측 적분식의 likelihood 항은 N개의 데이터, J의 weight dimension에 대해 표현되는 product distribution 식이다. 
+  - 이런 고차원의 distribution에 대해 integration하는 것은 현실적으로 불가능하다.
+- **따라서 여기서는 variational approximation을 통해 true posterior distribution을 근사한다.**
+  - 앞서 언급한 parameter of weights $$\mu, \rho$$를 벡터 $$\theta$$로 생각하자.
+  - 이때 우리의 variational approxiation $$q$$와 true distribution $$p$$ 사이의 $$KL-div$$를 최소화해야한다.
+  - $$\begin{equation} \begin{split}
+  \theta^* &= argmin_{\theta}KL[q(w \mid \theta) \parallel p(w \mid D)] \\
+  &= argmin_{\theta} \int q(w \mid \theta) log \frac{q(w \mid \theta)}{p(w)p(D \mid w)}dw \\
+  &= argmin_{\theta}KL[q(w \mid \theta) \parallel p(w)] -E_{q(w \mid \theta)}[logp(D\mid w)]
   
+  \end{split}
+  \end{equation}$$
+- weight으로 표현되어 있으나 꼴은 VAE와 비슷하다.
+  - 아직 고차원의 weight에 대해 평균과 KL-div가 포함되어 있는, 계산이 쉽지 않은 꼴이다.
+  - 논문에서는 이를 reparameterization trick으로 풀어낸다.
+- ![image](https://user-images.githubusercontent.com/46081019/63661515-dd95ae80-c7f5-11e9-8a6f-1f8067de5fa8.png)  
+- 따라서 최종적으로 얻는 cost는 복잡한 integration, KL, expectation 없이 weight의 Monte Carlo sampling만으로 표현된다.
+  - $$F(D, \theta) = \sum_{i} logq(w_i \mid \theta) - logp(w) -logp(D\mid w_i)$$
+  - VAE를 hidden node가 아니라 훨씬 고차원인 weight space에 대해 정의했다고 생각할 수 있다. 
+  - 이렇게 posterior에서 뽑힌 특정 weight sample에 의해 loss를 표현할 수 있기 때문에 학습이 가능해졌다.
+- 각 weight의 sample을 다음과 같이 표현할 수 있다.
+  - $$w = t(\theta, \eps) = \mu + log(1 + exp(\rho)) \circ \eps$$ 
+  - 이때 $$\eps$$는 reparameterization trick의 noise이다.
+- 이제 위의 Thm과 $$F(D, \theta), w$$를 이용해 학습하면 다음과 같다.
+  - ![image](https://user-images.githubusercontent.com/46081019/63662022-e38c8f00-c7f7-11e9-96b6-db2b7fd2a7b8.png)  
+- 논문에서는 학습 과정에서 두가지 디테일한 트릭을 사용했다.
+  - Mixture Prior: Prior를 단순히 $$N(0, I)$$을 쓰지 않고 평균이 0인 Gaussian Mixture를 사용했다.
+  - $$P(w) = \prod_j \pi N(w_j \mid 0, \sigma_1^2) + (1 - \pi) N(w_j \mid 0, \sigma_2^2)$$
+  - 이때 $$\sigma_1$$이 다른 $$\sigma_2$$보다 크고, $$sigma_2$$는 0에 가깝도록 설정한다. 이를 통해 하나의 단순한 prior stddev가 weight에 공유되는 것을 피한다. 또한 특정 weight는 sparse하게 코딩되는 것을 강제할 수 있다. 
   
 **2. Dropout as Bayesian Approximation**  
 - **핵심 아이디어: Bernoulli dropout만으로도 Gaussian Process의 integration over weight space을 근사할 수 있다.** 
