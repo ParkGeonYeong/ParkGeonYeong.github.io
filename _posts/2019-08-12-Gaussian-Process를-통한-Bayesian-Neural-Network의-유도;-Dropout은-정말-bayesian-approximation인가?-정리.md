@@ -75,9 +75,15 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
   - ![image](https://user-images.githubusercontent.com/46081019/63662022-e38c8f00-c7f7-11e9-96b6-db2b7fd2a7b8.png)  
 - 논문에서는 학습 과정에서 두가지 디테일한 트릭을 사용했다.
   - Mixture Prior: Prior를 단순히 $$N(0, I)$$을 쓰지 않고 평균이 0인 Gaussian Mixture를 사용했다.
-  - $$P(w) = \prod_j \pi N(w_j \mid 0, \sigma_1^2) + (1 - \pi) N(w_j \mid 0, \sigma_2^2)$$
-  - 이때 $$\sigma_1$$이 다른 $$\sigma_2$$보다 크고, $$sigma_2$$는 0에 가깝도록 설정한다. 이를 통해 하나의 단순한 prior stddev가 weight에 공유되는 것을 피한다. 또한 특정 weight는 sparse하게 코딩되는 것을 강제할 수 있다. 
+    - $$P(w) = \prod_j \pi N(w_j \mid 0, \sigma_1^2) + (1 - \pi) N(w_j \mid 0, \sigma_2^2)$$
+    - 이때 $$\sigma_1$$이 다른 $$\sigma_2$$보다 크고, $$sigma_2$$는 0에 가깝도록 설정한다. 이를 통해 하나의 단순한 prior stddev가 weight에 공유되는 것을 피한다. 또한 특정 weight는 sparse하게 코딩되는 것을 강제할 수 있다. 
+  - KL re-weighting: Prior와의 KL divergence은 variational posterior distribution의 성능을 과하게 억제할 수 있다. 따라서 학습 초반에는 Prior loss term의 weight를 많이 낮췄다가 점차 증진해간다.
+  - 다른 논문에서는 비슷한 아이디어를 KL annealing이라는 표현으로 사용한다. VAE의 posterior collapse에 대항함.
+  - [Generating Sentences from a Continuous Space](https://arxiv.org/pdf/1511.06349.pdf)
   
+- ![image](https://user-images.githubusercontent.com/46081019/63664561-f73cf300-c801-11e9-95cf-021fcfe2c322.png)  
+  - Noisy data에 regression fitting시킨 모습. 왼쪽의 BBB을 활용하면 Uncertain한 region에 대해서 불확실한 값을 리턴한다.
+
 **2. Dropout as Bayesian Approximation**  
 - **핵심 아이디어: Bernoulli dropout만으로도 Gaussian Process의 integration over weight space을 근사할 수 있다.** 
   - NN의 W1, W2, b를 이용해 PSD kernel 정의 
