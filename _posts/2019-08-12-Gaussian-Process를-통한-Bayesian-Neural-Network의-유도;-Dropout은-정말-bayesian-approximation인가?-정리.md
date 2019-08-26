@@ -69,8 +69,8 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
   - VAE를 hidden node가 아니라 훨씬 고차원인 weight space에 대해 정의했다고 생각할 수 있다. 
   - 이렇게 posterior에서 뽑힌 특정 weight sample에 의해 loss를 표현할 수 있기 때문에 학습이 가능해졌다.
 - 각 weight의 sample을 다음과 같이 표현할 수 있다.
-  - $$w = t(\theta, \eps) = \mu + log(1 + exp(\rho)) \circ \eps$$ 
-  - 이때 $$\eps$$는 reparameterization trick의 noise이다.
+  - $$w = t(\theta, \epsilon) = \mu + log(1 + exp(\rho)) \circ \epsilon$$ 
+  - 이때 $$\epsilon$$은 reparameterization trick의 noise이다.
 - 이제 위의 Thm과 $$F(D, \theta), w$$를 이용해 학습하면 다음과 같다.
   - ![image](https://user-images.githubusercontent.com/46081019/63662022-e38c8f00-c7f7-11e9-96b6-db2b7fd2a7b8.png)  
 - 논문에서는 학습 과정에서 두가지 디테일한 트릭을 사용했다.
