@@ -57,8 +57,7 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
   - $$\begin{equation} \begin{split}
   \theta^* &= argmin_{\theta}KL[q(w \mid \theta) \parallel p(w \mid D)] \\
   &= argmin_{\theta} \int q(w \mid \theta) log \frac{q(w \mid \theta)}{p(w)p(D \mid w)}dw \\
-  &= argmin_{\theta}KL[q(w \mid \theta) \parallel p(w)] -E_{q(w \mid \theta)}[logp(D\mid w)]
-  
+  &= argmin_{\theta}KL[q(w \mid \theta) \parallel p(w)] -E_{q(w \mid \theta)}[logp(D\mid w)] 
   \end{split}
   \end{equation}$$
 - weight으로 표현되어 있으나 꼴은 VAE와 비슷하다.
