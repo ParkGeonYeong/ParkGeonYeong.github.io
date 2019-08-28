@@ -1,11 +1,9 @@
 ---
-title: "Recurrent Meta-Learning과 뇌과학적 해석"
+title: RNN에서의 Task-representation과 뇌과학적 해석
 use_math: true
-layout:wide
-classes: single
----  
-  
-  
+classes: wide
+layout: single
+---
 본 자료는 다음을 참고했습니다.  
 - [Yang et al., "Task representations in neural networks trained to perform many cognitive tasks", Nature Neuro.](https://www.nature.com/articles/s41593-018-0310-2#Sec32)  
 - [Wang et al., "Prefrontal cortex as a meta-reinforcement learning system", Nature Neuro.](https://www.nature.com/articles/s41593-018-0147-8.pdf?source=post_page---------------------------)  
