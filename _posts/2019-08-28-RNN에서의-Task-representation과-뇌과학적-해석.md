@@ -3,21 +3,17 @@ title: RNN에서의 Task-representation과 뇌과학적 해석
 use_math: true
 classes: wide
 layout: single
----
+---  
+
 본 자료는 다음을 참고했습니다.  
 - [Yang et al., "Task representations in neural networks trained to perform many cognitive tasks", Nature Neuro.](https://www.nature.com/articles/s41593-018-0310-2#Sec32)  
 - [Wang et al., "Prefrontal cortex as a meta-reinforcement learning system", Nature Neuro.](https://www.nature.com/articles/s41593-018-0147-8.pdf?source=post_page---------------------------)  
   
   
-메타 러닝은 기존의 neuroscience의 실험론으로 쉽게 접근하기 어려운 문제이다. 
-Neuro 연구의 가장 큰 두 가지 방법론이 optogenetics 등을 활용한 animal studying, fMRI 등 imaging을 활용한 human studying인데 
-전자는 multi-task를 훈련시키기 어렵고, 후자는 resolution 문제로 디테일한 neural mechanism을 확인하기 어렵다.  
+메타 러닝은 기존의 neuroscience의 실험론으로 쉽게 접근하기 어려운 문제이다. Neuro 연구의 가장 큰 두 가지 방법론이 optogenetics 등을 활용한 animal studying, fMRI 등 imaging을 활용한 human studying인데 전자는 multi-task를 훈련시키기 어렵고, 후자는 resolution 문제로 디테일한 neural mechanism을 확인하기 어렵다.  
 이에 Computational Neuroscientist를 필두로 동물의 메타 러닝을 wet lab 실험이 아닌 modeling으로 풀고자 하는 움직임이 있다.   
-[Learning to reinforce Learn](https://arxiv.org/abs/1611.05763)을 시작으로 딥마인드 뉴로 연구 조직에서 
-Prefrontal Cortex-Subcortical circuit을 메타 러닝의 원리로 처음 제안하였다. 이 때문인지 동물의 메타 러닝 연구는 메모리와 결합된 
-recurrent neural network을 가장 많이 활용하는 것 같다.   
-여기서는 메타 러닝에서도 구체적으로 task representation이 어떻게 일어나는지를 recurrent modeling으로 보인  
-"Task representations in neural networks trained to perform many cognitive tasks", *Nature Neuro. 2018*을 figure 위주로 리뷰한다.   
+[Learning to reinforce Learn](https://arxiv.org/abs/1611.05763)을 시작으로 딥마인드 뉴로 연구 조직에서 Prefrontal Cortex-Subcortical circuit을 메타 러닝의 원리로 처음 제안하였다. 이 때문인지 동물의 메타 러닝 연구는 메모리와 결합된 recurrent neural network을 가장 많이 활용하는 것 같다.   
+여기서는 메타 러닝에서도 구체적으로 task representation이 어떻게 일어나는지를 recurrent modeling으로 보인 "Task representations in neural networks trained to perform many cognitive tasks", *Nature Neuro. 2018*을 figure 위주로 리뷰한다.   
   
   
 Abstract가 간결하게 잘 씌여 있는데, 이를 번역하면 다음과 같다.  
