@@ -31,7 +31,7 @@ Abstract가 간결하게 잘 씌여 있는데, 이를 번역하면 다음과 같
 이를 통해 특정 task를 타 tasks의 특성과 결합하여 수행할 수 있게 된다. 이는 인지의 유연성에 중요한 기본 원리로 보인다. 
 또한 다중 작업 과제를 학습한 동물의 prefrontal neuron recording을 통해 얻은 데이터가 
 continual-learning을 이용해 얻은 모델 데이터와 유사함을 보였다. 
-이 연구는 곧 다양한 인지 과제를 수행할 때의 neural representation을 연구하는 중요한 플랫폼으로써 활용될 수 있을 것이다.**
+이 연구는 곧 다양한 인지 과제를 수행할 때의 neural representation을 연구하는 중요한 플랫폼으로써 활용될 수 있을 것이다."
   
   
 **0. Clustering and Compositional embedding**  
