@@ -85,14 +85,18 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
   - Noisy data에 regression fitting시킨 모습. 왼쪽의 BBB을 활용하면 Uncertain한 region에 대해서 불확실한 값을 리턴한다.
 
 **2. Dropout as Bayesian Approximation**  
-- **핵심 아이디어: Bernoulli dropout만으로도 Gaussian Process의 integration over weight space을 근사할 수 있다.** 
-  - NN의 W1, W2, b를 이용해 PSD kernel 정의 
-  - Kernel을 통해 $$p(y \mid x, w)$$을 GP로 만들 수 있음을 보임
-  - 이때 Intractable True Weight Posterior를 ELBO로 학습함
-  - 이 과정에서 dropout과 reparameterization trick(Kingma et al.,)을 통해 ELBO의 계산량을 확 줄임
+- 논문을 한 줄로 요약한다면 **dropout의 적용만으로 이론적으로 gaussian process의 bayesian inference을 근사할 수 있다**는 것이다.
+  - **디테일하게는 Bernoulli dropout만으로도 Gaussian Process의 integration over weight space을 근사할 수 있다고 주장한다.** 
+  - 여기서는 NN의 W1, W2, b를 이용해 GP의 PSD kernel을 정의한다. 
+  - Kernel을 도입함으로써 NN의 $$p(y \mid x, w)$$을 GP로 만들 수 있음을 보였다.
+  - **이후 이 Intractable True Weight Posterior를 ELBO로 학습한다**.
+  - 이 과정에서 dropout과 reparameterization trick(Kingma et al.,)을 통해 ELBO의 계산량을 확 줄인다.
   - 정확히는 Monte-Carlo dropout만으로도 ELBO를 얻을 수 있게 함!
-  - 결국은 reparameterization trick을 두 번 쓴 셈
-  - 이를 통해 RL 실험에서는 posterior sampling을 근사하기도 함   
+  - 결국은 reparameterization trick을 두 번 쓴 셈이다.
+  - 이를 통해 RL 실험에서는 posterior sampling을 근사하기도 함
+  - 앞선 논문과의 차이점은, weight uncertainty를 mu와 stddev으로 parameterize하느냐, monte carlo sampling으로 parameterize하느냐의 차이이다.
+    - Dropout을 도입하여 Gaussian Process의 weight space of view을 Neural Network 차원에서 해석한다.
+- 
   
   
 **3. Further Discussion about Dropout**  
