@@ -144,7 +144,10 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
 - 결론적으로 $$L_{GP}$$의 첫 reconstruction 항과 뒤의 KL 항을 합치면 다음과 같다.
   - $$L_{GP} \propto -\frac{\tau}{2}\sum_n \parallel y_n - \hat{y}_n \parallel ^2 - \frac{p_1}{2}\parallel M_1 \parallel ^2 - \frac{p_1}{2}\parallel M_2 \parallel ^2 - \frac{1}{2}\parallel m \parallel ^2$$ (appendix eq.15)
   - 이는 곧 **likelihood에 weight의 variational parameter을 regularize시킨 것과 동일하다.**
-  - Dropout에서 흔히 사용하는 loss로 uncertainty의 modeling이 가능함을 보였다.  
-- 
+  - 분포를 얻었으니 prediction의 uncertainty을 얻을 수 있음은 자명하다.
+
+- 일련의 과정을 다시 요약하면, weight에 dropout을 걸고 stochastic variational inference을 활용함으로써 posterior weight distribution의 학습이 가능함을 보였다.  
+  
+  
 **3. Further Discussion about Dropout**  
 - TBD  
