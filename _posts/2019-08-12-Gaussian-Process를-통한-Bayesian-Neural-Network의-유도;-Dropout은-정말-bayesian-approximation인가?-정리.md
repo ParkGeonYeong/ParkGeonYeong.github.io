@@ -100,11 +100,51 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
   - 우선 Gaussian Process을 정의하기 위해서는 Positive Semi-Definite한 kernel, 혹은 데이터 간 covariance의 정의가 필요하다. 
   - 여기서는 Neural Network을 사용하기 때문에 이 kernel을 $$K(x, y) = \int p(w)p(b)\sigma(w^{T}x+b)\sigma(w^{T}y+b)dwdb$$으로 표현
     - 이때 w, b, $$\sigma$$는 결국 spectral decomposition이 되어 나중에 NN의 weight, bias, non-linear activation이 된다.
-- **만약 Gaussian process로 현재까지의 dataset (X, Y)와 앞으로의 data point (x, y)가 표현된다면 gaussian process의 weight-space view에 따라 다음 식이 성립해야 한다.** ()
+- **만약 Gaussian process로 현재까지의 dataset (X, Y)와 앞으로의 data point (x, y)가 표현된다면 gaussian process의 weight-space view에 따라 다음 식이 성립해야 한다.** (Rasmussen, Williams 책의 Chap 2. 참고)
   - $$p(y \mid x, X, Y) = \int p(y \mid x, w)p(w \mid X, Y)dw$$
   - $$p(y \mid x, w) = N(y; \hat{y}, \tau^{-1}I_{D])$$
-  - 
-  
-  
+- 이때 이상적으로 $$\hat{y}$$는 우리 NN의 output이 되어야 함을 명심하며, 앞서 정의한 kernel이 어떻게 이 결론을 이끌어내는지 보자.
+  - $$K(x, y) = \int p(w)p(b)\sigma(w^{T}x+b)\sigma(w^{T}y+b)dwdb$$
+  - 이 커널은 Monte-Carlo integration estimation을 통해 w, b의 sampling으로 계산할 수 있다고 치자 ($$\hat{K}$$).
+  - zero-mean Weight-space view의 Gaussian Process 정의에 따라 데이터 Y의 확률을 다음 GP로 근사한다.
+    - $$F \mid X, W_1, b \sim N(0, \hat{K}(X, X))$$
+    - $$Y \mid F \sim N(F, \tau^{-1}I_N)$$
+      - 이때 $$\tau$$는 데이터의 noise 혹은 precision level이다.
+    - GP의 kernel space에 projection된 vector $$\phi$$을 $$\phi(x, W_1, b) = \sqrt{\frac{1}{K}}\sigma(W_1^{T}x+b)$$이라 하자.
+    - **그러면 kernel 혹은 covariance 정의에 의해 원래대로라면 우리의 GP prior $$p(Y \mid X) = \int N(Y; 0, \phi\phi^T + \tau^{-1}I)p(W_1)p(b)dW_{1}db$$가 되어야 한다.**
+      - 여기에는 NxN짜리 covariance가 붙어있기 때문에 활용하기 좋지 않다. (N; 데이터 개수, D; 데이터 차원)
+    - **따라서 이 NxD 짜리 GP 식을 다시 column-wise으로 해석해서 우리가 익히 알고 있는 형태로 바꿔보자.**
+      - **원래는 Y의 distribution을 N개의 D-dimensional vector로 보았다면, 지금은 D개의 joint-distribution으로 보는 것이다.**
+      - $$N(Y; 0, \phi\phi^T + \tau^{-1}I) = \int N(y_d; {\phi}w_d, \tau^{-1}I_{N}) N(w_d; 0, I_{K})dw_d$$
+    - 이를 통해 우리는 곧 각 $$y_d$$에 대해 $$W_1$$외에 또 다른 weight을 도입하여 데이터의 GP을 정의할 수 있게 되었다.
+    - 이러한 트릭을 통해 Gaussian Process을 우리의 variational parameter $$W1, W2, b$$을 통해 정의할 수 있다.
+  - $$p(Y \mid X) = \int p(Y \mid X, W_1, W_2, b)p(W_1)p(W_2)p(b)$$
+- 이제 이 variational parameters을 학습해 보자.
+  - 우선 mean-field처럼 각 variational parameter $$w_1, w_2, b$$를 따로 구할 것이다.
+  - 이때 또 하나의 중요한 트릭이 사용된다.
+    - $$q(w) = \prod_{q=1}^{Q}q(w_q)$$에 포함된 하나의 $$w_q$$에 대해 다음과 같은 gaussian mixture로 근사한다.
+    - $$q(w_q) = p_{1}N(m_q, \sigma^{2}I_K) + (1-p_1)N(0, \sigma^{2}I_K)$$
+    - NN 관점에서 생각하면, 1번 논문처럼 weight을 gaussian으로 해석하긴 하는데, bernoulli $$p_1$$의 확률로 해당 weight을 평균 0으로 끄겠다는 것이다.
+      - 여기 $$\sigma$$을 보면 완전히 끄는게 아니라 일정 noise를 추가하는 것으로 보이지만, 이후 절에서 이를 0으로 보내버린다.
+    - Dropout을 수식화한 것이라고 생각해도 될 듯 하다.
+    - Bias는 그냥 심플하게 dropout을 걸지 않는다.
+  - 이제 Variational distribution을 도입했으니 evidence lower bound을 써보자.
+    - $$L_{GP} = \int q(W_1, W_2, b)logp(Y \mid X, W_1, W_2, b) - KL(q(W_1, W_2, b) \parallel p(W_1, W_2, b))$$ 
+    - 앞서 GP prior p(Y)를 도입했기 때문에 $$logp(Y \mid X, W_1, W_2, b)$$는 쉽게 벗겨진다.
+  - 이제 가능한 모든 $$w$$에 대해 integration이 필요한데, 당연히 intractable하다. 
+    - 이를 monte-carlo sampling으로 풀텐데, 이때 VAE에서처럼 sampling으로 인한 back-prop 불능의 문제가 발생한다.
+  - 따라서 reparameterization trick을 써서 모든 가능한 w가 싹 바뀌진 않고 gaussian noise $$\epsilon$$을 도입해 deterministic part와 stochastic part을 구분한다.
+- 이렇게 흘러갈 경우 여타 다른 기법과 차이가 없어진다.
+- **여기서는 reparameterization trick을 한 번 더 써서, 앞서 정의한 $$p_1$$에 대한 함수값인 $$z_1$$을 통해 weight를 dropout할 수 있게 한다.**
+- 이 경우 이제 sampling을 control할 변수가 $$z_1, \epsilon_1, z_2, \epsilon_2$$로 늘어난다.
+- 이때 parameter가 늘어나고 stochasticity가 가중되는 것이 싫기 때문에 $$\epsilon$$을 비트 상에서 정의할 수 있는 가장 작은 수로 근사하여 버린다.
+  - 즉 Posterior의 variational distribution을 **large mixture of dirac-delta function**으로 근사한다.
+    - **Weight의 모든 statistical variance는 전부 dropout의 bernoulli sampling에서 나온다.**
+- 또 한 가지 문제점은 KL 항에서 $$q(w)$$가 gaussian mixture이고, $$p(w)$$는 single gaussian이라는 것인데 이 역시 $$\sigma$$를 굉장히 작게 만들었다는 가정 하에 근사를 통해 analytic하게 구한다.
+- 결론적으로 $$L_{GP}$$의 첫 reconstruction 항과 뒤의 KL 항을 합치면 다음과 같다.
+  - $$L_{GP} \propto -\frac{\tau}{2}\sum_n \parallel y_n - \hat{y}_n \parallel ^2 - \frac{p_1}{2}\parallel M_1 \parallel ^2 - \frac{p_1}{2}\parallel M_2 \parallel ^2 - \frac{1}{2}\parallel m \parallel ^2$$ (appendix eq.15)
+  - 이는 곧 **likelihood에 weight의 variational parameter을 regularize시킨 것과 동일하다.**
+  - Dropout에서 흔히 사용하는 loss로 uncertainty의 modeling이 가능함을 보였다.  
+- 
 **3. Further Discussion about Dropout**  
 - TBD  
