@@ -147,6 +147,7 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
   - 분포를 얻었으니 prediction의 uncertainty을 얻을 수 있음은 자명하다.
 
 - 일련의 과정을 다시 요약하면, weight에 dropout을 걸고 stochastic variational inference을 활용함으로써 posterior weight distribution의 학습이 가능함을 보였다.  
+  - 일련의 데이터를 통해 weight의 basis을 계속해서 갱신해 나가고, 이를 확률적으로 weighting summation시킨다는 점에서 Gaussian Process의 weight-space view와 유사함을 알 수 있다. 
   
   
 **3. Further Discussion about Dropout**  
