@@ -89,14 +89,21 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
   - **디테일하게는 Bernoulli dropout만으로도 Gaussian Process의 integration over weight space을 근사할 수 있다고 주장한다.** 
   - 여기서는 NN의 W1, W2, b를 이용해 GP의 PSD kernel을 정의한다. 
   - Kernel을 도입함으로써 NN의 $$p(y \mid x, w)$$을 GP로 만들 수 있음을 보였다.
-  - **이후 이 Intractable True Weight Posterior를 ELBO로 학습한다**.
+  - **이후 Intractable True Weight Posterior를 ELBO로 학습한다**.
   - 이 과정에서 dropout과 reparameterization trick(Kingma et al.,)을 통해 ELBO의 계산량을 확 줄인다.
   - 정확히는 Monte-Carlo dropout만으로도 ELBO를 얻을 수 있게 함!
   - 결국은 reparameterization trick을 두 번 쓴 셈이다.
   - 이를 통해 RL 실험에서는 posterior sampling을 근사하기도 함
   - 앞선 논문과의 차이점은, weight uncertainty를 mu와 stddev으로 parameterize하느냐, monte carlo sampling으로 parameterize하느냐의 차이이다.
     - Dropout을 도입하여 Gaussian Process의 weight space of view을 Neural Network 차원에서 해석한다.
-- 
+- 논문의 흐름을 다시 요약하면 Weight을 Variational Parameter로 도입함으로써 Neural Network가 Gaussian Process으로 근사될 수 있음을 보이고, 그 다음 이 true weight parameter를 variational inference하는 과정이다. 
+  - 우선 Gaussian Process을 정의하기 위해서는 Positive Semi-Definite한 kernel, 혹은 데이터 간 covariance의 정의가 필요하다. 
+  - 여기서는 Neural Network을 사용하기 때문에 이 kernel을 $$K(x, y) = \int p(w)p(b)\sigma(w^{T}x+b)\sigma(w^{T}y+b)dwdb$$으로 표현
+    - 이때 w, b, $$\sigma$$는 결국 spectral decomposition이 되어 나중에 NN의 weight, bias, non-linear activation이 된다.
+- **만약 Gaussian process로 현재까지의 dataset (X, Y)와 앞으로의 data point (x, y)가 표현된다면 gaussian process의 weight-space view에 따라 다음 식이 성립해야 한다.** ()
+  - $$p(y \mid x, X, Y) = \int p(y \mid x, w)p(w \mid X, Y)dw$$
+  - $$p(y \mid x, w) = N(y; \hat{y}, \tau^{-1}I_{D])$$
+  - 
   
   
 **3. Further Discussion about Dropout**  
