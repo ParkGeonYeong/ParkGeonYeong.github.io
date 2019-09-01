@@ -24,7 +24,7 @@ Bayesian Neural Network은 weight를 probabilistic distribution으로 표현함�
 
 여기서는 bayesian neural network의 중요한 선구자적 기반이 되는 두 논문 Blundell et al., "Weight Uncertainty in Neural Networks"과 
 Gal et al., "Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning"을 수식 중심으로 구체적으로 
-살펴보고, 구현체도 참고한다. [Bayes by Backprop 구현체](http://krasserm.github.io/2019/03/14/bayesian-neural-networks/)
+살펴본다.
   
 이후 소개할 내용은 "과연 Dropout이 정말 true posterior distribution을 잘 근사하는가?"에 대한 discussion과 관련 paper이다. 
 Dropout 논문 발표 이후, Deep exploration via bootstrap이나 distributional RL 시리즈 등으로 유명한 스탠포드의 Ian Osband을 필두로 
@@ -102,7 +102,7 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
     - 이때 w, b, $$\sigma$$는 결국 spectral decomposition이 되어 나중에 NN의 weight, bias, non-linear activation이 된다.
 - **만약 Gaussian process로 현재까지의 dataset (X, Y)와 앞으로의 data point (x, y)가 표현된다면 gaussian process의 weight-space view에 따라 다음 식이 성립해야 한다.** (Rasmussen, Williams 책의 Chap 2. 참고)
   - $$p(y \mid x, X, Y) = \int p(y \mid x, w)p(w \mid X, Y)dw$$
-  - $$p(y \mid x, w) = N(y; \hat{y}, \tau^{-1}I_{D])$$
+  - $$p(y \mid x, w) = N(y; \hat{y}, \tau^{-1}I_{D})$$
 - 이때 이상적으로 $$\hat{y}$$는 우리 NN의 output이 되어야 함을 명심하며, 앞서 정의한 kernel이 어떻게 이 결론을 이끌어내는지 보자.
   - $$K(x, y) = \int p(w)p(b)\sigma(w^{T}x+b)\sigma(w^{T}y+b)dwdb$$
   - 이 커널은 Monte-Carlo integration estimation을 통해 w, b의 sampling으로 계산할 수 있다고 치자 ($$\hat{K}$$).
