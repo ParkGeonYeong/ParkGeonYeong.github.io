@@ -115,6 +115,7 @@ dropout과 bayesian approximation에 대한 논의가 이뤄진 것으로 보인
       - 여기에는 NxN짜리 covariance가 붙어있기 때문에 활용하기 좋지 않다. (N; 데이터 개수, D; 데이터 차원)
     - **따라서 이 NxD 짜리 GP 식을 다시 column-wise으로 해석해서 우리가 익히 알고 있는 형태로 바꿔보자.**
       - **원래는 Y의 distribution을 N개의 D-dimensional vector로 보았다면, 지금은 D개의 joint-distribution으로 보는 것이다.**
+        - 결국은 어떤 covariance 혹은 kernel 함수를 선택하여 표현하는지의 문제이기 때문에 이런 트릭을 써도 괜찮다.
       - $$N(Y; 0, \phi\phi^T + \tau^{-1}I) = \int N(y_d; {\phi}w_d, \tau^{-1}I_{N}) N(w_d; 0, I_{K})dw_d$$
     - 이를 통해 우리는 곧 각 $$y_d$$에 대해 $$W_1$$외에 또 다른 weight을 도입하여 데이터의 GP을 정의할 수 있게 되었다.
     - 이러한 트릭을 통해 Gaussian Process을 우리의 variational parameter $$W1, W2, b$$을 통해 정의할 수 있다.
