@@ -5,7 +5,7 @@ classes: wide
 layout: single
 ---
 
-* 개인적으로 읽은 Domain Adaptation 논문들을 정리합니다.*
+**개인적으로 읽은 Domain Adaptation 논문들을 정리합니다.**
 - 디테일한 증명은 굉장히 중요한 Thm을 제외하고는 생략합니다.  
 - 결과 역시 굉장히 중요하지 않으면 생략합니다.  
 - Deep Generative Model을 활용한 논문 / Theoretical한 논문 위주로 정리합니다.  
