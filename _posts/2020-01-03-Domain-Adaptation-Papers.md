@@ -50,7 +50,7 @@ layout: single
       &\leq (1 - \alpha) (\frac{1}{2}d_{\cal{H} \triangle \cal{H}}(D_S, D_T) + \lambda)
       \end{align*} $$
     - *Lemma 2.* (generalized alpha and empirical alpha error)  
-    Target domain은 $$\beta m$, Source domain은 $(1-\beta)m$$의 sample을 갖고 있다고 하자. 
+    Target domain은 $$\beta m$, Source domain은 $$(1-\beta)m$$의 sample을 갖고 있다고 하자. 
     이때 $$ \begin{align*} 
     \hat{\epsilon_{\alpha}}({h}) &= \alpha \hat{\epsilon_{T}}({h}) + (1 - \alpha) \hat{\epsilon_{S}}({h}) \\
     &= \frac{(\alpha)}{\beta m} \sum{\mid h(z_i) - f_T(z_i) \mid} + \frac{(1-\alpha)}{(1-\beta)m} \sum{ \mid h(z_i) - f_S(z_i) \mid} \\ 
