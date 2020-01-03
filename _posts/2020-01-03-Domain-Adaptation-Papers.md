@@ -58,14 +58,15 @@ layout: single
     분류 에러는 1을 넘을 수 없으므로, $F(z_i)$는 i에 따라 $\frac{\alpha}{\beta}$, 혹은 $\frac{(1-\alpha)}{(1-\beta) m}$에 upperbounded이다.  
     이 때 $\mathbb{\hat{\eps_{\alpha}}({h})} = \eps_{\alpha}({h})$이므로,   
     $Pr(\mid \hat{\eps_{\alpha}}({h}) - \eps_{\alpha}({h}) \mid \leq \eps)$에 Hoeffding's inequality를 적용할 수 있다.   
-      - Hoeffding's inequality : ![image](https://user-images.githubusercontent.com/46081019/71712906-ae014d80-2e4a-11ea-8940-f2bae55ab02c.png)  
+      - Hoeffding's inequality :   
+      ![image](https://user-images.githubusercontent.com/46081019/71712906-ae014d80-2e4a-11ea-8940-f2bae55ab02c.png)  
         - 직관적으로, convex-combined source dataset 역시 어쨌든 하나의 단일 dataset이기 때문에 generalization bound을 구할 수 있을 것이다. 다만 일반적인 하나의 dataset과는 차이가 조금 있기 때문에 hoeffding's inequality를 사용하기 전에 convex combined data을 하나의 시그마에 통합하는 트릭을 통해 empirical mean error를 우선 정의하고 넘어가는 과정이 필요했다.   
     - $\mid \hat{\eps_{\alpha}}({h}) - \eps_{\alpha}({h}) \mid$와 $\mid \eps_{\alpha}({h}) - \eps_{T}({h}) \mid$의 inequality를 얻었으므로 이를 종합하여 $\eps_T(\hat{h})$에 대한 generalization bound을 얻을 수 있다.  
     - ![image](https://user-images.githubusercontent.com/46081019/71712996-151f0200-2e4b-11ea-8e7e-07d8063833b0.png)  
     - alpha가 0일 경우 Unsupervised DA, alpha가 1일 경우 Target domain만을 활용한 generalization bound을 얻을 수 있다.
     - Optimal alpha는 그 중간에 있는데, 이는 beta 값을 고려하여 결정된다. 즉 beta(from target domain)이 클 수록 target labeled data가 많기 때문에 alpha을 높게 잡는게 유리하다. 
     
-  - **2. Multi-source DA ** 
+  - **2. Multi-source DA** 
     - Multi-source DA 역시 거의 비슷한 방식으로 증명할 수 있다.  
     - ![image](https://user-images.githubusercontent.com/46081019/71713090-86f74b80-2e4b-11ea-912a-1a0caa0521b7.png)  
     - 이때 H-divergence가 Target과 convex-combined source domain에 대해 정의되어 있다. 이때 만약 더 관련성이 높은 source domain에 높은 convex weight가 가해졌다면 target과의 H-divergence를 줄이기 더 수월할 것이다. 아래 그림 참고
