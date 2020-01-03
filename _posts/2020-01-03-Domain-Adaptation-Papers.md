@@ -5,10 +5,10 @@ classes: wide
 layout: single
 ---
 
-**개인적으로 읽은 Domain Adaptation 논문들을 정리합니다.**
-- 디테일한 증명은 굉장히 중요한 Thm을 제외하고는 생략합니다. 빠르고 간략히 논문이 말하고자 하는 바를 요약하는데에 초점을 맞춥니다.   
-- 결과 역시 굉장히 중요하지 않으면 생략합니다.  
-- Deep Generative Model을 활용한 논문 / Theoretical한 논문 위주로 정리합니다.  
+**개인적으로 읽은 Domain Adaptation 논문들을 정리**
+- 디테일한 증명은 굉장히 중요한 Thm을 제외하고는 생략.    
+- 결과 역시 굉장히 중요하지 않으면 생략.  
+- Deep Generative Model을 활용한 논문 / Theoretical한 논문 위주로 정리.  
   
 ### Theoretical Analysis  
 - [(2007) Ben-David et al., Analysis of Representations for Domain Adaptation](https://papers.nips.cc/paper/2983-analysis-of-representations-for-domain-adaptation)  
@@ -50,7 +50,7 @@ layout: single
       &\leq (1 - \alpha) (\frac{1}{2}d_{\cal{H} \triangle \cal{H}}(D_S, D_T) + \lambda)
       \end{align*} $$
     - *Lemma 2.* (generalized alpha and empirical alpha error)  
-    Target domain은 $$\beta m$, Source domain은 $$(1-\beta)m$$의 sample을 갖고 있다고 하자. 
+    Target domain은 $$\beta m$$, Source domain은 $$(1-\beta)m$$의 sample을 갖고 있다고 하자. 
     이때 $$ \begin{align*} 
     \hat{\epsilon_{\alpha}}({h}) &= \alpha \hat{\epsilon_{T}}({h}) + (1 - \alpha) \hat{\epsilon_{S}}({h}) \\
     &= \frac{(\alpha)}{\beta m} \sum{\mid h(z_i) - f_T(z_i) \mid} + \frac{(1-\alpha)}{(1-\beta)m} \sum{ \mid h(z_i) - f_S(z_i) \mid} \\ 
