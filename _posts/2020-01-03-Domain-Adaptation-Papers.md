@@ -100,6 +100,19 @@ layout: single
 - [(2018) Li et al., Extracting Relationships by Multi-Domain Matching](https://papers.nips.cc/paper/7913-extracting-relationships-by-multi-domain-matching.pdf)  
   
 - [(2018) Zhao et al., Adversarial Multiple Source Domain Adaptation](https://papers.nips.cc/paper/8075-adversarial-multiple-source-domain-adaptation.pdf)  
+  
+- [(2018) Peng et al., Moment Matching for Multi-Source Domain Adaptation](https://arxiv.org/abs/1812.01754)  
+  - Domain Adaptation Competition중 하나인 [VisDA](http://ai.bu.edu/visda-2019/) 데이터셋을 제안  
+  - 기존 Multi-Source Domain Adaptation Studies가 Multiple Source VS Target의 Weight을 잘 구하는 데에 초점을 맞췄다면, 여기서는 Source Domains (정확히는 Feature) 간의 alignment 역시 신경쓴다.
+  - > "Intuitively, it is not possible to perfectly align the target domain with every source domain, if the source domains are not aligned themselves."
+    - "Domain Generalization with Adversarial Feature Learning" (CVPR 2018)과 유사하다. 해당 단락 첫 논문 참고
+  - 이때 단순히 feature distribution ($p(z)$)을 잘 align하는 것 뿐만 아니라, ($p(y \mid z)$)을 잘 align해야 하기 때문에 maximum classifier discrepancy trick을 썼다. (*combined with Deep Generative Model* Saito et al., 논문 참고)
+    - 이를 통해 도메인 별 $p(z, y)$를 좁힌 것으로 보인다.
+  - Theoretical하게는 $d_{\cal{H} \triangle \cal{H}}$ discrepancy 말고, Momentum을 줄이는 이유를 validate했다.
+  - ![image](https://user-images.githubusercontent.com/46081019/71822038-2bd98900-30d7-11ea-9e9f-b929ae5acbb4.png)  
+    - 여기서 $d_{CM}^k$가 cross-moment divergence between domains이다. 증명 과정에서는 $\mid \int_{\chi} \prod_j (x_j)^{i_j}d\mu_S -  \int_{\chi} \prod_j (x_j)^{i_j}d\mu_T \mid$으로, 만약 arbitrary j를 RKHS의 infinite dimension으로 확장하면 MMD같은 momentum loss가 될 것이다.
+    - 다만, 증명 과정을 보면 $d_{\cal{H} \triangle \cal{H}}$ discrepancy보다는 loose한 upper-bound로 보이는데 이는 확인이 필요하다.
+
 
   
 ### Suggest New Loss  
