@@ -102,7 +102,7 @@ layout: single
   - [기존 연구](https://papers.nips.cc/paper/3212-learning-bounds-for-domain-adaptation)의 d(weighted-source domain, target domain)을 줄이는 방법론을 제시하는 좋은 논문이다.
   - 기존 source classifier를 optimize함과 동시에 lagrangian constraint으로 $L_{D}(E(x; \theta_E); \theta_D) = \sum_s {\beta_s d(\cal{D_s}, \cal{D_{/s}}^{w_s})}$을 추가했다. 여기서 \beta_s는 각 domain의 lagrangian coeff로, target domain에 source domains보다 세게 걸어줬다.
   - 위 domain loss $L_D$는 domain discriminator f, encoder E에 대해 다음과 같이 정의된다.
-    - $L_D = \sum_s  {sup_{\parallel f_s \parallel _L \leq 1} \lambda_s(E_{x \sim \cal{D_s}}[f_s(E(x))] - E_{x \sim \cal{D_{/s}^{w_s}}}[f_s(E(x))]}$
+    - $$L_D = \sum_s  {sup_{\parallel f_s \parallel _L \leq 1} \lambda_s(E_{x \sim \cal{D_s}}[f_s(E(x))] - E_{x \sim \cal{D_{/s}^{w_s}}}[f_s(E(x))]}$$
     - 이때 f는 Kantorovich-Rubenstein dual formulation을 빌려, 1-lipschitzness 함수로 표현된다.
   - weight는 다음과 같다:
     - ![image](https://user-images.githubusercontent.com/46081019/71968539-7af2fb80-3248-11ea-9e5b-6b7de275b1dd.png)  
@@ -112,7 +112,8 @@ layout: single
   - Theoretical하게는 기존 weighted source domain adaptation과 비슷하게, target domain에서의 generalization error를 weighted source domain error와 wasserstein-like discrepancy between weighted source domain and target domain으로 표현했다.
   - ![image](https://user-images.githubusercontent.com/46081019/71968920-15ebd580-3249-11ea-81a0-6a9decb84ad6.png)  
   - ![image](https://user-images.githubusercontent.com/46081019/71968991-33b93a80-3249-11ea-84e8-35c3ff7253c2.png)  
-
+  - 증명에서 3->4번째 줄은 다음과 같다: 
+    - $$E_{D_T}[\mid f(z) - f^*(z) \mid] - \sum w_s E_{D_S}[\mid f(z) - f^*(z) \mid] = E_{D_T}[h(z)] - E_{\sum w_sD_s}[h(z)] = \alpha_{\lambda + \lambda^*}(\sum w_sD_s, D_T)$$
   
 - [(2018) Zhao et al., Adversarial Multiple Source Domain Adaptation](https://papers.nips.cc/paper/8075-adversarial-multiple-source-domain-adaptation.pdf)  
   
