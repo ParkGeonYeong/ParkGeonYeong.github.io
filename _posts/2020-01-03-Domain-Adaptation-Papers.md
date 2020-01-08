@@ -98,6 +98,21 @@ layout: single
 - [(2018) Gong et al., DLOW: Domain Flow for Adaptation and Generalization](https://arxiv.org/abs/1812.05418)  
   
 - [(2018) Li et al., Extracting Relationships by Multi-Domain Matching](https://papers.nips.cc/paper/7913-extracting-relationships-by-multi-domain-matching.pdf)  
+  - Pairwise Domain 간의 Wasserstein-Like discrepancy를 계산하여, 서로 연관성이 높은 도메인 간의 거리를 더 열심히 줄인다.
+  - [기존 연구](https://papers.nips.cc/paper/3212-learning-bounds-for-domain-adaptation)의 d(weighted-source domain, target domain)을 줄이는 방법론을 제시하는 좋은 논문이다.
+  - 기존 source classifier를 optimize함과 동시에 lagrangian constraint으로 $L_{D}(E(x; \theta_E); \theta_D) = \sum_s {\beta_s d(\cal{D_s}, \cal{D_{/s}}^{w_s})}$을 추가했다. 여기서 \beta_s는 각 domain의 lagrangian coeff로, target domain에 source domains보다 세게 걸어줬다.
+  - 위 domain loss $L_D$는 domain discriminator f, encoder E에 대해 다음과 같이 정의된다.
+    - $L_D = \sum_s  {sup_{\parallel f_s \parallel _L \leq 1} \lambda_s(E_{x \sim \cal{D_s}}[f_s(E(x))] - E_{x \sim \cal{D_{/s}^{w_s}}}[f_s(E(x))]}$
+    - 이때 f는 Kantorovich-Rubenstein dual formulation을 빌려, 1-lipschitzness 함수로 표현된다.
+  - weight는 다음과 같다:
+    - ![image](https://user-images.githubusercontent.com/46081019/71968539-7af2fb80-3248-11ea-9e5b-6b7de275b1dd.png)  
+    - 이때 domain discriminator $f(;\theta_D)$는 wgan처럼 따로 optimize해준다.
+  - 최종 loss는 다음과 같다:
+    - ![image](https://user-images.githubusercontent.com/46081019/71968602-9eb64180-3248-11ea-8ec3-3ea372acd060.png)  
+  - Theoretical하게는 기존 weighted source domain adaptation과 비슷하게, target domain에서의 generalization error를 weighted source domain error와 wasserstein-like discrepancy between weighted source domain and target domain으로 표현했다.
+  - ![image](https://user-images.githubusercontent.com/46081019/71968920-15ebd580-3249-11ea-81a0-6a9decb84ad6.png)  
+  - ![image](https://user-images.githubusercontent.com/46081019/71968991-33b93a80-3249-11ea-84e8-35c3ff7253c2.png)  
+
   
 - [(2018) Zhao et al., Adversarial Multiple Source Domain Adaptation](https://papers.nips.cc/paper/8075-adversarial-multiple-source-domain-adaptation.pdf)  
   
@@ -112,7 +127,10 @@ layout: single
   - ![image](https://user-images.githubusercontent.com/46081019/71822038-2bd98900-30d7-11ea-9e9f-b929ae5acbb4.png)  
     - 여기서 $d_{CM}^k$가 cross-moment divergence between domains이다. 증명 과정에서는 $\mid \int_{\chi} \prod_j (x_j)^{i_j}d\mu_S -  \int_{\chi} \prod_j (x_j)^{i_j}d\mu_T \mid$으로, 만약 arbitrary j를 RKHS의 infinite dimension으로 확장하면 MMD같은 momentum loss가 될 것이다.
     - 다만, 증명 과정을 보면 $d_{\cal{H} \triangle \cal{H}}$ discrepancy보다는 loose한 upper-bound로 보이는데 이는 확인이 필요하다.
-
+  - 개인적으로 이 논문이 왜 Oral까지 갔는지 잘 이해가 되지 않는다. 몇 가지 아쉬운 점들은, 
+    - MDAN, MDMN 등 기존에 SOTA를 찍은 Multi-source DA 알고리즘과의 비교가 전혀 없다. 이후 MDAN, MDMN과 이 논문을 비교하는 타 논문에서 이 논문이 가장 안 좋은 성능을 보이는 것으로 나타났다.
+    - Source Domain간의 alignment을 고려한 논문이 없었다고 주장하지만, MDMN의 경우 각 도메인과 나머지 도메인들의 Wasserstein-like discrepancy로 이뤄진 weight를 가해가며 모든 Pairwise Domain 간의 거리를 가깝게 만든다.
+    - Moment를 가깝게 만드는 아이디어는 좋지만 다른 DA에서 많이 썼었던 방식이고, 그 이론적 근거로 든 bound는 loose하다. 오히려 Maximum Discrepancy Classifier 트릭을 쓴 게 성능상 기여도가 더 크지 않을까 생각한다.
 
   
 ### Suggest New Loss  
