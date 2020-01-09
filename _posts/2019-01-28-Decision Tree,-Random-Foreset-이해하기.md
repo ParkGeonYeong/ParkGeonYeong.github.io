@@ -1,5 +1,5 @@
 ---
-title: "xgboost 이해하기 (Decision Tree, Random Foreset로부터)"
+title: "Decision Tree, Random Foreset 이해하기"
 use_math: True
 layout: single
 classes: wide
