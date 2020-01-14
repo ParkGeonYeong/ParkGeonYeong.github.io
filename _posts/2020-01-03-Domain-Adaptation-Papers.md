@@ -115,7 +115,22 @@ layout: single
   - 증명에서 3->4번째 줄은 다음과 같다: 
     - $$E_{D_T}[\mid f(z) - f^*(z) \mid] - \sum w_s E_{D_S}[\mid f(z) - f^*(z) \mid] = E_{D_T}[h(z)] - E_{\sum w_sD_s}[h(z)] = \alpha_{\lambda + \lambda^*}(\sum w_sD_s, D_T)$$
   
-- [(2018) Zhao et al., Adversarial Multiple Source Domain Adaptation](https://papers.nips.cc/paper/8075-adversarial-multiple-source-domain-adaptation.pdf)  
+- [(2018) Zhao et al., Adversarial Multiple Source Domain Adaptation](https://papers.nips.cc/paper/8075-adversarial-multiple-source-domain-adaptation.pdf)   
+  - 기존 DANN Paper의 multi-source domain 확장판, multi-head domain classifier으로 각각의 source domain과 target domain에 adversarial training(with gradient reversal layer)을 걸어주어 each domain에 invariant한 feature를 뽑는 것이 목적이다.
+  - Single-source domain adaptation에 union bound을 걸어줘 loose한 classification bound을 하나 얻고, source domains에 convex combination을 건 mixture source domain을 통해 보다 타이트한 bound을 추가로 얻었다.
+  - ![image](https://user-images.githubusercontent.com/46081019/72336858-ec2d2580-3704-11ea-96c3-7157fcef28c1.png)  
+  - 우선 source domain이 k개 있다고 할 때 union bound와 기존 Ben-david et al., 2010의 theorem으로 인해 다음이 성립한다.
+  - ![image](https://user-images.githubusercontent.com/46081019/72337060-3adabf80-3705-11ea-9dd8-0e55b80836d6.png)  
+  - Generalized Target error를 source domain 중 가장 좋지 않은 항(w.r.t. classification error and H-divergence)으로 표현했기 때문에 굉장히 loose한 경우라고 할 수 있다.
+  - 이를 soft하게 구현한 버전이 아래이다. 
+  - ![image](https://user-images.githubusercontent.com/46081019/72337230-9147fe00-3705-11ea-8009-f777ade6e2df.png)  
+  - 증명 과정은 우선 $\alpha$ weight vector를 적용해 새로 정의한 a new combined source $\tilde{S}$ 상에서 시작한다.
+  - $\tilde{S}, T$에 Ben-David의 generalization bound을 걸어 줄 수 있다. 그 과정에서 정의되지 않은 $\hat{\epsilon_{\tilde{S}(h)}}, d_{\cal{H} \triangle \cal{H}}$을 풀어내야 하는데, 우리가 알고 있는 것은 각각의 source domain data와 labels이므로 이를 이용해서 표현해야 한다.
+    - 우선 $\hat{\epsilon_{\tilde{S}}} = \sum_{i \in [k]} {\alpha_i \hat{\epsilon_{S_i}}}$이다.
+    - 또 $d_{\cal{H} \triangle \cal{H}}(\hat{D}_{\tilde{S}}, \hat{D}_{T})$은 다음과 같다. 
+    - ![image](https://user-images.githubusercontent.com/46081019/72338482-e38a1e80-3707-11ea-8a66-b2d85ff8a84c.png)   
+
+
   
 - [(2018) Peng et al., Moment Matching for Multi-Source Domain Adaptation](https://arxiv.org/abs/1812.01754)  
   - Domain Adaptation Competition중 하나인 [VisDA](http://ai.bu.edu/visda-2019/) 데이터셋을 제안  
