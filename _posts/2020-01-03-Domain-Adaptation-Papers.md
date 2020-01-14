@@ -127,7 +127,7 @@ layout: single
   - 증명 과정은 우선 $\alpha$ weight vector를 적용해 새로 정의한 a new combined source $\tilde{S}$ 상에서 시작한다.
   - $\tilde{S}, T$에 Ben-David의 generalization bound을 걸어 줄 수 있다. 그 과정에서 정의되지 않은 $\hat{\epsilon_{\tilde{S}(h)}}, d_{\cal{H} \triangle \cal{H}}$을 풀어내야 하는데, 우리가 알고 있는 것은 각각의 source domain data와 labels이므로 이를 이용해서 표현해야 한다.
     - 우선 $\hat{\epsilon_{\tilde{S}}} = \sum_{i \in [k]} {\alpha_i \hat{\epsilon_{S_i}}}$이다.
-    - 또 $d_{\cal{H} \triangle \cal{H}}(\hat{D}_{\tilde{S}}, \hat{D}_{T})$은 다음과 같다. 
+    - 또 $$d_{\cal{H} \triangle \cal{H}}(\hat{D}_{\tilde{S}}, \hat{D}_{T})$$은 다음과 같다. 
     - ![image](https://user-images.githubusercontent.com/46081019/72338482-e38a1e80-3707-11ea-8a66-b2d85ff8a84c.png)   
 
 
