@@ -31,7 +31,7 @@ chernoff bound의 special case라고 볼 수 있는 hoeffdin's inquality로 이�
   (e.g., 데이터 수 n에 exponential하게 error의 upperbound가 줄어드는) 
   - Chernoff bound의 가장 기본적인 형태는 다음과 같다. 
   - > The generic Chernoff bound for a random variable X is attained by applying Markov's inequality to $$e^{\lambda X}$$. 
-  For every $\lambda >0$: 
+  For every $$\lambda >0$$: 
   - $$Pr(X \geq a) \leq min_{\lambda >0}\frac{E[e^{\lambda a}]}{{e^{\lambda a}}}$$
   - 위의 minimization을 $$\lambda$$에 대해 풀어내서 optimization하는 방식을 많이 사용한다. 이를 통해 아래 딸려오는 preposition을 얻을 수 있다.
   - > Suppose $$X_1,...X_n$$ are i.i.d from Bernoulli(m). Then, 
