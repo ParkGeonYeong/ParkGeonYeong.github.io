@@ -37,7 +37,9 @@ chernoff bound의 special case라고 볼 수 있는 hoeffdin's inquality로 이�
   - > Suppose $$X_1,...X_n$$ are i.i.d from Bernoulli(m). Then, 
   $$Pr(X_1 + ... + X_n \geq n(m+\delta)) \leq exp(-nKL(m+\delta \parallel m)$$
   - 위 식을 보면 슬슬 감을 잡을 수 있는데, [0, 1]로 bounded된 random variable X의 empirical mean과 true mean의 차이를 exponential bound로 표현했다. 
-  - ML에서 쓰는 empirical risk minimization에서 정의하는 $$R_n(h)$$와 true risk $$R(h)$$에 비슷하게 적용할 수 있을 것이다.
+  - ML에서 쓰는 empirical risk minimization에서 정의하는 $$R_n(h)$$와 true risk $$R(h)$$에 비슷하게 적용할 수 있을 것이다.  
+    
+    
 **1. Hoeffding's inequality**  
 Hoeffding's inequality는 learning theory에서 가장 중요한 식이라고 많이 불리는데, 
 실제로 'with probability 1-d, ...'으로 시작되는 많은 ML theorem들은 대부분 hoeffding's inequality에 의해 직간접적으로 증명된다. 
@@ -54,6 +56,7 @@ Hoeffding's inequality는 [a,b]를 [0,1]로 고정하고 $$Z_i$$를 binary class
 $$R(f) \leq R_n(f) + \sqrt \frac {log \frac {2}{\delta}}{2n}$$  
 즉 어떤 f에 대해서 empirical risk와 true risk의 관계를 데이터 n에 대해 표현한 것이다. 데이터 n을 많이 확보하며, 
 empirical risk가 낮아지도록 f의 hypothesis space를 넓히면 좋은 bound을 얻을 수 있을 것이다.  
+  
 **1.1. Hoeffding's inequality의 limitation**  
 단, 여기서 우리는 실제로 f의 complexity를 필요 이상으로 높일 경우 true risk와 emprical risk의 격차가 굉장히 커진다는 것을 알고 있다. 
 여기서 실제 f에 대한 고려가 빠졌기 때문이다. 우리가 원하는 bound는 어떤 고정된 f에 대한 것이 아니라, $$f \in \cal{F}$$에 대해서 
@@ -74,10 +77,12 @@ empirical risk가 낮아지도록 f의 hypothesis space를 넓히면 좋은 boun
 function space에서 sampling된 어떤 function이 n개의 data를 어떻게 shatter하는지를 기반으로 이를 표현할 필요성이 있다. 
 이에 growth function이라는 것을 새로 정의하면 다음과 같다:  
 > The growth function is the maximum number of ways into which n points can be classified by the function class: 
-$$S_{\cal{F}}(n) = sup_{(z_1,...,z_n)} \mid \cal{F_{z_1, ..., z_n}} \mid$$  
-**이를 통해서 VC-dimension이 도입되지 않은, VC bound의 초기 식을 구할 수 있다.**  
+$$S_{\cal{F}}(n) = sup_{(z_1,...,z_n)} \mid \cal{F_{z_1, ..., z_n}} \mid$$    
+- **이를 통해서 VC-dimension이 도입되지 않은, VC bound의 초기 식을 구할 수 있다.**  
 > For any $$\delta > 0$$, with probability at least $$1-\delta$$, 
 $$R(f) \leq R_n(f) + 2\sqrt{\frac {2log S_{\cal{F}}(2n) + log(2/\delta) }{n} }$$  
+  
+  
 - 증명 과정은 두 단계로 나뉜다. 
 - 우선 기존에 우리가 갖고 놀던 $$P(R(f) - R_n(f) \geq \epsilon)$$의 경우 알 수 없는 true risk $$R$$이 끼어 있는데, 
 **이를 소거하지 않고 function의 complexity나 growth function을 도입하기 쉽지 않다.** 따라서 true risk를 다른 방식으로 대체하는데, 
