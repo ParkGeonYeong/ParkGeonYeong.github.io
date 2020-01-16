@@ -31,7 +31,7 @@ chernoff bound의 special case라고 볼 수 있는 hoeffdin's inquality로 이�
   (e.g., 데이터 수 n에 exponential하게 error의 upperbound가 줄어드는) 
   - Chernoff bound의 가장 기본적인 형태는 다음과 같다. 
   - > The generic Chernoff bound for a random variable X is attained by applying Markov's inequality to $$e^{\lambda X}$$. 
-  For every $$\lambda >0$$: 
+  For every $$\lambda >0$$,    
   - $$Pr(X \geq a) \leq min_{\lambda >0}\frac{E[e^{\lambda a}]}{{e^{\lambda a}}}$$
   - 위의 minimization을 $$\lambda$$에 대해 풀어내서 optimization하는 방식을 많이 사용한다. 이를 통해 아래 딸려오는 preposition을 얻을 수 있다.
   - > Suppose $$X_1,...X_n$$ are i.i.d from Bernoulli(m). Then, 
@@ -61,7 +61,7 @@ empirical risk가 낮아지도록 f의 hypothesis space를 넓히면 좋은 boun
 단, 여기서 우리는 실제로 f의 complexity를 필요 이상으로 높일 경우 true risk와 emprical risk의 격차가 굉장히 커진다는 것을 알고 있다. 
 여기서 실제 f에 대한 고려가 빠졌기 때문이다. 우리가 원하는 bound는 어떤 고정된 f에 대한 것이 아니라, $$f \in \cal{F}$$에 대해서 
 가장 supremum 값에 대한 것이다. 우리가 취할 수 있는 여러 hypothesis의 set에 대한 bound가 필요한 것이다.  
-이때 위 f를 $$f_i \in \left\{ f_1, ... f_N \right\}$$에 대해 각각 표현하고, 이에 union bound를 적용하면 다음과 같다.  
+이때 위 f를 $$f_i \in \left\{ f_1, ... f_N \right\}$$에 대해 각각 표현하고, 이에 union bound를 적용하면 .  
 - $$\begin{align} 
 \mathbb{P}[\exists f \in \left\{ f_1, ..., f_N \right\}: R(f)-R_n(f) \geq \epsilon] 
 &\leq \sum P(R(f)-R_n(f) \geq \epsilon) \\
