@@ -59,7 +59,7 @@ $$
 $$R(f) - R_n(f)$$를 적용해 주면 우리가 원하는 최종 bound을 얻을 수 있다.  
 
   
-**3. Summary**   
+**2. Summary**   
 이전 포스트에서 구한 VC-bound에 이어, 여기서는 distribution-dependent measure인 rademacher complexity를 도입해 
 generalization error bound을 구해 보았다. 두 bound 모두 결국은 n이 무한대에 이름에 따라 data error term은 떨어져 나가고, 
 estimation error term만 남는 것을 알 수 있다. 이 때 estimation error term은 hypotheseis space의 complexity를 무작정 높인다고 해서 
