@@ -13,7 +13,7 @@ VC-dimension보다 조금 더 계산하기 쉬울 수 있다.
 **0. Rademacher Variable, correlation and Complexity**    
 VC-dimension은 특정 hypothesis class의 complexity를 "shattering" 개념에서 measure했다. 
 **Rademacher Complexity는 살짝 다르게, 데이터와의 "correlation" 개념에서 complexity를 measure한다.** 
-'어떤 임의의 랜덤한 binary data와 classifier의 prediction이 평균적으로 얼마나 correlated될 수 있는지'가 rademacher complexity라 할 수 있다. 
+'어떤 임의의 랜덤한 binary data와 classifier의 prediction이 평균적으로 얼마나 maximally correlated 가능한지'가 rademacher complexity라 할 수 있다. 
   
 우선 empirical risk의 정의부터 시작하면:  
 $$
