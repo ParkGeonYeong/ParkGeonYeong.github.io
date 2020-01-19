@@ -104,6 +104,7 @@ $$R(f) \leq R_n(f) + 2\sqrt{\frac {2log S_{\cal{F}}(2n) + log(2/\delta) }{n} }$$
   여기서는 단지 2n개의 finite data에 대한 값만 알면 되는 간단한 상황이다.**
 - 이러한 아름다운 증명 과정을 거쳐서 우리는 이제 function의 complexity와 number of data로 upper bound의 표현을 마쳤다.
 - 그 뒤로는 $$S_{\cal{F}}(h)$$를 VC-dimension으로 bound시켜, 최종적으로 VC-dimension이 포함된 bound을 얻게 된다.  
+  - 이때 growth function $$S_{\cal{F}}(h)$$에 log가 붙은 항을 VC entropy라 하며, 이는 어떤 데이터셋을 사용했는 지에 따라 값이 달라지는 distribution-dependent항이다. 반면 VC-dimension은 function 자체의 capacity measure로써 distribution-free항이다.
 - ![image](https://user-images.githubusercontent.com/46081019/72447883-722a9880-37f9-11ea-9669-634bd0144598.png)   
   
   
