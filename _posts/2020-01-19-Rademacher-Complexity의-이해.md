@@ -20,7 +20,7 @@ $$
 \begin{align}
 R_n(h) &= \frac{1}{n} \sum_{i=1}^{n}(\mathbb{1}(h(x_i) \neq y_i)) \\
        &= \frac{1}{n} \sum_{i=1}^{n}(\frac{1-y_i h(x_i)}{2})
-\end{align}&&  
+\end{align}$$  
 으로 쓸 수 있다. 이는 즉 $$min_h R_n(h) \Leftrightarrow max_h \sum y_i h(x_i)$$라는 의미가 된다. 
 우리가 원하는 function의 complexity measure는 어떤 임의의 dataset $$\cal{D} = \left\{ (x_i, y_i) \right\}$$에 대해서 
 가늠되어야 하므로, 이를 위해 어떤 임의의 random한 dataset 혹은 labelset을 정의하면 좋을 것이다. 
@@ -36,7 +36,8 @@ discrete function space $$\cal{F}$$ with $$\mid \cal{F} \mid = 2^n$$이라고 �
     
 **1. Convergence Bound**  
 앞서 VC-dimension 및 growth function을 활용해 VC-bound을 표현했다. 여기서는 위에서 정의한 rademacher complexity를 통해 generalization bound을 정의해 본다.   
-> Thm. with probability at least $$1-\delta$$, $$R(f) \leq \hat{R}_n(f) + 2Rad_n(F) + \sqrt{\frac{log 1/\delta}{2n} }$$  
+> Thm. with probability at least $$1-\delta$$, $$R(f) \leq \hat{R}_n(f) + 2Rad_n(F) + \sqrt{\frac{log 1/\delta}{2n} }$$   
+
 - 증명은 두 단계로, 우선 hoeffding's inequality를 적용한 다음, rademacher complexity를 적절히 도입한다.
 - $$\Phi(n) = sup_f{[R(f) - R_n(f)]}$$라 하자. 
   - $$\Phi$$는 bounded이므로, Hoeffding's inequality에 의해, 
@@ -48,7 +49,7 @@ $$\begin{align}
 &\leq \mathbb{E}_n[\mathbb{E_{n'}} [sup(R_{n'}(f) - R_n(f))]] \\ 
 &\doteq \mathbb{E}_n[\mathbb{E_{n'}} [sup \sum_i \frac{1}{n} \sigma_i(R_{n'}(f_i) - R_{n}(f_i))]] \\
 &\leq \mathbb{E}_n[\mathbb{E_{n'}} [sup \sum_i \frac{1}{n} \sigma_i(R_{n'}(f_i)]] + \mathbb{E}_n[\mathbb{E_{n'}} [sup \sum_i \frac{1}{n} \sigma_i(R_{n}(f_i)]] \\
-&= 2Rad_n(F)
+&= 2Rad_n(F) $$
 
 \end{align}
 $$  
