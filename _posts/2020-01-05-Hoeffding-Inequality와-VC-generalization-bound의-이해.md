@@ -89,6 +89,8 @@ $$R(f) \leq R_n(f) + 2\sqrt{\frac {2log S_{\cal{F}}(2n) + log(2/\delta) }{n} }$$
 이때 가상의 'ghost sample' $$Z'_1, ..., Z'_n$$을 도입한다. 여기에 symmetrization lemma를 적용하는데, 이는 다음과 같다.
   - For any t: $$\mathbb{P}[sup_{f \in \cal{F}} \mid (P-P_n)f\mid \geq t ] \leq 2\mathbb{P}[sup_{f \in \cal{F}} \mid (P'_n-P_n)f \mid \geq t/2 ]$$
   - 편의상 $$R(f)$$를 $$Pf$$로 대체하였다.
+  - 양변이 $$Pf$$를 기준으로 대칭적으로 표현되었기 때문에 symmetrization lemma라고 부른다.
+  - $$P'_{n}f$$는 새로운 가상의 ghost sample set $$z'_1, ..., z'_n$$에 대한 empirical risk이다. **이를 통해 우리가 접근하기 어려운 true risk를 가상의 두 dataset에 대해서 치환해 생각할 수 있게 되었다.** 
   - Lemma 증명은 triangular inequality를 우선 씌워, $$(P-P_n)f \geq t$$이며 $$(P - P'_n)f \leq t/2$$인 경우 $$(P'_n - P_n)f \geq t/2$$임을 이용한다.
   - 여기서 if-then 관계로 inequality를 세운 다음, 걸리적거리는 $$\mathbb{P}((P - P'_n)f \leq t/2)$$를 chebyshev's inequality로 날린다.
 - 위의 lemma를 통해 우리의 관심사를 두 데이터셋 N, N'에 대한 classifier f의 차이로 치환하였다. 
@@ -102,7 +104,11 @@ $$R(f) \leq R_n(f) + 2\sqrt{\frac {2log S_{\cal{F}}(2n) + log(2/\delta) }{n} }$$
   여기서는 단지 2n개의 finite data에 대한 값만 알면 되는 간단한 상황이다.**
 - 이러한 아름다운 증명 과정을 거쳐서 우리는 이제 function의 complexity와 number of data로 upper bound의 표현을 마쳤다.
 - 그 뒤로는 $$S_{\cal{F}}(h)$$를 VC-dimension으로 bound시켜, 최종적으로 VC-dimension이 포함된 bound을 얻게 된다.  
-- ![image](https://user-images.githubusercontent.com/46081019/72447883-722a9880-37f9-11ea-9669-634bd0144598.png)  
+- ![image](https://user-images.githubusercontent.com/46081019/72447883-722a9880-37f9-11ea-9669-634bd0144598.png)   
+  
+  
+**3. Summary**  
+Markov Inequality에서 시작해서 여러 basic probabilistic inequalities가 어떻게 hoeffding's inequality로 이어지는지 확인했다. 이후 hoeffding's inequality가 learning theory에서 어떤 역할을 하는지, 그리고 더 나아가 function complexity를 포함한 VC-Bound가 어떻게 발전해왔는지 확인했다. 다음에는 VC-dimension 외에 function complexity(or capacity)를 표현할 수 있는 다른 measure를 추가로 정리해 보도록 하겠다. 
 
 
 
