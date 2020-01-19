@@ -49,7 +49,8 @@ $$\begin{align}
 &\leq \mathbb{E}_n[\mathbb{E_{n'}} [sup(R_{n'}(f) - R_n(f))]] \\ 
 &\doteq \mathbb{E}_n[\mathbb{E_{n'}} [sup \sum_i \frac{1}{n} \sigma_i(R_{n'}(f_i) - R_{n}(f_i))]] \\
 &\leq \mathbb{E}_n[\mathbb{E_{n'}} [sup \sum_i \frac{1}{n} \sigma_i(R_{n'}(f_i)]] + \mathbb{E}_n[\mathbb{E_{n'}} [sup \sum_i \frac{1}{n} \sigma_i(R_{n}(f_i)]] \\
-&= 2Rad_n(F) $$
+&= 2Rad_n(F) 
+\end{align}$$
 
 \end{align}
 $$  
