@@ -29,7 +29,7 @@ words_per_minute         : 200
 comments:
   provider               : "disqus" #"discourse", "facebook", "google-plus", "staticman", "staticman_v2", "utterances", "custom"
   disqus:
-    shortname            : https-parkgeonyeong-github-io # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
+    shortname            : #https-parkgeonyeong-github-io # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
     server               : # https://meta.discourse.org/t/embedding-discourse-comments-via-javascript/31963 , e.g.: meta.discourse.org
   facebook:
@@ -103,11 +103,11 @@ analytics:
 
 # Site Author
 author:
-  name             : "Park Geon Yeong"
+  name             : #"Park Geon Yeong"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Computational Neuroscience, Machine Learning enthusiast"
-  location         : "Daejeon, South Korea"
-  email            : "pky3436@kaist.ac.kr"
+  bio              : #"Computational Neuroscience, Machine Learning enthusiast"
+  location         : #"Daejeon, South Korea"
+  email            : #"pky3436@kaist.ac.kr"
   links:
     - label: "pky3436@kaist.ac.kr"
       icon: "fas fa-fw fa-envelope-square"
